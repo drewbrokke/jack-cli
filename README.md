@@ -1,2 +1,2 @@
 # jack
-Chop through that git log wicked fast
+Chop through that Git log wicked fast
