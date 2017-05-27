@@ -1,0 +1,22 @@
+{
+  "name": "jack",
+  "version": "1.0.0",
+  "description": "Chop through that Git log wicked fast!",
+  "main": "index.js",
+  "preferGlobal": true,
+  "bin": {
+    "jack": "index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Drew Brokke <drew.brokke@liferay.com> (https://github.com/drewbrokke)",
+  "license": "ISC",
+  "dependencies": {
+    "blessed": "^0.1.81"
+  },
+  "devDependencies": {
+    "@types/blessed": "^0.1.5",
+    "@types/node": "^7.0.22"
+  }
+}

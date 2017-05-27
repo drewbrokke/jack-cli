@@ -1,0 +1,55 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        // Basic Options
+        "target": "esnext",
+        "module": "commonjs",
+        // "listFiles": true,
+        // "lib": [],
+        // "allowJs": true,
+        // "checkJs": true,
+        // "jsx": "preserve",
+        // "declaration": true,
+        // "sourceMap": true,
+        // "outFile": "./",
+        "outDir": "./dist",
+        "rootDir": "./src",
+        // "removeComments": true,
+        // "noEmit": true,
+        // "importHelpers": true,
+        // "downlevelIteration": true,
+        // "isolatedModules": true,
+
+        // Strict Type-Checking Options
+        "strict": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "noImplicitThis": true,
+        "alwaysStrict": true,
+
+        // Additional Checks
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true
+
+        // Module Resolution Options
+        // "moduleResolution": "node",
+        // "baseUrl": "./",
+        // "paths": {},
+        // "rootDirs": [],
+        // "typeRoots": [],
+        // "types": [],
+        // "allowSyntheticDefaultImports": true,
+
+        // Source Map Options
+        // "sourceRoot": "./",
+        // "mapRoot": "./",
+        // "inlineSourceMap": true,
+        // "inlineSources": true,
+
+        // Experimental Options
+        // "experimentalDecorators": true,
+        // "emitDecoratorMetadata": true,
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "jsRules": {},
+    "rules": {
+        "curly": ["ignore-same-line"],
+        "indent": "tabs",
+        "max-line-length": 80,
+        "quotemark": "single",
+        "variable-name": ["allow-leading-underscore"]
+    },
+    "rulesDirectory": []
+}
