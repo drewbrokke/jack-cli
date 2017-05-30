@@ -1,6 +1,6 @@
 {
   "name": "jack",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Chop through that Git log wicked fast!",
   "main": "index.js",
   "preferGlobal": true,
