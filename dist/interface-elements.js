@@ -52,12 +52,12 @@ Helper Functions
 function addColorsToItem(item) {
     const [sha, message, time, author] = item.split(git_util_1.COMMIT_ELEMENT_SEPARATOR);
     return [
-        '{red-fg}', sha,
-        '{white-fg}', message,
-        '{green-fg}', time,
-        '{blue-fg}', author,
-        '{/}',
-    ].join('');
+        `{red-fg} ${sha} -`,
+        `{white-fg}${message}`,
+        `{green-fg}${time}`,
+        `{blue-fg}${author}`,
+        `{/}`,
+    ].join(' ');
 }
 function getListElement() {
     const listBgColor = '#555';

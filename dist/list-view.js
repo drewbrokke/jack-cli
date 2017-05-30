@@ -9,7 +9,7 @@ function renderListView(screen) {
     let progressMarker;
     const listLength = commits.length;
     async function listOnSelectFn(_item, newIndex) {
-        const sha = commits[newIndex].slice(0, 12);
+        const [sha] = commits[newIndex].split(git_util_1.COMMIT_ELEMENT_SEPARATOR);
         const content = await git_util_1.getCommitContent(sha);
         action_handler_1.doAction(0 /* RENDER_COMMIT */, { commits, content, index: newIndex, screen });
     }

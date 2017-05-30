@@ -32,7 +32,7 @@ function getGitLog(args) {
         'log',
         '--abbrev-commit',
         '--date=relative',
-        `--pretty=format:%h ${exports.COMMIT_ELEMENT_SEPARATOR} %s ${exports.COMMIT_ELEMENT_SEPARATOR}(%cr) ${exports.COMMIT_ELEMENT_SEPARATOR}<%an>`,
+        `--pretty=format:%h${exports.COMMIT_ELEMENT_SEPARATOR}%s${exports.COMMIT_ELEMENT_SEPARATOR}(%cr)${exports.COMMIT_ELEMENT_SEPARATOR}<%an>`,
         ...args,
     ]);
     return getChildProcessContent(gitLogProcess)

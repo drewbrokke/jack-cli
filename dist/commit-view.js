@@ -37,12 +37,11 @@ function renderCommitView(screen) {
 exports.renderCommitView = renderCommitView;
 async function updateContent(index, commits, screen) {
     let content;
-    let sha;
     if (index < 0)
         return;
     if (index >= commits.length)
         return;
-    sha = commits[index].slice(0, 12);
+    const [sha] = commits[index].split(git_util_1.COMMIT_ELEMENT_SEPARATOR);
     content = contentCache.get(sha);
     if (!content) {
         content = await git_util_1.getCommitContent(sha);
