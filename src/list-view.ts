@@ -1,5 +1,5 @@
 import { Action, doAction } from './action-handler';
-import { getCommitContent } from './git-util';
+import { COMMIT_ELEMENT_SEPARATOR, getCommitContent } from './git-util';
 import { constructProgressText, getCommitListElement, getTextElement } from './interface-elements';
 import { BoxElement, IListElement, KeyEvent, Screen, TextElement } from './types';
 
@@ -11,7 +11,7 @@ export function renderListView(screen: Screen): void {
 	const listLength: number | undefined = commits.length;
 
 	async function listOnSelectFn(_item: BoxElement, newIndex: number) {
-		const sha: string = commits[newIndex].slice(0, 12);
+		const [sha] = commits[newIndex].split(COMMIT_ELEMENT_SEPARATOR);
 
 		const content = await getCommitContent(sha);
 
