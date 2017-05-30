@@ -75,12 +75,12 @@ function addColorsToItem(item: string) {
 	const [sha, message, time, author] = item.split(COMMIT_ELEMENT_SEPARATOR);
 
 	return [
-		'{red-fg}', sha,
-		'{white-fg}', message,
-		'{green-fg}', time,
-		'{blue-fg}', author,
-		'{/}',
-	].join('');
+		`{red-fg} ${sha} -`,
+		`{white-fg}${message}`,
+		`{green-fg}${time}`,
+		`{blue-fg}${author}`,
+		`{/}`,
+	].join(' ');
 }
 
 function getListElement(): IListElement {

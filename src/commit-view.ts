@@ -1,5 +1,5 @@
 import { Action, doAction } from './action-handler';
-import { getCommitContent } from './git-util';
+import { COMMIT_ELEMENT_SEPARATOR, getCommitContent } from './git-util';
 import { constructProgressText, getBoxElement, getTextElement } from './interface-elements';
 import { BoxElement, KeyEvent, Screen, TextElement } from './types';
 
@@ -55,12 +55,11 @@ async function updateContent(
 	index: number, commits: string[], screen: Screen): Promise<void> {
 
 	let content: string | undefined;
-	let sha: string;
 
 	if (index < 0) return;
 	if (index >= commits.length) return;
 
-	sha = commits[index].slice(0, 12);
+	const [sha] = commits[index].split(COMMIT_ELEMENT_SEPARATOR);
 
 	content = contentCache.get(sha);
 

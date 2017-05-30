@@ -41,7 +41,7 @@ export function getGitLog(args: string[]): Promise<string[]> {
 			'log',
 			'--abbrev-commit',
 			'--date=relative',
-			`--pretty=format:%h ${COMMIT_ELEMENT_SEPARATOR} %s ${COMMIT_ELEMENT_SEPARATOR}(%cr) ${COMMIT_ELEMENT_SEPARATOR}<%an>`,
+			`--pretty=format:%h${COMMIT_ELEMENT_SEPARATOR}%s${COMMIT_ELEMENT_SEPARATOR}(%cr)${COMMIT_ELEMENT_SEPARATOR}<%an>`,
 			...args,
 		],
 	);
