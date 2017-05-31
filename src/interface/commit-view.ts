@@ -1,13 +1,10 @@
 import { decrementIndex, incrementIndex, viewList } from '../redux/action-creators';
 import { store } from '../redux/store';
-import { BoxElement, KeyEvent, TextElement } from '../types/types';
-import { constructProgressText, getBoxElement, getTextElement } from './interface-elements';
+import { BoxElement, KeyEvent } from '../types/types';
+import { getBoxElement } from './interface-elements';
 
-export function getCommitElement(content: string, commits: string[], index: number): BoxElement {
-	const {length} = commits;
-
+export function getCommitElement(content: string): BoxElement {
 	let contentBox: BoxElement;
-	let progressMarker: TextElement;
 
 	const handleKeypressFn = (_ch: string, key: KeyEvent) => {
 		switch (key.name) {
@@ -35,9 +32,6 @@ export function getCommitElement(content: string, commits: string[], index: numb
 
 	contentBox = getBoxElement({content}, handleKeypressFn);
 
-	progressMarker = getTextElement(constructProgressText(index, length));
-
-	contentBox.append(progressMarker);
 	contentBox.focus();
 
 	return contentBox;

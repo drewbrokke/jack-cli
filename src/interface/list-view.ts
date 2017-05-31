@@ -1,11 +1,10 @@
 import { decrementIndex, incrementIndex, viewCommit } from '../redux/action-creators';
 import { store } from '../redux/store';
-import { IListElement, KeyEvent, TextElement } from '../types/types';
-import { addColorsToItem, constructProgressText, getCommitListElement, getTextElement } from './interface-elements';
+import { IListElement, KeyEvent } from '../types/types';
+import { getCommitListElement } from './interface-elements';
 
-export function getListElement(commits: string[], index: number): IListElement {
+export function getListElement(commits: string[]): IListElement {
 	let list: IListElement;
-	let progressMarker: TextElement;
 
 	const handleKeypressFn = (_ch: string, key: KeyEvent) => {
 		switch (key.name) {
@@ -33,13 +32,6 @@ export function getListElement(commits: string[], index: number): IListElement {
 
 	list = getCommitListElement(commits, handleKeypressFn);
 
-	progressMarker = getTextElement(
-		constructProgressText(index, commits.length));
-
-	list.append(progressMarker);
-
-	list.setItems(commits.map(addColorsToItem));
-	list.select(index);
 	list.focus();
 
 	return list;
