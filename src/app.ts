@@ -71,7 +71,7 @@ function renderScreen(screen: Screen): () => Screen {
 		}
 
 		if (!list) {
-			list = getListElement(commits);
+			list = getListElement();
 
 			screen.append(list);
 		}
