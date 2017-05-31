@@ -14,7 +14,8 @@
   "author": "Drew Brokke <drew.brokke@liferay.com> (https://github.com/drewbrokke)",
   "license": "ISC",
   "dependencies": {
-    "blessed": "^0.1.81"
+    "blessed": "^0.1.81",
+    "redux": "^3.6.0"
   },
   "devDependencies": {
     "@types/blessed": "^0.1.5",
