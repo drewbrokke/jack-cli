@@ -2,7 +2,7 @@
     "compileOnSave": true,
     "compilerOptions": {
         // Basic Options
-        "target": "esnext",
+        "target": "es2015",
         "module": "commonjs",
         // "listFiles": true,
         // "lib": [],
