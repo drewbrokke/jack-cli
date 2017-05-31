@@ -3,7 +3,7 @@ import { store } from '../redux/store';
 import { IListElement, KeyEvent } from '../types/types';
 import { getCommitListElement } from './interface-elements';
 
-export function getListElement(commits: string[]): IListElement {
+export function getListElement(): IListElement {
 	let list: IListElement;
 
 	const handleKeypressFn = (_ch: string, key: KeyEvent) => {
@@ -30,7 +30,7 @@ export function getListElement(commits: string[]): IListElement {
 		}
 	};
 
-	list = getCommitListElement(commits, handleKeypressFn);
+	list = getCommitListElement(handleKeypressFn);
 
 	list.focus();
 

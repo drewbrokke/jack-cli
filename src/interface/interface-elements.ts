@@ -15,14 +15,11 @@ export function constructProgressText(
 }
 
 export function getCommitListElement(
-	items: string[],
 	onKeyPressFn: (ch: string, key: KeyEvent) => void): IListElement {
 
 	const list: IListElement = getListElement();
 
 	list.on('keypress', onKeyPressFn);
-
-	list.setItems(items.map(addColorsToItem));
 
 	return list;
 }
