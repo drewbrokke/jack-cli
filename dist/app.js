@@ -6,11 +6,15 @@ const list_view_1 = require("./interface/list-view");
 const action_creators_1 = require("./redux/action-creators");
 const store_1 = require("./redux/store");
 const git_util_1 = require("./util/git-util");
-function swapViews(oldViewElement, newViewElement) {
-    oldViewElement.hide();
-    newViewElement.show();
-    newViewElement.focus();
+function run(args) {
+    store_1.store.subscribe(renderScreen(interface_elements_1.getScreenElement()));
+    const process = git_util_1.getGitLogProcess(args);
+    process.stdout.setEncoding('utf8');
+    process.stdout.on('data', (data) => {
+        store_1.store.dispatch(action_creators_1.addCommits(data.split('\n').filter((item) => Boolean(item))));
+    });
 }
+exports.run = run;
 function renderScreen(screen) {
     let lastState = store_1.store.getState();
     const commitContentMap = new Map();
@@ -75,12 +79,8 @@ function renderScreen(screen) {
         return screen;
     };
 }
-function run(args) {
-    store_1.store.subscribe(renderScreen(interface_elements_1.getScreenElement()));
-    const process = git_util_1.getGitLogProcess(args);
-    process.stdout.setEncoding('utf8');
-    process.stdout.on('data', (data) => {
-        store_1.store.dispatch(action_creators_1.addCommits(data.split('\n').filter((item) => Boolean(item))));
-    });
+function swapViews(oldViewElement, newViewElement) {
+    oldViewElement.hide();
+    newViewElement.show();
+    newViewElement.focus();
 }
-exports.run = run;
