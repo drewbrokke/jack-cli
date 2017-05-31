@@ -65,7 +65,7 @@ function renderScreen(screen: Screen): () => Screen {
 		*/
 
 		if (!commit) {
-			commit = getCommitElement('');
+			commit = getCommitElement();
 
 			screen.append(commit);
 		}
