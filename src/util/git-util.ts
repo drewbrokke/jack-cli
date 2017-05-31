@@ -1,4 +1,4 @@
-import { ChildProcess, spawn } from 'child_process';
+import { ChildProcess, spawn, spawnSync, SpawnSyncReturns } from 'child_process';
 
 export const COMMIT_ELEMENT_SEPARATOR: string = '{%SEPARATOR%}';
 
@@ -34,6 +34,23 @@ export function getCommitContent(sha: string): Promise<string> {
 	return getChildProcessContent(gitShowProcess);
 }
 
+export function getCommitContentSync(sha: string): string {
+	const gitShowProcess: SpawnSyncReturns<string> = spawnSync(
+		'git',
+		[
+			'show',
+			'--abbrev-commit',
+			'--color',
+			sha,
+		],
+		{
+			encoding: 'utf8',
+		},
+	);
+
+	return gitShowProcess.output.join('\n');
+}
+
 export function getGitLog(args: string[]): Promise<string[]> {
 	const gitLogProcess: ChildProcess = spawn(
 		'git',
@@ -49,4 +66,17 @@ export function getGitLog(args: string[]): Promise<string[]> {
 	return getChildProcessContent(gitLogProcess)
 		.then((content) => content
 			.split('\n').filter((item: string) => Boolean(item)));
+}
+
+export function getGitLogProcess(args: string[]): ChildProcess {
+	return spawn(
+		'git',
+		[
+			'log',
+			'--abbrev-commit',
+			'--date=relative',
+			`--pretty=format:%h${COMMIT_ELEMENT_SEPARATOR}%s${COMMIT_ELEMENT_SEPARATOR}(%cr)${COMMIT_ELEMENT_SEPARATOR}<%an>`,
+			...args,
+		],
+	);
 }
