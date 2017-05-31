@@ -27,6 +27,18 @@ function getCommitContent(sha) {
     return getChildProcessContent(gitShowProcess);
 }
 exports.getCommitContent = getCommitContent;
+function getCommitContentSync(sha) {
+    const gitShowProcess = child_process_1.spawnSync('git', [
+        'show',
+        '--abbrev-commit',
+        '--color',
+        sha,
+    ], {
+        encoding: 'utf8',
+    });
+    return gitShowProcess.output.join('\n');
+}
+exports.getCommitContentSync = getCommitContentSync;
 function getGitLog(args) {
     const gitLogProcess = child_process_1.spawn('git', [
         'log',
@@ -40,3 +52,13 @@ function getGitLog(args) {
         .split('\n').filter((item) => Boolean(item)));
 }
 exports.getGitLog = getGitLog;
+function getGitLogProcess(args) {
+    return child_process_1.spawn('git', [
+        'log',
+        '--abbrev-commit',
+        '--date=relative',
+        `--pretty=format:%h${exports.COMMIT_ELEMENT_SEPARATOR}%s${exports.COMMIT_ELEMENT_SEPARATOR}(%cr)${exports.COMMIT_ELEMENT_SEPARATOR}<%an>`,
+        ...args,
+    ]);
+}
+exports.getGitLogProcess = getGitLogProcess;
