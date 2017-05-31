@@ -28,12 +28,11 @@ export function getCommitListElement(
 }
 
 export function getBoxElement(
-	{ top = 0, right = 0, bottom = 0, left = 0, content = ''},
+	{ top = 0, right = 0, bottom = 0, left = 0},
 	onKeyFn: (ch: string, key: KeyEvent) => void): BoxElement {
 
 	const box: BoxElement = Blessed.box({
 		bottom,
-		content,
 		left,
 		mouse: true,
 		right,

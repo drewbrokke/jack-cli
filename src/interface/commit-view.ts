@@ -3,7 +3,7 @@ import { store } from '../redux/store';
 import { BoxElement, KeyEvent } from '../types/types';
 import { getBoxElement } from './interface-elements';
 
-export function getCommitElement(content: string): BoxElement {
+export function getCommitElement(): BoxElement {
 	let contentBox: BoxElement;
 
 	const handleKeypressFn = (_ch: string, key: KeyEvent) => {
@@ -30,7 +30,7 @@ export function getCommitElement(content: string): BoxElement {
 		}
 	};
 
-	contentBox = getBoxElement({content}, handleKeypressFn);
+	contentBox = getBoxElement({}, handleKeypressFn);
 
 	contentBox.focus();
 
