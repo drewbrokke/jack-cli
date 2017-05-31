@@ -24,11 +24,18 @@ import {
 	getGitLogProcess,
 } from './util/git-util';
 
-function swapViews(oldViewElement: BlessedElement, newViewElement: BlessedElement) {
-	oldViewElement.hide();
+export function run(args: string[]): void {
+	store.subscribe(renderScreen(getScreenElement()));
 
-	newViewElement.show();
-	newViewElement.focus();
+	const process: ChildProcess = getGitLogProcess(args);
+
+	process.stdout.setEncoding('utf8');
+
+	process.stdout.on('data', (data: string) => {
+		store.dispatch(
+			addCommits(
+				data.split('\n').filter((item: string) => Boolean(item))));
+	});
 }
 
 function renderScreen(screen: Screen): () => Screen {
@@ -124,16 +131,9 @@ function renderScreen(screen: Screen): () => Screen {
 	};
 }
 
-export function run(args: string[]): void {
-	store.subscribe(renderScreen(getScreenElement()));
+function swapViews(oldViewElement: BlessedElement, newViewElement: BlessedElement) {
+	oldViewElement.hide();
 
-	const process: ChildProcess = getGitLogProcess(args);
-
-	process.stdout.setEncoding('utf8');
-
-	process.stdout.on('data', (data: string) => {
-		store.dispatch(
-			addCommits(
-				data.split('\n').filter((item: string) => Boolean(item))));
-	});
+	newViewElement.show();
+	newViewElement.focus();
 }
