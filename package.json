@@ -4,6 +4,10 @@
   "description": "Chop through that Git log wicked fast!",
   "main": "index.js",
   "preferGlobal": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/drewbrokke/jack"
+  },
   "bin": {
     "jack": "index.js"
   },
