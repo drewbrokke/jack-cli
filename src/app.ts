@@ -65,13 +65,13 @@ function renderScreen(screen: Screen): () => Screen {
 		*/
 
 		if (!commit) {
-			commit = getCommitElement('', commits, index);
+			commit = getCommitElement('');
 
 			screen.append(commit);
 		}
 
 		if (!list) {
-			list = getListElement(commits, index);
+			list = getListElement(commits);
 
 			screen.append(list);
 		}
