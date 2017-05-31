@@ -1,26 +1,25 @@
 import * as Blessed from 'blessed';
-import { COMMIT_ELEMENT_SEPARATOR } from './git-util';
 import {
 	BoxElement,
 	IListElement,
 	KeyEvent,
 	Screen,
 	TextElement,
- } from './types';
+ } from '../types/types';
+import { COMMIT_ELEMENT_SEPARATOR } from '../util/git-util';
 
 export function constructProgressText(
 	index: number = 0, total: number = 0): string {
 
-	return `Commit ${total - index}/${total}`;
+	return `Commit ${index + 1}/${total}`;
 }
 
 export function getCommitListElement(
-	items: string[], onSelectFn: (item: BoxElement, index: number) => void,
+	items: string[],
 	onKeyPressFn: (ch: string, key: KeyEvent) => void): IListElement {
 
 	const list: IListElement = getListElement();
 
-	list.on('select', onSelectFn);
 	list.on('keypress', onKeyPressFn);
 
 	list.setItems(items.map(addColorsToItem));
@@ -71,12 +70,12 @@ export function getTextElement(content: string): TextElement {
 Helper Functions
 */
 
-function addColorsToItem(item: string) {
+export function addColorsToItem(item: string) {
 	const [sha, message, time, author] = item.split(COMMIT_ELEMENT_SEPARATOR);
 
 	return [
-		`{red-fg} ${sha} -`,
-		`{white-fg}${message}`,
+		`{red-fg} ${sha}`,
+		`{white-fg}- ${message}`,
 		`{green-fg}${time}`,
 		`{blue-fg}${author}`,
 		`{/}`,
