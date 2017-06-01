@@ -4,6 +4,7 @@ import { COMMIT_SHA_REGEX } from '../util/git-util';
 export function reducer(state: IState, action: IAction): IState {
 	const currentIndex = state.index;
 	const currentCommits = state.commits;
+	const currentSHA = state.SHA;
 
 	switch (action.type) {
 		case 'ADD_COMMITS':
@@ -16,17 +17,23 @@ export function reducer(state: IState, action: IAction): IState {
 			return { ...state, commits };
 
 		case 'DECREMENT_INDEX':
+			const previousValidIndex = getPreviousValidIndex(
+				currentIndex - 1, currentIndex, currentCommits);
+
 			return {
 				...state,
-				index: getPreviousValidIndex(
-					currentIndex - 1, currentIndex, currentCommits),
+				SHA: getSHA(previousValidIndex, currentCommits, currentSHA),
+				index: previousValidIndex,
 			};
 
 		case 'INCREMENT_INDEX':
+			const nextValidIndex = getNextValidIndex(
+				currentIndex + 1, currentIndex, currentCommits);
+
 			return {
 				...state,
-				index: getNextValidIndex(
-					currentIndex + 1, currentIndex, currentCommits),
+				SHA: getSHA(nextValidIndex, currentCommits, currentSHA),
+				index: nextValidIndex,
 			};
 
 		case 'VIEW_COMMIT':
@@ -62,4 +69,20 @@ function getPreviousValidIndex(index: number, prevValidIndex: number, commits: s
 	}
 
 	return getPreviousValidIndex(index - 1, prevValidIndex, commits);
+}
+
+function getSHA(index: number, commits: string[], currentSHA: string): string {
+	const matches: RegExpExecArray | null = COMMIT_SHA_REGEX.exec(commits[index]);
+
+	if (!matches) {
+		return currentSHA;
+	}
+
+	const sha: string | null = matches[0];
+
+	if (sha) {
+		return sha;
+	}
+
+	return currentSHA;
 }
