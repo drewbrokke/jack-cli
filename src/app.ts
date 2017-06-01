@@ -18,7 +18,6 @@ import {
 	TextElement,
 } from './types/types';
 import {
-	COMMIT_SHA_REGEX,
 	getCommitContentSync,
 	getGitLogProcess,
 } from './util/git-util';
@@ -46,7 +45,7 @@ function renderScreen(screen: Screen): () => Screen {
 	return (): Screen => {
 		const state: IState = store.getState();
 
-		const {commits, index, view} = state;
+		const {commits, index, SHA, view} = state;
 
 		const lastView = lastState.view;
 
@@ -107,23 +106,15 @@ function renderScreen(screen: Screen): () => Screen {
 			}
 
 			if (isNewView || isNewIndex) {
-				const matches: RegExpExecArray | null = COMMIT_SHA_REGEX.exec(commits[index]);
+				let content: string | undefined = commitContentMap.get(SHA);
 
-				if (matches) {
-					const sha: string | null = matches[0];
+				if (!content) {
+					content = getCommitContentSync(SHA);
 
-					let content: string | undefined = commitContentMap.get(sha);
-
-					if (!content) {
-						content = getCommitContentSync(sha);
-
-						commitContentMap.set(sha, content);
-					}
-
-					commit.setContent(content);
-				} else {
-					commit.setContent('No commit SHA was found on the selected line.');
+					commitContentMap.set(SHA, content);
 				}
+
+				commit.setContent(content);
 			}
 		}
 
