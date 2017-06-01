@@ -10,7 +10,7 @@ import {
 export function constructProgressText(
 	index: number = 0, total: number = 0): string {
 
-	return `Commit ${index + 1}/${total}`;
+	return `Line ${index + 1}/${total}`;
 }
 
 export function getCommitListElement(
