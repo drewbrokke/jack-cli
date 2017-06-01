@@ -72,7 +72,6 @@ function getListElement(): IListElement {
 
 	return Blessed.list({
 		bottom: 0,
-		keys: true,
 		left: 0,
 		mouse: true,
 		right: 0,
@@ -83,6 +82,5 @@ function getListElement(): IListElement {
 		},
 		tags: true,
 		top: 0,
-		vi: true,
 	});
 }
