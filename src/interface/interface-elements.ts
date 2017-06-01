@@ -88,11 +88,6 @@ function getListElement(): IListElement {
 		mouse: true,
 		right: 0,
 		style: {
-			item: {
-				hover: {
-					bg: listBgColor,
-				},
-			},
 			selected: {
 				bg: listBgColor,
 			},
