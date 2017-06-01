@@ -1,22 +1,39 @@
 import { decrementIndex, incrementIndex, viewList } from '../redux/action-creators';
 import { store } from '../redux/store';
-import { BoxElement, KeyEvent } from '../types/types';
-import { getBoxElement } from './interface-elements';
+import { KeyEvent, ScrollableTextElement } from '../types/types';
+import { getScrollableTextElement } from './interface-elements';
 
-export function getCommitElement(): BoxElement {
-	let contentBox: BoxElement;
+export function getCommitElement(): ScrollableTextElement {
+	const contentBox: ScrollableTextElement = getScrollableTextElement({
+		bottom: 0,
+		clickable: true,
+		keys: true,
+		left: 0,
+		mouse: true,
+		right: 0,
+		scrollable: true,
+		scrollbar: true,
+		top: 0,
+		vi: true,
+	});
 
 	const handleKeypressFn = (_ch: string, key: KeyEvent) => {
 		switch (key.name) {
 			case 'down':
 			case 'j':
-				store.dispatch(incrementIndex());
+			case 'right':
+				if (key.shift || key.name === 'right') {
+					store.dispatch(incrementIndex());
+				}
 
 				break;
 
 			case 'k':
+			case 'left':
 			case 'up':
-				store.dispatch(decrementIndex());
+				if (key.shift || key.name === 'left') {
+					store.dispatch(decrementIndex());
+				}
 
 				break;
 
@@ -30,7 +47,7 @@ export function getCommitElement(): BoxElement {
 		}
 	};
 
-	contentBox = getBoxElement({}, handleKeypressFn);
+	contentBox.on('keypress', handleKeypressFn);
 
 	contentBox.focus();
 
