@@ -31,9 +31,7 @@ export function run(args: string[]): void {
 	process.stdout.setEncoding('utf8');
 
 	process.stdout.on('data', (data: string) => {
-		store.dispatch(
-			addCommits(
-				data.split('\n').filter((item: string) => Boolean(item))));
+		store.dispatch(addCommits(data.split('\n').slice(0, -1)));
 	});
 }
 
