@@ -7,6 +7,8 @@ export type KeyEvent = Blessed.Widgets.Events.IKeyEventArg;
 export type ListOptions = Blessed.Widgets.ListOptions<BoxOptions>;
 export type Node = Blessed.Widgets.Node;
 export type Screen = Blessed.Widgets.Screen;
+export type ScrollableTextElement = Blessed.Widgets.ScrollableTextElement;
+export type ScrollableTextOptions = Blessed.Widgets.ScrollableTextOptions;
 export type TextElement = Blessed.Widgets.TextElement;
 export type TextOptions = Blessed.Widgets.TextOptions;
 
@@ -17,7 +19,6 @@ export interface IListElement extends Blessed.Widgets.ListElement {
 	pushItem(child: BlessedElement | string): number;
 	setItems(items: BlessedElement[] | string[]): void;
 }
-
 
 export type View = 'COMMIT' | 'LIST';
 
