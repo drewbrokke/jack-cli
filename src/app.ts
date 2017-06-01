@@ -19,6 +19,7 @@ import {
 } from './types/types';
 import {
 	COMMIT_ELEMENT_SEPARATOR,
+	COMMIT_SHA_REGEX,
 	getCommitContentSync,
 	getGitLogProcess,
 } from './util/git-util';
@@ -109,17 +110,23 @@ function renderScreen(screen: Screen): () => Screen {
 			}
 
 			if (isNewView || isNewIndex) {
-				const [sha] = commits[index].split(COMMIT_ELEMENT_SEPARATOR);
+				const matches: RegExpExecArray | null = COMMIT_SHA_REGEX.exec(commits[index]);
 
-				let content: string | undefined = commitContentMap.get(sha);
+				if (matches) {
+					const sha: string | null = matches[0];
 
-				if (!content) {
-					content = getCommitContentSync(sha);
+					let content: string | undefined = commitContentMap.get(sha);
 
-					commitContentMap.set(sha, content);
+					if (!content) {
+						content = getCommitContentSync(sha);
+
+						commitContentMap.set(sha, content);
+					}
+
+					commit.setContent(content);
+				} else {
+					commit.setContent('No commit SHA was found on the selected line.');
 				}
-
-				commit.setContent(content);
 			}
 		}
 
