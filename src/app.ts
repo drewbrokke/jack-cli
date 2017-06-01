@@ -26,11 +26,11 @@ import {
 export function run(args: string[]): void {
 	store.subscribe(renderScreen(getScreenElement()));
 
-	const process: ChildProcess = getGitLogProcess(args);
+	const gitLogProcess: ChildProcess = getGitLogProcess(args);
 
-	process.stdout.setEncoding('utf8');
+	gitLogProcess.stdout.setEncoding('utf8');
 
-	process.stdout.on('data', (data: string) => {
+	gitLogProcess.stdout.on('data', (data: string) => {
 
 		// The slice here gets rid of an extra newline that's not part of normal complete output
 
