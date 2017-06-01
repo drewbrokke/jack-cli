@@ -11,10 +11,10 @@ import { addCommits } from './redux/action-creators';
 import { store } from './redux/store';
 import {
 	BlessedElement,
-	BoxElement,
 	IListElement,
 	IState,
 	Screen,
+	ScrollableTextElement,
 	TextElement,
 } from './types/types';
 import {
@@ -43,7 +43,7 @@ function renderScreen(screen: Screen): () => Screen {
 
 	const commitContentMap: Map<string, string> = new Map();
 
-	let commit: BoxElement;
+	let commit: ScrollableTextElement;
 	let list: IListElement;
 	let progressBar: TextElement;
 
