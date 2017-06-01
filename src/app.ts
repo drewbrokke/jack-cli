@@ -26,16 +26,12 @@ import {
 export function run(args: string[]): void {
 	store.subscribe(renderScreen(getScreenElement()));
 
+	let dataString = '';
 	const gitLogProcess: ChildProcess = getGitLogProcess(args);
 
 	gitLogProcess.stdout.setEncoding('utf8');
-
-	gitLogProcess.stdout.on('data', (data: string) => {
-
-		// The slice here gets rid of an extra newline that's not part of normal complete output
-
-		store.dispatch(addCommits(data.split('\n').slice(0, -1)));
-	});
+	gitLogProcess.stdout.on('data', (data: string) => dataString += data);
+	gitLogProcess.on('close', () => store.dispatch(addCommits(dataString.split('\n'))));
 }
 
 function renderScreen(screen: Screen): () => Screen {
