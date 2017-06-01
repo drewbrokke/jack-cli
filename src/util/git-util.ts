@@ -24,9 +24,7 @@ export function getGitLogProcess(args: string[]): ChildProcess {
 		'git',
 		[
 			'log',
-			'--abbrev-commit',
-			'--date=relative',
-			`--pretty=format:%h${COMMIT_ELEMENT_SEPARATOR}%s${COMMIT_ELEMENT_SEPARATOR}(%cr)${COMMIT_ELEMENT_SEPARATOR}<%an>`,
+			'--color=always',
 			...args,
 		],
 	);
