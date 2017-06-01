@@ -15,8 +15,6 @@ function reducer(state, action) {
             return Object.assign({}, state, { index: getPreviousValidIndex(currentIndex - 1, currentIndex, currentCommits) });
         case 'INCREMENT_INDEX':
             return Object.assign({}, state, { index: getNextValidIndex(currentIndex + 1, currentIndex, currentCommits) });
-        case 'TOGGLE_SPLIT':
-            return Object.assign({}, state, { split: !state.split });
         case 'VIEW_COMMIT':
             return Object.assign({}, state, { view: 'COMMIT' });
         case 'VIEW_LIST':

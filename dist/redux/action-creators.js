@@ -19,13 +19,6 @@ function incrementIndex() {
     };
 }
 exports.incrementIndex = incrementIndex;
-function setCommitContent(content) {
-    return {
-        payload: content,
-        type: 'SET_COMMIT_CONTENT',
-    };
-}
-exports.setCommitContent = setCommitContent;
 function viewCommit() {
     return {
         type: 'VIEW_COMMIT',

@@ -8,9 +8,9 @@ const store_1 = require("./redux/store");
 const git_util_1 = require("./util/git-util");
 function run(args) {
     store_1.store.subscribe(renderScreen(interface_elements_1.getScreenElement()));
-    const process = git_util_1.getGitLogProcess(args);
-    process.stdout.setEncoding('utf8');
-    process.stdout.on('data', (data) => {
+    const gitLogProcess = git_util_1.getGitLogProcess(args);
+    gitLogProcess.stdout.setEncoding('utf8');
+    gitLogProcess.stdout.on('data', (data) => {
         // The slice here gets rid of an extra newline that's not part of normal complete output
         store_1.store.dispatch(action_creators_1.addCommits(data.split('\n').slice(0, -1)));
     });

@@ -11,20 +11,10 @@ function getCommitListElement(onKeyPressFn) {
     return list;
 }
 exports.getCommitListElement = getCommitListElement;
-function getBoxElement({ top = 0, right = 0, bottom = 0, left = 0 }, onKeyFn) {
-    const box = Blessed.box({
-        bottom,
-        left,
-        mouse: true,
-        right,
-        scrollable: true,
-        scrollbar: true,
-        top,
-    });
-    box.on('keypress', onKeyFn);
-    return box;
+function getScrollableTextElement(options) {
+    return Blessed.scrollabletext(options);
 }
-exports.getBoxElement = getBoxElement;
+exports.getScrollableTextElement = getScrollableTextElement;
 function getScreenElement() {
     const screen = Blessed.screen({
         smartCSR: true,
