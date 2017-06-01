@@ -1,9 +1,10 @@
 import * as Blessed from 'blessed';
 import {
-	BoxElement,
 	IListElement,
 	KeyEvent,
 	Screen,
+	ScrollableTextElement,
+	ScrollableTextOptions,
 	TextElement,
  } from '../types/types';
 
@@ -23,23 +24,10 @@ export function getCommitListElement(
 	return list;
 }
 
-export function getBoxElement(
-	{ top = 0, right = 0, bottom = 0, left = 0},
-	onKeyFn: (ch: string, key: KeyEvent) => void): BoxElement {
+export function getScrollableTextElement(
+	options: ScrollableTextOptions): ScrollableTextElement {
 
-	const box: BoxElement = Blessed.box({
-		bottom,
-		left,
-		mouse: true,
-		right,
-		scrollable: true,
-		scrollbar: true,
-		top,
-	});
-
-	box.on('keypress', onKeyFn);
-
-	return box;
+	return Blessed.scrollabletext(options);
 }
 
 export function getScreenElement(): Screen {
