@@ -2,7 +2,6 @@ import { ChildProcess } from 'child_process';
 
 import { getCommitElement } from './interface/commit-view';
 import {
-	addColorsToItem,
 	constructProgressText,
 	getScreenElement,
 	getTextElement,
@@ -90,7 +89,7 @@ function renderScreen(screen: Screen): () => Screen {
 		*/
 
 		if (isNewCommits) {
-			list.setItems(commits.map(addColorsToItem));
+			list.setItems(commits);
 		}
 
 		if (isNewCommits || isNewIndex) {
