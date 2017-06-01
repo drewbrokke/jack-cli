@@ -1,17 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const git_util_1 = require("../util/git-util");
 function reducer(state, action) {
+    const currentIndex = state.index;
+    const currentCommits = state.commits;
     switch (action.type) {
         case 'ADD_COMMITS':
             const newCommits = typeof action.payload === 'string'
                 ? Array.of(action.payload)
                 : action.payload;
-            const commits = [...state.commits, ...newCommits];
+            const commits = [...currentCommits, ...newCommits];
             return Object.assign({}, state, { commits });
         case 'DECREMENT_INDEX':
-            return Object.assign({}, state, { index: getSafeIndex(state.index - 1, state.commits) });
+            return Object.assign({}, state, { index: getPreviousValidIndex(currentIndex - 1, currentIndex, currentCommits) });
         case 'INCREMENT_INDEX':
-            return Object.assign({}, state, { index: getSafeIndex(state.index + 1, state.commits) });
+            return Object.assign({}, state, { index: getNextValidIndex(currentIndex + 1, currentIndex, currentCommits) });
         case 'TOGGLE_SPLIT':
             return Object.assign({}, state, { split: !state.split });
         case 'VIEW_COMMIT':
@@ -23,12 +26,21 @@ function reducer(state, action) {
     }
 }
 exports.reducer = reducer;
-function getSafeIndex(index, commits) {
-    if (index < 0) {
-        return 0;
-    }
+function getNextValidIndex(index, prevValidIndex, commits) {
     if (index >= commits.length) {
-        return commits.length - 1;
+        return prevValidIndex;
     }
-    return index;
+    if (git_util_1.COMMIT_SHA_REGEX.test(commits[index])) {
+        return index;
+    }
+    return getNextValidIndex(index + 1, prevValidIndex, commits);
+}
+function getPreviousValidIndex(index, prevValidIndex, commits) {
+    if (index < 0) {
+        return prevValidIndex;
+    }
+    if (git_util_1.COMMIT_SHA_REGEX.test(commits[index])) {
+        return index;
+    }
+    return getPreviousValidIndex(index - 1, prevValidIndex, commits);
 }

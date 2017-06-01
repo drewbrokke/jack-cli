@@ -11,7 +11,8 @@ function run(args) {
     const process = git_util_1.getGitLogProcess(args);
     process.stdout.setEncoding('utf8');
     process.stdout.on('data', (data) => {
-        store_1.store.dispatch(action_creators_1.addCommits(data.split('\n').filter((item) => Boolean(item))));
+        // The slice here gets rid of an extra newline that's not part of normal complete output
+        store_1.store.dispatch(action_creators_1.addCommits(data.split('\n').slice(0, -1)));
     });
 }
 exports.run = run;
@@ -51,10 +52,11 @@ function renderScreen(screen) {
 
         */
         if (isNewCommits) {
-            list.setItems(commits.map(interface_elements_1.addColorsToItem));
+            list.setItems(commits);
         }
         if (isNewCommits || isNewIndex) {
             progressBar.setText(interface_elements_1.constructProgressText(index, commits.length));
+            list.select(index);
         }
         if (view === 'LIST' && isNewView) {
             swapViews(commit, list);
@@ -65,13 +67,19 @@ function renderScreen(screen) {
                 swapViews(list, commit);
             }
             if (isNewView || isNewIndex) {
-                const [sha] = commits[index].split(git_util_1.COMMIT_ELEMENT_SEPARATOR);
-                let content = commitContentMap.get(sha);
-                if (!content) {
-                    content = git_util_1.getCommitContentSync(sha);
-                    commitContentMap.set(sha, content);
+                const matches = git_util_1.COMMIT_SHA_REGEX.exec(commits[index]);
+                if (matches) {
+                    const sha = matches[0];
+                    let content = commitContentMap.get(sha);
+                    if (!content) {
+                        content = git_util_1.getCommitContentSync(sha);
+                        commitContentMap.set(sha, content);
+                    }
+                    commit.setContent(content);
                 }
-                commit.setContent(content);
+                else {
+                    commit.setContent('No commit SHA was found on the selected line.');
+                }
             }
         }
         screen.render();

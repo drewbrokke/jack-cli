@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Blessed = require("blessed");
-const git_util_1 = require("../util/git-util");
 function constructProgressText(index = 0, total = 0) {
     return `Commit ${index + 1}/${total}`;
 }
@@ -48,22 +47,10 @@ exports.getTextElement = getTextElement;
 /*
 Helper Functions
 */
-function addColorsToItem(item) {
-    const [sha, message, time, author] = item.split(git_util_1.COMMIT_ELEMENT_SEPARATOR);
-    return [
-        `{red-fg} ${sha}`,
-        `{white-fg}- ${message}`,
-        `{green-fg}${time}`,
-        `{blue-fg}${author}`,
-        `{/}`,
-    ].join(' ');
-}
-exports.addColorsToItem = addColorsToItem;
 function getListElement() {
     const listBgColor = '#555';
     return Blessed.list({
         bottom: 0,
-        keys: true,
         left: 0,
         mouse: true,
         right: 0,
@@ -74,6 +61,5 @@ function getListElement() {
         },
         tags: true,
         top: 0,
-        vi: true,
     });
 }
