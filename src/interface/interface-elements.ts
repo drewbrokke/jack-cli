@@ -6,7 +6,6 @@ import {
 	Screen,
 	TextElement,
  } from '../types/types';
-import { COMMIT_ELEMENT_SEPARATOR } from '../util/git-util';
 
 export function constructProgressText(
 	index: number = 0, total: number = 0): string {
@@ -67,18 +66,6 @@ export function getTextElement(content: string): TextElement {
 /*
 Helper Functions
 */
-
-export function addColorsToItem(item: string) {
-	const [sha, message, time, author] = item.split(COMMIT_ELEMENT_SEPARATOR);
-
-	return [
-		`{red-fg} ${sha}`,
-		`{white-fg}- ${message}`,
-		`{green-fg}${time}`,
-		`{blue-fg}${author}`,
-		`{/}`,
-	].join(' ');
-}
 
 function getListElement(): IListElement {
 	const listBgColor: string = '#555';
