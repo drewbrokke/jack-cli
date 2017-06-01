@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Blessed = require("blessed");
 function constructProgressText(index = 0, total = 0) {
-    return `Commit ${index + 1}/${total}`;
+    return `Line ${index + 1}/${total}`;
 }
 exports.constructProgressText = constructProgressText;
 function getCommitListElement(onKeyPressFn) {
