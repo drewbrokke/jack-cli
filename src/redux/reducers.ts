@@ -1,4 +1,5 @@
 import { IAction, IState } from '../types/types';
+import { COMMIT_SHA_REGEX } from '../util/git-util';
 
 export function reducer(state: IState, action: IAction): IState {
 	switch (action.type) {
@@ -29,6 +30,30 @@ export function reducer(state: IState, action: IAction): IState {
 		default:
 			return state;
 	}
+}
+
+function getNextValidIndex(index: number, prevValidIndex: number, commits: string[]): number {
+	if (index === commits.length) {
+		return prevValidIndex;
+	}
+
+	if (COMMIT_SHA_REGEX.test(commits[index])) {
+		return index;
+	}
+
+	return getNextValidIndex(index + 1, prevValidIndex, commits);
+}
+
+function getPreviousValidIndex(index: number, prevValidIndex: number, commits: string[]): number {
+	if (index === 0) {
+		return prevValidIndex;
+	}
+
+	if (COMMIT_SHA_REGEX.test(commits[index])) {
+		return index;
+	}
+
+	return getPreviousValidIndex(index + 1, prevValidIndex, commits);
 }
 
 function getSafeIndex(index: number, commits: string[]): number {
