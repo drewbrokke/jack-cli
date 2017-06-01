@@ -44,7 +44,9 @@ export function getBoxElement(
 }
 
 export function getScreenElement(): Screen {
-	const screen = Blessed.screen();
+	const screen = Blessed.screen({
+		smartCSR: true,
+	});
 
 	screen.key(['C-c', 'q', 'escape'], () => process.exit(0));
 
