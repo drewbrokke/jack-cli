@@ -1,7 +1,7 @@
 # jack
 Chop through that Git log wicked fast
 
-**jack** is an interactive drop-in replacement for **git-log**.  It allows you to view a list of commits and "quick-look" their changes right from the command line.  `git log`'s filtering and logging flexibility is so much better than almost all GUI apps, so in most cases, this will be a much faster way to review a series of commits/changes.
+**jack** is an interactive drop-in replacement for `git log`.  It allows you to view a list of commits and "quick-look" their changes right from the command line.  `git log`'s filtering and logging flexibility is so much better than almost all GUI apps, so in most cases, this will be a much faster way to review a series of commits/changes.
 
 ## Installation
 ```
@@ -20,7 +20,7 @@ jack -n 100
 ### List view
 Navigate through the list:  `down/up` or `j/k`
 
-View a commit's contents:   `space` or `enter`
+Go to Commit view (`git show` the commit):   `space` or `enter`
 
 ### Commit view
 View next/previous commit:  `down/up` or `j/k`
@@ -28,6 +28,4 @@ View next/previous commit:  `down/up` or `j/k`
 Return to List View:        `space` or `enter`
 
 ## Limitations
-You cannot use the `--pretty` option with **jack**.  It uses a pre-set printing format in order to parse the commit log correctly for things like the commit's SHA.  Besides that, you can use all of `git log`'s considerable filtering capabilities.
-
-Also, it's not currently recommended to use **jack** with really big logs (> 2000 commits), as performance starts to suffer in the list view with that many items.  This is mostly due to the interface itself, but we'll work to make it as performant as possible.  In the meantime, hopefully you're not in a situation where you have to review more than 2000 commits at a single time :)
+It's not currently recommended to use **jack** with really big logs (> 2000 commits), as performance starts to suffer in the list view with that many items.  This is mostly due to the interface itself, but we'll work to make it as performant as possible.  In the meantime, hopefully you're not in a situation where you have to review more than 2000 commits at a single time :)
