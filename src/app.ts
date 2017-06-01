@@ -18,7 +18,6 @@ import {
 	TextElement,
 } from './types/types';
 import {
-	COMMIT_ELEMENT_SEPARATOR,
 	COMMIT_SHA_REGEX,
 	getCommitContentSync,
 	getGitLogProcess,
@@ -96,6 +95,8 @@ function renderScreen(screen: Screen): () => Screen {
 
 		if (isNewCommits || isNewIndex) {
 			progressBar.setText(constructProgressText(index, commits.length));
+
+			list.select(index);
 		}
 
 		if (view === 'LIST' && isNewView) {
