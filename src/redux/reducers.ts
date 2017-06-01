@@ -2,21 +2,24 @@ import { IAction, IState } from '../types/types';
 import { COMMIT_SHA_REGEX } from '../util/git-util';
 
 export function reducer(state: IState, action: IAction): IState {
+	const currentIndex = state.index;
+	const currentCommits = state.commits;
+
 	switch (action.type) {
 		case 'ADD_COMMITS':
 			const newCommits = typeof action.payload === 'string'
 				? Array.of(action.payload)
 				: action.payload;
 
-			const commits = [ ...state.commits, ...newCommits ];
+			const commits = [ ...currentCommits, ...newCommits ];
 
 			return { ...state, commits };
 
 		case 'DECREMENT_INDEX':
-			return { ...state, index: getSafeIndex(state.index - 1, state.commits) };
+			return { ...state, index: getSafeIndex(currentIndex - 1, currentCommits) };
 
 		case 'INCREMENT_INDEX':
-			return { ...state, index: getSafeIndex(state.index + 1, state.commits) };
+			return { ...state, index: getSafeIndex(currentIndex + 1, currentCommits) };
 
 		case 'TOGGLE_SPLIT':
 			return { ...state, split: !state.split };
