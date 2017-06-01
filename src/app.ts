@@ -31,6 +31,9 @@ export function run(args: string[]): void {
 	process.stdout.setEncoding('utf8');
 
 	process.stdout.on('data', (data: string) => {
+
+		// The slice here gets rid of an extra newline that's not part of normal complete output
+
 		store.dispatch(addCommits(data.split('\n').slice(0, -1)));
 	});
 }
