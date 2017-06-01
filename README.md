@@ -20,7 +20,7 @@ jack -n 100
 ### List view
 Navigate through the list:  `down/up` or `j/k`
 
-Go to Commit view (`git show` the commit):   `space` or `enter`
+Go to Commit View (`git show` the commit):   `space` or `enter`
 
 ### Commit view
 View next/previous commit:  `down/up` or `j/k`
