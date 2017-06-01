@@ -23,8 +23,6 @@ export type ActionType =
 	'INCREMENT_INDEX' |
 	'NEXT_COMMIT' |
 	'PREVIOUS_COMMIT' |
-	'SET_COMMIT_CONTENT' |
-	'TOGGLE_SPLIT' |
 	'VIEW_COMMIT' |
 	'VIEW_LIST';
 

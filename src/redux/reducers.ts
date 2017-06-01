@@ -29,9 +29,6 @@ export function reducer(state: IState, action: IAction): IState {
 					currentIndex + 1, currentIndex, currentCommits),
 			};
 
-		case 'TOGGLE_SPLIT':
-			return { ...state, split: !state.split };
-
 		case 'VIEW_COMMIT':
 			return { ...state, view: 'COMMIT' };
 
