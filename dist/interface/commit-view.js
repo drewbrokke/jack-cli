@@ -3,10 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const action_creators_1 = require("../redux/action-creators");
 const store_1 = require("../redux/store");
 const interface_elements_1 = require("./interface-elements");
-function getCommitElement(content, commits, index) {
-    const { length } = commits;
+function getCommitElement() {
     let contentBox;
-    let progressMarker;
     const handleKeypressFn = (_ch, key) => {
         switch (key.name) {
             case 'down':
@@ -24,9 +22,7 @@ function getCommitElement(content, commits, index) {
             default: break;
         }
     };
-    contentBox = interface_elements_1.getBoxElement({ content }, handleKeypressFn);
-    progressMarker = interface_elements_1.getTextElement(interface_elements_1.constructProgressText(index, length));
-    contentBox.append(progressMarker);
+    contentBox = interface_elements_1.getBoxElement({}, handleKeypressFn);
     contentBox.focus();
     return contentBox;
 }

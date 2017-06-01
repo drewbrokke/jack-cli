@@ -6,17 +6,15 @@ function constructProgressText(index = 0, total = 0) {
     return `Commit ${index + 1}/${total}`;
 }
 exports.constructProgressText = constructProgressText;
-function getCommitListElement(items, onKeyPressFn) {
+function getCommitListElement(onKeyPressFn) {
     const list = getListElement();
     list.on('keypress', onKeyPressFn);
-    list.setItems(items.map(addColorsToItem));
     return list;
 }
 exports.getCommitListElement = getCommitListElement;
-function getBoxElement({ top = 0, right = 0, bottom = 0, left = 0, content = '' }, onKeyFn) {
+function getBoxElement({ top = 0, right = 0, bottom = 0, left = 0 }, onKeyFn) {
     const box = Blessed.box({
         bottom,
-        content,
         left,
         mouse: true,
         right,
@@ -68,11 +66,6 @@ function getListElement() {
         mouse: true,
         right: 0,
         style: {
-            item: {
-                hover: {
-                    bg: listBgColor,
-                },
-            },
             selected: {
                 bg: listBgColor,
             },

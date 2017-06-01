@@ -34,11 +34,11 @@ function renderScreen(screen) {
 
         */
         if (!commit) {
-            commit = commit_view_1.getCommitElement('', commits, index);
+            commit = commit_view_1.getCommitElement();
             screen.append(commit);
         }
         if (!list) {
-            list = list_view_1.getListElement(commits, index);
+            list = list_view_1.getListElement();
             screen.append(list);
         }
         if (!progressBar) {
