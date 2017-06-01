@@ -37,6 +37,7 @@ export interface IState {
 	index: number;
 	commits: string[];
 	content: string;
+	SHA: string;
 }
 
 export interface IAction {
