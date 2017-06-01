@@ -17,8 +17,8 @@ export function reducer(state: IState, action: IAction): IState {
 
 		case 'DECREMENT_INDEX':
 			return {
-				...state, index:
-				getPreviousValidIndex(
+				...state,
+				index: getPreviousValidIndex(
 					currentIndex - 1, currentIndex, currentCommits),
 			};
 
