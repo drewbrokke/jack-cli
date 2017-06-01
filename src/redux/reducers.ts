@@ -16,10 +16,18 @@ export function reducer(state: IState, action: IAction): IState {
 			return { ...state, commits };
 
 		case 'DECREMENT_INDEX':
-			return { ...state, index: getSafeIndex(currentIndex - 1, currentCommits) };
+			return {
+				...state, index:
+				getPreviousValidIndex(
+					currentIndex - 1, currentIndex, currentCommits),
+			};
 
 		case 'INCREMENT_INDEX':
-			return { ...state, index: getSafeIndex(currentIndex + 1, currentCommits) };
+			return {
+				...state,
+				index: getNextValidIndex(
+					currentIndex + 1, currentIndex, currentCommits),
+			};
 
 		case 'TOGGLE_SPLIT':
 			return { ...state, split: !state.split };
@@ -36,7 +44,7 @@ export function reducer(state: IState, action: IAction): IState {
 }
 
 function getNextValidIndex(index: number, prevValidIndex: number, commits: string[]): number {
-	if (index === commits.length) {
+	if (index >= commits.length) {
 		return prevValidIndex;
 	}
 
@@ -48,7 +56,7 @@ function getNextValidIndex(index: number, prevValidIndex: number, commits: strin
 }
 
 function getPreviousValidIndex(index: number, prevValidIndex: number, commits: string[]): number {
-	if (index === 0) {
+	if (index < 0) {
 		return prevValidIndex;
 	}
 
@@ -56,7 +64,7 @@ function getPreviousValidIndex(index: number, prevValidIndex: number, commits: s
 		return index;
 	}
 
-	return getPreviousValidIndex(index + 1, prevValidIndex, commits);
+	return getPreviousValidIndex(index - 1, prevValidIndex, commits);
 }
 
 function getSafeIndex(index: number, commits: string[]): number {
