@@ -18,14 +18,23 @@ jack -n 100
 ```
 
 ### List view
-Navigate through the list:  `down/up` or `j/k`
-
-Go to Commit View (`git show` the commit):   `space` or `enter`
+- **Select next item**: `down` / `j`
+- **Select previous item**: `up` / `k`
+- **Go to Commit View** (`git show` the commit):      `space` | `enter`
 
 ### Commit view
-View next/previous commit:  `down/up` or `j/k`
-
-Return to List View:        `space` or `enter`
+- **View next commit**: `shift + down` | `shift + j` | `right`
+- **View previous commit**: `shift + up` | `shift + k` | `left`
+- **Return to List View**: `space` | `enter`
+- **Navigating commit content**: This uses the interface library's [built-in commands](https://github.com/chjj/blessed/blob/master/lib/widgets/scrollablebox.js#L120-L162).
+    + **Scroll up**: `up` | `k`
+    + **Scroll down**: `down` | `j`
+    + **Scroll up half screen**: `ctrl + u`
+    + **Scroll down half screen**: `ctrl + d`
+    + **Scroll up full screen**: `ctrl + b`
+    + **Scroll down full screen**: `ctrl + f`
+    + **Scroll to top**: `g`
+    + **Scroll to bottom**: `shift + g`
 
 ## Limitations
 It's not currently recommended to use **jack** with really big logs (> 2000 commits), as performance starts to suffer in the list view with that many items.  This is mostly due to the interface itself, but we'll work to make it as performant as possible.  In the meantime, hopefully you're not in a situation where you have to review more than 2000 commits at a single time :)
