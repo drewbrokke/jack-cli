@@ -66,15 +66,3 @@ function getPreviousValidIndex(index: number, prevValidIndex: number, commits: s
 
 	return getPreviousValidIndex(index - 1, prevValidIndex, commits);
 }
-
-function getSafeIndex(index: number, commits: string[]): number {
-	if (index < 0) {
-		return 0;
-	}
-
-	if (index >= commits.length) {
-		return commits.length - 1;
-	}
-
-	return index;
-}
