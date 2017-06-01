@@ -19,13 +19,6 @@ export function incrementIndex(): IAction {
 	};
 }
 
-export function setCommitContent(content: string): IAction {
-	return {
-		payload: content,
-		type: 'SET_COMMIT_CONTENT',
-	};
-}
-
 export function viewCommit(): IAction {
 	return {
 		type: 'VIEW_COMMIT',
