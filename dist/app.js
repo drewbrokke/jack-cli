@@ -21,7 +21,7 @@ function renderScreen(screen) {
     let lastState = store_1.store.getState();
     const commitContentMap = new Map();
     let commit;
-    let list;
+    let commitList;
     let notificationContainer;
     let progressBar;
     return () => {
@@ -40,9 +40,9 @@ function renderScreen(screen) {
             commit = commit_view_1.getCommitElement();
             screen.append(commit);
         }
-        if (!list) {
-            list = list_view_1.getCommitListElement();
-            screen.append(list);
+        if (!commitList) {
+            commitList = list_view_1.getCommitListElement();
+            screen.append(commitList);
         }
         if (!progressBar) {
             progressBar = progress_indicator_1.getProgressIndicator(progress_indicator_1.constructProgressText(index, commits.length));
@@ -58,23 +58,23 @@ function renderScreen(screen) {
 
         */
         if (state.notificationRequested) {
-            notification_1.notify(state.notificationText);
+            notification_1.notifySuccess(state.notificationText);
             store_1.store.dispatch(action_creators_1.notificationSent());
         }
         if (isNewCommits) {
-            list.setItems(commits);
+            commitList.setItems(commits);
         }
         if (isNewCommits || isNewIndex) {
             progressBar.setText(progress_indicator_1.constructProgressText(index, commits.length));
-            list.select(index);
+            commitList.select(index);
         }
         if (view === 'LIST' && isNewView) {
-            swapViews(commit, list);
-            list.select(index);
+            swapViews(commit, commitList);
+            commitList.select(index);
         }
         if (view === 'COMMIT') {
             if (isNewView) {
-                swapViews(list, commit);
+                swapViews(commitList, commit);
             }
             if (isNewView || isNewIndex) {
                 let content = commitContentMap.get(SHA);

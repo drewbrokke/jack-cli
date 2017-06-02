@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const interface_elements_1 = require("./interface-elements");
 let notificationContainer;
+const COLOR_ERROR = 'red';
+const COLOR_SUCCESS = '#294';
 function getNotificationContainer() {
     if (!notificationContainer) {
         notificationContainer = interface_elements_1.getBoxElement({
@@ -13,15 +15,19 @@ function getNotificationContainer() {
     return notificationContainer;
 }
 exports.getNotificationContainer = getNotificationContainer;
-function notify(content) {
-    notificationContainer.append(getNotification(content));
+function notifyError(content) {
+    notificationContainer.append(getNotification(content, COLOR_ERROR));
 }
-exports.notify = notify;
+exports.notifyError = notifyError;
+function notifySuccess(content) {
+    notificationContainer.append(getNotification(content, COLOR_SUCCESS));
+}
+exports.notifySuccess = notifySuccess;
 // Helper functions
-function getNotification(content) {
+function getNotification(content, bg) {
     const options = {
         align: 'center',
-        bg: '#294',
+        bg,
         clickable: true,
         content,
         padding: {
