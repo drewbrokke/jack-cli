@@ -12,6 +12,7 @@ const REPO_TOP_LEVEL: string = spawnSync('git', ['rev-parse', '--show-toplevel']
 
 export function getScreen(): Screen {
 	const screen: Screen = getScreenElement({
+		autoPadding: true,
 		smartCSR: true,
 	});
 
