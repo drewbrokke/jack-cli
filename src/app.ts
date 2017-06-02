@@ -38,7 +38,7 @@ function renderScreen(screen: Screen): () => Screen {
 	const commitContentMap: Map<string, string> = new Map();
 
 	let commit: ScrollableTextElement;
-	let list: IListElement;
+	let commitList: IListElement;
 	let notificationContainer: BoxElement;
 	let progressBar: TextElement;
 
@@ -65,10 +65,10 @@ function renderScreen(screen: Screen): () => Screen {
 			screen.append(commit);
 		}
 
-		if (!list) {
-			list = getCommitListElement();
+		if (!commitList) {
+			commitList = getCommitListElement();
 
-			screen.append(list);
+			screen.append(commitList);
 		}
 
 		if (!progressBar) {
@@ -97,24 +97,24 @@ function renderScreen(screen: Screen): () => Screen {
 		}
 
 		if (isNewCommits) {
-			list.setItems(commits);
+			commitList.setItems(commits);
 		}
 
 		if (isNewCommits || isNewIndex) {
 			progressBar.setText(constructProgressText(index, commits.length));
 
-			list.select(index);
+			commitList.select(index);
 		}
 
 		if (view === 'LIST' && isNewView) {
-			swapViews(commit, list);
+			swapViews(commit, commitList);
 
-			list.select(index);
+			commitList.select(index);
 		}
 
 		if (view === 'COMMIT') {
 			if (isNewView) {
-				swapViews(list, commit);
+				swapViews(commitList, commit);
 			}
 
 			if (isNewView || isNewIndex) {
