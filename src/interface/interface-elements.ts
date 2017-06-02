@@ -3,6 +3,7 @@ import {
 	IListElement,
 	KeyEvent,
 	Screen,
+	ScreenOptions,
 	ScrollableTextElement,
 	ScrollableTextOptions,
 	TextElement,
@@ -30,14 +31,8 @@ export function getScrollableTextElement(
 	return Blessed.scrollabletext(options);
 }
 
-export function getScreenElement(): Screen {
-	const screen = Blessed.screen({
-		smartCSR: true,
-	});
-
-	screen.key(['C-c', 'q', 'escape'], () => process.exit(0));
-
-	return screen;
+export function getScreenElement(options: ScreenOptions): Screen {
+	return Blessed.screen(options);
 }
 
 export function getTextElement(content: string): TextElement {
