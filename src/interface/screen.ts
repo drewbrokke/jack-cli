@@ -60,23 +60,7 @@ function openFilesFromCommit(): void {
 	exec(`git diff --name-only ${SHA}^..${SHA}`, (_error: Error, stdout: string) => {
 		const files: string[] = stdout.split('\n').filter(Boolean);
 
-		if (process.platform === 'darwin') {
-			const openProcess: ChildProcess = spawn('open', files, { cwd: REPO_TOP_LEVEL });
-
-			openProcess.on('error', (err: Error) => {
-				store.dispatch(notificationRequested(err.message, 'ERROR'));
-			});
-
-			openProcess.on('close', (code: number) => {
-				if (code === 0) {
-					store.dispatch(
-						notificationRequested(
-							`Successfully opened files:\n\n${files.join('\n')}`, 'SUCCESS'));
-				}
-			});
-		} else {
-			files.map((file: string) => path.join(REPO_TOP_LEVEL, file)).forEach(opn);
-		}
+		files.map((file: string) => path.join(REPO_TOP_LEVEL, file)).forEach(opn);
 
 		store.dispatch(
 			notificationRequested(
