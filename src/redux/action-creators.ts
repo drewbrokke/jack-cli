@@ -19,6 +19,19 @@ export function incrementIndex(): IAction {
 	};
 }
 
+export function notificationRequested(notificationText: string): IAction {
+	return {
+		payload: notificationText,
+		type: 'NOTIFICATION_REQUESTED',
+	};
+}
+
+export function notificationSent(): IAction {
+	return {
+		type: 'NOTIFICATION_SENT',
+	};
+}
+
 export function viewCommit(): IAction {
 	return {
 		type: 'VIEW_COMMIT',
