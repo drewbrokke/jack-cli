@@ -8,6 +8,8 @@ const initialState: IState = {
 	commits: [],
 	content: '',
 	index: 0,
+	notificationRequested: false,
+	notificationText: '',
 	split: false,
 	view: 'LIST',
 };
