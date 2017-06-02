@@ -1,4 +1,4 @@
-import { exec, spawnSync } from 'child_process';
+import { exec, spawn, spawnSync, SpawnSyncReturns } from 'child_process';
 import * as clipboardy from 'clipboardy';
 import * as opn from 'opn';
 import * as path from 'path';
@@ -18,9 +18,28 @@ export function getScreen(): Screen {
 
 	screen.key('c', copySHAToClipboard);
 	screen.key('o', openFilesFromCommit);
+	screen.key('p', cherryPickCommit);
 	screen.key(['C-c', 'q', 'escape'], () => process.exit(0));
 
 	return screen;
+}
+
+function cherryPickCommit(): void {
+	const {SHA} = store.getState();
+
+	const cherryPickSync: SpawnSyncReturns<string> = spawnSync('git', ['cherry-pick', SHA]);
+
+	if (cherryPickSync.status !== 0) {
+		store.dispatch(
+			notificationRequested(
+				`Cherry-pick failed:\n\n${cherryPickSync.stderr.toString()}\n\nAborting cherry-pick.`));
+
+		spawn('git', ['cherry-pick', '--abort']);
+	} else {
+		store.dispatch(
+			notificationRequested(
+				`Successfully cherry-picked commit ${SHA} onto current branch.`));
+	}
 }
 
 function copySHAToClipboard(): void {
