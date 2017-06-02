@@ -43,12 +43,18 @@ function openFilesFromCommit() {
     child_process_1.exec(`git diff --name-only ${SHA}^..${SHA}`, (_error, stdout) => {
         const files = stdout.split('\n').filter(Boolean);
         if (process.platform === 'darwin') {
-            child_process_1.spawn('open', files);
+            const openProcess = child_process_1.spawn('open', files, { cwd: REPO_TOP_LEVEL });
+            openProcess.on('error', (err) => {
+                store_1.store.dispatch(action_creators_1.notificationRequested(err.message, 'ERROR'));
+            });
+            openProcess.on('close', (code) => {
+                if (code === 0) {
+                    store_1.store.dispatch(action_creators_1.notificationRequested(`Successfully opened files:\n\n${files.join('\n')}`, 'SUCCESS'));
+                }
+            });
         }
         else {
-            files
-                .map((file) => path.join(REPO_TOP_LEVEL, file))
-                .forEach((file) => opn(file));
+            files.map((file) => path.join(REPO_TOP_LEVEL, file)).forEach(opn);
         }
         store_1.store.dispatch(action_creators_1.notificationRequested(`Opening files:\n\n${files.join('\n')}`, 'INFO'));
     });
