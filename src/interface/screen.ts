@@ -32,13 +32,13 @@ function cherryPickCommit(): void {
 	if (cherryPickSync.status !== 0) {
 		store.dispatch(
 			notificationRequested(
-				`Cherry-pick failed:\n\n${cherryPickSync.stderr.toString()}\n\nAborting cherry-pick.`));
+				`Cherry-pick failed:\n\n${cherryPickSync.stderr.toString()}\n\nAborting cherry-pick.`, 'ERROR'));
 
 		spawn('git', ['cherry-pick', '--abort']);
 	} else {
 		store.dispatch(
 			notificationRequested(
-				`Successfully cherry-picked commit ${SHA} onto current branch.`));
+				`Successfully cherry-picked commit ${SHA} onto current branch.`, 'SUCCESS'));
 	}
 }
 
@@ -47,7 +47,7 @@ function copySHAToClipboard(): void {
 
 	clipboardy.writeSync(SHA);
 
-	store.dispatch(notificationRequested(`Copied SHA to the clipboard: ${SHA}`));
+	store.dispatch(notificationRequested(`Copied SHA to the clipboard: ${SHA}`, 'SUCCESS'));
 }
 
 function openFilesFromCommit(): void {
@@ -60,6 +60,6 @@ function openFilesFromCommit(): void {
 			.map((file: string) => path.join(REPO_TOP_LEVEL, file))
 			.forEach((file: string) => opn(file));
 
-		store.dispatch(notificationRequested(`Opening files:\n\n${files.join('\n')}`));
+		store.dispatch(notificationRequested(`Opening files:\n\n${files.join('\n')}`, 'INFO'));
 	});
 }
