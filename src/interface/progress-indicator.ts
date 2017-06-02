@@ -10,7 +10,7 @@ export function getProgressIndicator(content: string): TextElement {
 		fill: true,
 		right: 0,
 		shrink: true,
-		top: 0,
+		top: 3,
 	});
 }
 
