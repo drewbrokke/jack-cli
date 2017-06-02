@@ -55,7 +55,7 @@ function getNotification(content: string, bg: string): TextElement {
 	const notificationDestroyTimer: NodeJS.Timer = setTimeout(() => {
 		notification.destroy();
 		screen.render();
-	}, 3000);
+	}, 5000);
 
 	notification.on('mouseup', () => {
 		clearTimeout(notificationDestroyTimer);
