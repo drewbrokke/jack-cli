@@ -5,8 +5,11 @@ import * as path from 'path';
 
 import { notificationRequested } from '../redux/action-creators';
 import { store } from '../redux/store';
-import { Screen } from '../types/types';
+import {
+	Screen,
+} from '../types/types';
 import { getScreenElement } from './interface-elements';
+import { toggleHelp } from './notification';
 
 const REPO_TOP_LEVEL: string = spawnSync('git', ['rev-parse', '--show-toplevel']).stdout.toString().split('\n')[0];
 
@@ -16,9 +19,10 @@ export function getScreen(): Screen {
 		smartCSR: true,
 	});
 
-	screen.key('c', copySHAToClipboard);
+	screen.key('?', toggleHelp);
+	screen.key('c', cherryPickCommit);
 	screen.key('o', openFilesFromCommit);
-	screen.key('p', cherryPickCommit);
+	screen.key('y', copySHAToClipboard);
 	screen.key(['C-c', 'q', 'escape'], () => process.exit(0));
 
 	return screen;
