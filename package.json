@@ -18,6 +18,7 @@
   "license": "ISC",
   "dependencies": {
     "blessed": "^0.1.81",
+    "clipboardy": "^1.1.2",
     "redux": "^3.6.0"
   },
   "devDependencies": {
