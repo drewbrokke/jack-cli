@@ -1,18 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const interface_elements_1 = require("./interface-elements");
-function getProgressIndicator(content) {
+function getHelpPrompt() {
     return interface_elements_1.getTextElement({
         border: 'line',
-        content,
+        content: 'Press "?" to show/hide help.',
         fill: true,
         right: 0,
         shrink: true,
-        top: 3,
+        top: 0,
     });
 }
-exports.getProgressIndicator = getProgressIndicator;
-function constructProgressText(index = 0, total = 0) {
-    return `Line ${index + 1}/${total}`;
-}
-exports.constructProgressText = constructProgressText;
+exports.getHelpPrompt = getHelpPrompt;

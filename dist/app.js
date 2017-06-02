@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const commit_view_1 = require("./interface/commit-view");
+const help_prompt_1 = require("./interface/help-prompt");
 const list_view_1 = require("./interface/list-view");
 const notification_1 = require("./interface/notification");
 const progress_indicator_1 = require("./interface/progress-indicator");
@@ -22,6 +23,7 @@ function renderScreen(screen) {
     const commitContentMap = new Map();
     let commit;
     let commitList;
+    let helpPrompt;
     let notificationContainer;
     let progressBar;
     return () => {
@@ -43,6 +45,10 @@ function renderScreen(screen) {
         if (!commitList) {
             commitList = list_view_1.getCommitListElement();
             screen.append(commitList);
+        }
+        if (!helpPrompt) {
+            helpPrompt = help_prompt_1.getHelpPrompt();
+            screen.append(helpPrompt);
         }
         if (!progressBar) {
             progressBar = progress_indicator_1.getProgressIndicator(progress_indicator_1.constructProgressText(index, commits.length));
