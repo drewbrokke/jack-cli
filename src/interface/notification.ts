@@ -8,6 +8,9 @@ import { getBoxElement, getTextElement } from './interface-elements';
 
 let notificationContainer: BoxElement;
 
+const COLOR_ERROR: string = 'red';
+const COLOR_SUCCESS: string = '#294';
+
 export function getNotificationContainer(): BoxElement {
 	if (!notificationContainer) {
 		notificationContainer = getBoxElement({
@@ -20,16 +23,20 @@ export function getNotificationContainer(): BoxElement {
 	return notificationContainer;
 }
 
-export function notify(content: string): void {
-	notificationContainer.append(getNotification(content));
+export function notifyError(content: string): void {
+	notificationContainer.append(getNotification(content, COLOR_ERROR));
+}
+
+export function notifySuccess(content: string): void {
+	notificationContainer.append(getNotification(content, COLOR_SUCCESS));
 }
 
 // Helper functions
 
-function getNotification(content: string): TextElement {
+function getNotification(content: string, bg: string): TextElement {
 	const options: TextOptions = {
 		align: 'center',
-		bg: '#294',
+		bg,
 		clickable: true,
 		content,
 		padding: {
