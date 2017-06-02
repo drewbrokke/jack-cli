@@ -44,7 +44,7 @@ function getNotification(content, bg) {
     const notificationDestroyTimer = setTimeout(() => {
         notification.destroy();
         screen.render();
-    }, 3000);
+    }, 5000);
     notification.on('mouseup', () => {
         clearTimeout(notificationDestroyTimer);
         notification.destroy();

@@ -15,10 +15,22 @@ function getScreen() {
     });
     screen.key('c', copySHAToClipboard);
     screen.key('o', openFilesFromCommit);
+    screen.key('p', cherryPickCommit);
     screen.key(['C-c', 'q', 'escape'], () => process.exit(0));
     return screen;
 }
 exports.getScreen = getScreen;
+function cherryPickCommit() {
+    const { SHA } = store_1.store.getState();
+    const cherryPickSync = child_process_1.spawnSync('git', ['cherry-pick', SHA]);
+    if (cherryPickSync.status !== 0) {
+        store_1.store.dispatch(action_creators_1.notificationRequested(`Cherry-pick failed:\n\n${cherryPickSync.stderr.toString()}\n\nAborting cherry-pick.`));
+        child_process_1.spawn('git', ['cherry-pick', '--abort']);
+    }
+    else {
+        store_1.store.dispatch(action_creators_1.notificationRequested(`Successfully cherry-picked commit ${SHA} onto current branch.`));
+    }
+}
 function copySHAToClipboard() {
     const { SHA } = store_1.store.getState();
     clipboardy.writeSync(SHA);
