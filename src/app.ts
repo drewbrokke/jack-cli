@@ -1,11 +1,8 @@
 import { ChildProcess } from 'child_process';
 
 import { getCommitElement } from './interface/commit-view';
-import {
-	constructProgressText,
-	getTextElement,
-} from './interface/interface-elements';
 import { getListElement } from './interface/list-view';
+import { constructProgressText, getProgressIndicator } from './interface/progress-indicator';
 import { getScreen } from './interface/screen';
 import { addCommits } from './redux/action-creators';
 import { store } from './redux/store';
@@ -72,7 +69,7 @@ function renderScreen(screen: Screen): () => Screen {
 		}
 
 		if (!progressBar) {
-			progressBar = getTextElement(
+			progressBar = getProgressIndicator(
 				constructProgressText(index, commits.length));
 
 			screen.append(progressBar);
