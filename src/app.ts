@@ -2,7 +2,7 @@ import { ChildProcess } from 'child_process';
 
 import { getCommitElement } from './interface/commit-view';
 import { getCommitListElement } from './interface/list-view';
-import { getNotificationContainer, notifySuccess } from './interface/notification';
+import { getNotificationContainer, notify } from './interface/notification';
 import { constructProgressText, getProgressIndicator } from './interface/progress-indicator';
 import { getScreen } from './interface/screen';
 import { addCommits, notificationSent } from './redux/action-creators';
@@ -90,8 +90,8 @@ function renderScreen(screen: Screen): () => Screen {
 
 		*/
 
-		if (state.notificationRequested) {
-			notifySuccess(state.notificationText);
+		if (state.notificationType !== 'NONE') {
+			notify(state.notificationText, state.notificationType);
 
 			store.dispatch(notificationSent());
 		}
