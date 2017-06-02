@@ -1,10 +1,21 @@
 import { decrementIndex, incrementIndex, viewCommit } from '../redux/action-creators';
 import { store } from '../redux/store';
 import { IListElement, KeyEvent } from '../types/types';
-import { getCommitListElement } from './interface-elements';
+import { getListElement } from './interface-elements';
 
-export function getListElement(): IListElement {
-	let list: IListElement;
+export function getCommitListElement(): IListElement {
+	const list: IListElement = getListElement({
+		bottom: 0,
+		left: 0,
+		mouse: true,
+		right: 0,
+		style: {
+			selected: {
+				bg: '#555',
+			},
+		},
+		top: 0,
+	});
 
 	const handleKeypressFn = (_ch: string, key: KeyEvent) => {
 		switch (key.name) {
@@ -30,7 +41,7 @@ export function getListElement(): IListElement {
 		}
 	};
 
-	list = getCommitListElement(handleKeypressFn);
+	list.on('keypress', handleKeypressFn);
 
 	list.focus();
 
