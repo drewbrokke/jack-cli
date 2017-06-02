@@ -7,15 +7,17 @@ const path = require("path");
 const action_creators_1 = require("../redux/action-creators");
 const store_1 = require("../redux/store");
 const interface_elements_1 = require("./interface-elements");
+const notification_1 = require("./notification");
 const REPO_TOP_LEVEL = child_process_1.spawnSync('git', ['rev-parse', '--show-toplevel']).stdout.toString().split('\n')[0];
 function getScreen() {
     const screen = interface_elements_1.getScreenElement({
         autoPadding: true,
         smartCSR: true,
     });
-    screen.key('c', copySHAToClipboard);
+    screen.key('?', notification_1.toggleHelp);
+    screen.key('c', cherryPickCommit);
     screen.key('o', openFilesFromCommit);
-    screen.key('p', cherryPickCommit);
+    screen.key('y', copySHAToClipboard);
     screen.key(['C-c', 'q', 'escape'], () => process.exit(0));
     return screen;
 }
