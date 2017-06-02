@@ -51,15 +51,15 @@ export function reducer(state: IState, action: IAction): IState {
 		case 'NOTIFICATION_REQUESTED':
 			return {
 				...state,
-				notificationRequested: true,
-				notificationText: action.payload,
+				notificationText: action.payload.text,
+				notificationType: action.payload.type,
 			};
 
 		case 'NOTIFICATION_SENT':
 			return {
 				...state,
-				notificationRequested: false,
 				notificationText: '',
+				notificationType: 'NONE',
 			};
 
 		case 'VIEW_COMMIT':
