@@ -42,9 +42,14 @@ function openFilesFromCommit() {
     const { SHA } = store_1.store.getState();
     child_process_1.exec(`git diff --name-only ${SHA}^..${SHA}`, (_error, stdout) => {
         const files = stdout.split('\n').filter(Boolean);
-        files
-            .map((file) => path.join(REPO_TOP_LEVEL, file))
-            .forEach((file) => opn(file));
+        if (process.platform === 'darwin') {
+            child_process_1.spawn('open', files);
+        }
+        else {
+            files
+                .map((file) => path.join(REPO_TOP_LEVEL, file))
+                .forEach((file) => opn(file));
+        }
         store_1.store.dispatch(action_creators_1.notificationRequested(`Opening files:\n\n${files.join('\n')}`, 'INFO'));
     });
 }
