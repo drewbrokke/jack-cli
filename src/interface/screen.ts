@@ -1,4 +1,4 @@
-import { exec, spawn, spawnSync, SpawnSyncReturns } from 'child_process';
+import { ChildProcess, exec, spawn, spawnSync, SpawnSyncReturns } from 'child_process';
 import * as clipboardy from 'clipboardy';
 import * as opn from 'opn';
 import * as path from 'path';
@@ -61,13 +61,25 @@ function openFilesFromCommit(): void {
 		const files: string[] = stdout.split('\n').filter(Boolean);
 
 		if (process.platform === 'darwin') {
-			spawn('open', files);
+			const openProcess: ChildProcess = spawn('open', files, { cwd: REPO_TOP_LEVEL });
+
+			openProcess.on('error', (err: Error) => {
+				store.dispatch(notificationRequested(err.message, 'ERROR'));
+			});
+
+			openProcess.on('close', (code: number) => {
+				if (code === 0) {
+					store.dispatch(
+						notificationRequested(
+							`Successfully opened files:\n\n${files.join('\n')}`, 'SUCCESS'));
+				}
+			});
 		} else {
-			files
-				.map((file: string) => path.join(REPO_TOP_LEVEL, file))
-				.forEach((file: string) => opn(file));
+			files.map((file: string) => path.join(REPO_TOP_LEVEL, file)).forEach(opn);
 		}
 
-		store.dispatch(notificationRequested(`Opening files:\n\n${files.join('\n')}`, 'INFO'));
+		store.dispatch(
+			notificationRequested(
+				`Opening files:\n\n${files.join('\n')}`, 'INFO'));
 	});
 }
