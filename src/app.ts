@@ -25,12 +25,12 @@ import {
 export function run(args: string[]): void {
 	store.subscribe(renderScreen(getScreen()));
 
-	let dataString = '';
 	const gitLogProcess: ChildProcess = getGitLogProcess(args);
 
 	gitLogProcess.stdout.setEncoding('utf8');
-	gitLogProcess.stdout.on('data', (data: string) => dataString += data);
-	gitLogProcess.on('close', () => store.dispatch(addCommits(dataString.split('\n'))));
+	gitLogProcess.stdout.on('data', (data: string) => {
+		store.dispatch(addCommits(data.trim().split('\n')));
+	});
 }
 
 function renderScreen(screen: Screen): () => Screen {
