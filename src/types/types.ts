@@ -35,6 +35,13 @@ export type ActionType =
 	'VIEW_COMMIT' |
 	'VIEW_LIST';
 
+export type NotificationType =
+	'ERROR' |
+	'INFO' |
+	'NONE' |
+	'SUCCESS' |
+	'WARNING';
+
 export interface IState {
 	view: View;
 	split: boolean;
@@ -42,8 +49,8 @@ export interface IState {
 	commits: string[];
 	content: string;
 	SHA: string;
-	notificationRequested: boolean;
 	notificationText: string;
+	notificationType: NotificationType;
 }
 
 export interface IAction {
