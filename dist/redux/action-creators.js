@@ -19,9 +19,12 @@ function incrementIndex() {
     };
 }
 exports.incrementIndex = incrementIndex;
-function notificationRequested(notificationText) {
+function notificationRequested(text, type) {
     return {
-        payload: notificationText,
+        payload: {
+            text,
+            type,
+        },
         type: 'NOTIFICATION_REQUESTED',
     };
 }

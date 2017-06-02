@@ -2,8 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const interface_elements_1 = require("./interface-elements");
 let notificationContainer;
-const COLOR_ERROR = 'red';
-const COLOR_SUCCESS = '#294';
+const colors = new Map();
+colors.set('ERROR', 'red');
+colors.set('INFO', 'blue');
+colors.set('SUCCESS', '#294');
+colors.set('WARNING', 'yellow');
 function getNotificationContainer() {
     if (!notificationContainer) {
         notificationContainer = interface_elements_1.getBoxElement({
@@ -15,14 +18,10 @@ function getNotificationContainer() {
     return notificationContainer;
 }
 exports.getNotificationContainer = getNotificationContainer;
-function notifyError(content) {
-    notificationContainer.append(getNotification(content, COLOR_ERROR));
+function notify(content, type) {
+    notificationContainer.append(getNotification(content, colors.get(type) || 'INFO'));
 }
-exports.notifyError = notifyError;
-function notifySuccess(content) {
-    notificationContainer.append(getNotification(content, COLOR_SUCCESS));
-}
-exports.notifySuccess = notifySuccess;
+exports.notify = notify;
 // Helper functions
 function getNotification(content, bg) {
     const options = {

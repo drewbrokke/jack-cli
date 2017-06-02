@@ -57,8 +57,8 @@ function renderScreen(screen) {
         UI update conditions
 
         */
-        if (state.notificationRequested) {
-            notification_1.notifySuccess(state.notificationText);
+        if (state.notificationType !== 'NONE') {
+            notification_1.notify(state.notificationText, state.notificationType);
             store_1.store.dispatch(action_creators_1.notificationSent());
         }
         if (isNewCommits) {

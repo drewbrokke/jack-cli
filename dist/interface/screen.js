@@ -24,17 +24,17 @@ function cherryPickCommit() {
     const { SHA } = store_1.store.getState();
     const cherryPickSync = child_process_1.spawnSync('git', ['cherry-pick', SHA]);
     if (cherryPickSync.status !== 0) {
-        store_1.store.dispatch(action_creators_1.notificationRequested(`Cherry-pick failed:\n\n${cherryPickSync.stderr.toString()}\n\nAborting cherry-pick.`));
+        store_1.store.dispatch(action_creators_1.notificationRequested(`Cherry-pick failed:\n\n${cherryPickSync.stderr.toString()}\n\nAborting cherry-pick.`, 'ERROR'));
         child_process_1.spawn('git', ['cherry-pick', '--abort']);
     }
     else {
-        store_1.store.dispatch(action_creators_1.notificationRequested(`Successfully cherry-picked commit ${SHA} onto current branch.`));
+        store_1.store.dispatch(action_creators_1.notificationRequested(`Successfully cherry-picked commit ${SHA} onto current branch.`, 'SUCCESS'));
     }
 }
 function copySHAToClipboard() {
     const { SHA } = store_1.store.getState();
     clipboardy.writeSync(SHA);
-    store_1.store.dispatch(action_creators_1.notificationRequested(`Copied SHA to the clipboard: ${SHA}`));
+    store_1.store.dispatch(action_creators_1.notificationRequested(`Copied SHA to the clipboard: ${SHA}`, 'SUCCESS'));
 }
 function openFilesFromCommit() {
     const { SHA } = store_1.store.getState();
@@ -43,6 +43,6 @@ function openFilesFromCommit() {
         files
             .map((file) => path.join(REPO_TOP_LEVEL, file))
             .forEach((file) => opn(file));
-        store_1.store.dispatch(action_creators_1.notificationRequested(`Opening files:\n\n${files.join('\n')}`));
+        store_1.store.dispatch(action_creators_1.notificationRequested(`Opening files:\n\n${files.join('\n')}`, 'INFO'));
     });
 }

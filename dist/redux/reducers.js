@@ -24,9 +24,9 @@ function reducer(state, action) {
             const nextValidIndex = getNextValidIndex(currentIndex + 1, currentIndex, currentCommits);
             return Object.assign({}, state, { SHA: getSHA(nextValidIndex, currentCommits, currentSHA), index: nextValidIndex });
         case 'NOTIFICATION_REQUESTED':
-            return Object.assign({}, state, { notificationRequested: true, notificationText: action.payload });
+            return Object.assign({}, state, { notificationText: action.payload.text, notificationType: action.payload.type });
         case 'NOTIFICATION_SENT':
-            return Object.assign({}, state, { notificationRequested: false, notificationText: '' });
+            return Object.assign({}, state, { notificationText: '', notificationType: 'NONE' });
         case 'VIEW_COMMIT':
             return Object.assign({}, state, { view: 'COMMIT' });
         case 'VIEW_LIST':
