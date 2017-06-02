@@ -5,9 +5,11 @@ import {
 	TextElement,
 	TextOptions,
 } from '../types/types';
+import { helpText } from '../util/help-text';
 import { getBoxElement, getTextElement } from './interface-elements';
 
 let notificationContainer: BoxElement;
+let helpBox: TextElement;
 
 const colors: Map<NotificationType, string> = new Map();
 
@@ -30,7 +32,19 @@ export function getNotificationContainer(): BoxElement {
 
 export function notify(content: string, type: NotificationType) {
 	notificationContainer.append(
-		getNotification(content, colors.get(type) || 'INFO'));
+		getNotification(content, colors.get(type) || 'blue'));
+}
+
+export function toggleHelp() {
+	if (!helpBox) {
+		helpBox = getPersistentNotification(helpText, 'none');
+
+		notificationContainer.append(helpBox);
+	} else {
+		helpBox.toggle();
+	}
+
+	notificationContainer.screen.render();
 }
 
 // Helper functions
@@ -65,6 +79,36 @@ function getNotification(content: string, bg: string): TextElement {
 		notification.destroy();
 		screen.render();
 	});
+
+	return notification;
+}
+
+function getPersistentNotification(content: string, bg: string): TextElement {
+	const options: TextOptions = {
+		align: 'center',
+		bg,
+		border: 'line',
+		clickable: true,
+		content,
+		padding: {
+			bottom: 1,
+			left: 2,
+			right: 2,
+			top: 1,
+		},
+		shrink: true,
+		valign: 'middle',
+	};
+
+	const notification: TextElement = getTextElement(options);
+	const screen: Screen = notification.screen;
+
+	notification.on('mouseup', () => {
+		notification.destroy();
+		screen.render();
+	});
+
+	notification.focus();
 
 	return notification;
 }
