@@ -1,15 +1,35 @@
 import {
+	BoxElement,
 	Screen,
 	TextElement,
 	TextOptions,
 } from '../types/types';
-import { getTextElement } from './interface-elements';
+import { getBoxElement, getTextElement } from './interface-elements';
 
-export function getNotification(content: string): TextElement {
+let notificationContainer: BoxElement;
+
+export function getNotificationContainer(): BoxElement {
+	if (!notificationContainer) {
+		notificationContainer = getBoxElement({
+			bottom: 0,
+			right: 0,
+			shrink: true,
+		});
+	}
+
+	return notificationContainer;
+}
+
+export function notify(content: string): void {
+	notificationContainer.append(getNotification(content));
+}
+
+// Helper functions
+
+function getNotification(content: string): TextElement {
 	const options: TextOptions = {
 		align: 'center',
 		bg: '#294',
-		bottom: 0,
 		clickable: true,
 		content,
 		padding: {
@@ -18,23 +38,19 @@ export function getNotification(content: string): TextElement {
 			right: 2,
 			top: 1,
 		},
-		right: 0,
 		shrink: true,
 		valign: 'middle',
 	};
 
 	const notification: TextElement = getTextElement(options);
+	const screen: Screen = notification.screen;
 
 	const notificationDestroyTimer: NodeJS.Timer = setTimeout(() => {
-		const screen: Screen = notification.screen;
-
 		notification.destroy();
 		screen.render();
 	}, 3000);
 
 	notification.on('mouseup', () => {
-		const screen: Screen = notification.screen;
-
 		clearTimeout(notificationDestroyTimer);
 
 		notification.destroy();
