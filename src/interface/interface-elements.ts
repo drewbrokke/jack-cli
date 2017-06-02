@@ -1,5 +1,7 @@
 import * as Blessed from 'blessed';
 import {
+	BoxElement,
+	BoxOptions,
 	IListElement,
 	KeyEvent,
 	Screen,
@@ -9,6 +11,10 @@ import {
 	TextElement,
 	TextOptions,
  } from '../types/types';
+
+export function getBoxElement(options: BoxOptions): BoxElement {
+	return Blessed.box(options);
+}
 
 export function getCommitListElement(
 	onKeyPressFn: (ch: string, key: KeyEvent) => void): IListElement {
