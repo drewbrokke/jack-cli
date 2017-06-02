@@ -11,7 +11,12 @@ function reducer(state, action) {
                 ? Array.of(action.payload)
                 : action.payload;
             const commits = [...currentCommits, ...newCommits];
-            return Object.assign({}, state, { commits });
+            let SHA = currentSHA;
+            if (!SHA) {
+                SHA = getSHA(getNextValidIndex(currentIndex, currentIndex, commits), commits, SHA);
+            }
+            return Object.assign({}, state, { SHA,
+                commits });
         case 'DECREMENT_INDEX':
             const previousValidIndex = getPreviousValidIndex(currentIndex - 1, currentIndex, currentCommits);
             return Object.assign({}, state, { SHA: getSHA(previousValidIndex, currentCommits, currentSHA), index: previousValidIndex });
