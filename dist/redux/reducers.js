@@ -4,6 +4,7 @@ const git_util_1 = require("../util/git-util");
 function reducer(state, action) {
     const currentIndex = state.index;
     const currentCommits = state.commits;
+    const currentSHA = state.SHA;
     switch (action.type) {
         case 'ADD_COMMITS':
             const newCommits = typeof action.payload === 'string'
@@ -12,9 +13,11 @@ function reducer(state, action) {
             const commits = [...currentCommits, ...newCommits];
             return Object.assign({}, state, { commits });
         case 'DECREMENT_INDEX':
-            return Object.assign({}, state, { index: getPreviousValidIndex(currentIndex - 1, currentIndex, currentCommits) });
+            const previousValidIndex = getPreviousValidIndex(currentIndex - 1, currentIndex, currentCommits);
+            return Object.assign({}, state, { SHA: getSHA(previousValidIndex, currentCommits, currentSHA), index: previousValidIndex });
         case 'INCREMENT_INDEX':
-            return Object.assign({}, state, { index: getNextValidIndex(currentIndex + 1, currentIndex, currentCommits) });
+            const nextValidIndex = getNextValidIndex(currentIndex + 1, currentIndex, currentCommits);
+            return Object.assign({}, state, { SHA: getSHA(nextValidIndex, currentCommits, currentSHA), index: nextValidIndex });
         case 'VIEW_COMMIT':
             return Object.assign({}, state, { view: 'COMMIT' });
         case 'VIEW_LIST':
@@ -41,4 +44,15 @@ function getPreviousValidIndex(index, prevValidIndex, commits) {
         return index;
     }
     return getPreviousValidIndex(index - 1, prevValidIndex, commits);
+}
+function getSHA(index, commits, currentSHA) {
+    const matches = git_util_1.COMMIT_SHA_REGEX.exec(commits[index]);
+    if (!matches) {
+        return currentSHA;
+    }
+    const sha = matches[0];
+    if (sha) {
+        return sha;
+    }
+    return currentSHA;
 }

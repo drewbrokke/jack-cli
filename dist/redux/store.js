@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Redux = require("redux");
 const reducers_1 = require("./reducers");
 const initialState = {
+    SHA: '',
     commits: [],
     content: '',
     index: 0,

@@ -15,12 +15,8 @@ function getScrollableTextElement(options) {
     return Blessed.scrollabletext(options);
 }
 exports.getScrollableTextElement = getScrollableTextElement;
-function getScreenElement() {
-    const screen = Blessed.screen({
-        smartCSR: true,
-    });
-    screen.key(['C-c', 'q', 'escape'], () => process.exit(0));
-    return screen;
+function getScreenElement(options) {
+    return Blessed.screen(options);
 }
 exports.getScreenElement = getScreenElement;
 function getTextElement(content) {
