@@ -13,3 +13,9 @@ export function getProgressIndicator(content: string): TextElement {
 		top: 0,
 	});
 }
+
+export function constructProgressText(
+	index: number = 0, total: number = 0): string {
+
+	return `Line ${index + 1}/${total}`;
+}
