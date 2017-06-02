@@ -1,6 +1,7 @@
 import { ChildProcess } from 'child_process';
 
 import { getCommitElement } from './interface/commit-view';
+import { getHelpPrompt } from './interface/help-prompt';
 import { getCommitListElement } from './interface/list-view';
 import { getNotificationContainer, notify } from './interface/notification';
 import { constructProgressText, getProgressIndicator } from './interface/progress-indicator';
@@ -39,6 +40,7 @@ function renderScreen(screen: Screen): () => Screen {
 
 	let commit: ScrollableTextElement;
 	let commitList: IListElement;
+	let helpPrompt: TextElement;
 	let notificationContainer: BoxElement;
 	let progressBar: TextElement;
 
@@ -69,6 +71,12 @@ function renderScreen(screen: Screen): () => Screen {
 			commitList = getCommitListElement();
 
 			screen.append(commitList);
+		}
+
+		if (!helpPrompt) {
+			helpPrompt = getHelpPrompt();
+
+			screen.append(helpPrompt);
 		}
 
 		if (!progressBar) {
