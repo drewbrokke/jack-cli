@@ -22,6 +22,7 @@ function renderScreen(screen) {
     const commitContentMap = new Map();
     let commit;
     let list;
+    let notificationContainer;
     let progressBar;
     return () => {
         const state = store_1.store.getState();
@@ -40,22 +41,26 @@ function renderScreen(screen) {
             screen.append(commit);
         }
         if (!list) {
-            list = list_view_1.getListElement();
+            list = list_view_1.getCommitListElement();
             screen.append(list);
         }
         if (!progressBar) {
             progressBar = progress_indicator_1.getProgressIndicator(progress_indicator_1.constructProgressText(index, commits.length));
             screen.append(progressBar);
         }
-        if (state.notificationRequested) {
-            screen.append(notification_1.getNotification(state.notificationText));
-            store_1.store.dispatch(action_creators_1.notificationSent());
+        if (!notificationContainer) {
+            notificationContainer = notification_1.getNotificationContainer();
+            screen.append(notificationContainer);
         }
         /*
 
         UI update conditions
 
         */
+        if (state.notificationRequested) {
+            notification_1.notify(state.notificationText);
+            store_1.store.dispatch(action_creators_1.notificationSent());
+        }
         if (isNewCommits) {
             list.setItems(commits);
         }

@@ -10,6 +10,7 @@ const interface_elements_1 = require("./interface-elements");
 const REPO_TOP_LEVEL = child_process_1.spawnSync('git', ['rev-parse', '--show-toplevel']).stdout.toString().split('\n')[0];
 function getScreen() {
     const screen = interface_elements_1.getScreenElement({
+        autoPadding: true,
         smartCSR: true,
     });
     screen.key('c', copySHAToClipboard);

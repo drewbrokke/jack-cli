@@ -3,8 +3,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const action_creators_1 = require("../redux/action-creators");
 const store_1 = require("../redux/store");
 const interface_elements_1 = require("./interface-elements");
-function getListElement() {
-    let list;
+function getCommitListElement() {
+    const list = interface_elements_1.getListElement({
+        bottom: 0,
+        left: 0,
+        mouse: true,
+        right: 0,
+        style: {
+            selected: {
+                bg: '#555',
+            },
+        },
+        top: 0,
+    });
     const handleKeypressFn = (_ch, key) => {
         switch (key.name) {
             case 'down':
@@ -22,8 +33,8 @@ function getListElement() {
             default: break;
         }
     };
-    list = interface_elements_1.getCommitListElement(handleKeypressFn);
+    list.on('keypress', handleKeypressFn);
     list.focus();
     return list;
 }
-exports.getListElement = getListElement;
+exports.getCommitListElement = getCommitListElement;
