@@ -7,6 +7,7 @@ import {
 	ScrollableTextElement,
 	ScrollableTextOptions,
 	TextElement,
+	TextOptions,
  } from '../types/types';
 
 export function constructProgressText(
@@ -35,15 +36,8 @@ export function getScreenElement(options: ScreenOptions): Screen {
 	return Blessed.screen(options);
 }
 
-export function getTextElement(content: string): TextElement {
-	return Blessed.text({
-		border: 'line',
-		content,
-		fill: true,
-		right: 0,
-		shrink: true,
-		top: 0,
-	});
+export function getTextElement(options: TextOptions): TextElement {
+	return Blessed.text(options);
 }
 
 /*
