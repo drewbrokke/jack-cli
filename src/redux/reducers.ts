@@ -36,6 +36,20 @@ export function reducer(state: IState, action: IAction): IState {
 				index: nextValidIndex,
 			};
 
+		case 'NOTIFICATION_REQUESTED':
+			return {
+				...state,
+				notificationRequested: true,
+				notificationText: action.payload,
+			};
+
+		case 'NOTIFICATION_SENT':
+			return {
+				...state,
+				notificationRequested: false,
+				notificationText: '',
+			};
+
 		case 'VIEW_COMMIT':
 			return { ...state, view: 'COMMIT' };
 
