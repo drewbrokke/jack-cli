@@ -1,4 +1,4 @@
-import { IAction } from '../types/types';
+import { IAction, NotificationType } from '../types/types';
 
 export function addCommits(commits: string[]): IAction {
 	return {
@@ -19,9 +19,14 @@ export function incrementIndex(): IAction {
 	};
 }
 
-export function notificationRequested(notificationText: string): IAction {
+export function notificationRequested(
+	text: string, type: NotificationType): IAction {
+
 	return {
-		payload: notificationText,
+		payload: {
+			text,
+			type,
+		},
 		type: 'NOTIFICATION_REQUESTED',
 	};
 }
