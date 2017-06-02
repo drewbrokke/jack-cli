@@ -60,9 +60,13 @@ function openFilesFromCommit(): void {
 	exec(`git diff --name-only ${SHA}^..${SHA}`, (_error: Error, stdout: string) => {
 		const files: string[] = stdout.split('\n').filter(Boolean);
 
-		files
-			.map((file: string) => path.join(REPO_TOP_LEVEL, file))
-			.forEach((file: string) => opn(file));
+		if (process.platform === 'darwin') {
+			spawn('open', files);
+		} else {
+			files
+				.map((file: string) => path.join(REPO_TOP_LEVEL, file))
+				.forEach((file: string) => opn(file));
+		}
 
 		store.dispatch(notificationRequested(`Opening files:\n\n${files.join('\n')}`, 'INFO'));
 	});
