@@ -3,10 +3,10 @@ import { ChildProcess } from 'child_process';
 import { getCommitElement } from './interface/commit-view';
 import {
 	constructProgressText,
-	getScreenElement,
 	getTextElement,
 } from './interface/interface-elements';
 import { getListElement } from './interface/list-view';
+import { getScreen } from './interface/screen';
 import { addCommits } from './redux/action-creators';
 import { store } from './redux/store';
 import {
@@ -23,7 +23,7 @@ import {
 } from './util/git-util';
 
 export function run(args: string[]): void {
-	store.subscribe(renderScreen(getScreenElement()));
+	store.subscribe(renderScreen(getScreen()));
 
 	let dataString = '';
 	const gitLogProcess: ChildProcess = getGitLogProcess(args);
