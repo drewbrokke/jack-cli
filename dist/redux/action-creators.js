@@ -19,6 +19,19 @@ function incrementIndex() {
     };
 }
 exports.incrementIndex = incrementIndex;
+function notificationRequested(notificationText) {
+    return {
+        payload: notificationText,
+        type: 'NOTIFICATION_REQUESTED',
+    };
+}
+exports.notificationRequested = notificationRequested;
+function notificationSent() {
+    return {
+        type: 'NOTIFICATION_SENT',
+    };
+}
+exports.notificationSent = notificationSent;
 function viewCommit() {
     return {
         type: 'VIEW_COMMIT',

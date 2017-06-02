@@ -18,6 +18,10 @@ function reducer(state, action) {
         case 'INCREMENT_INDEX':
             const nextValidIndex = getNextValidIndex(currentIndex + 1, currentIndex, currentCommits);
             return Object.assign({}, state, { SHA: getSHA(nextValidIndex, currentCommits, currentSHA), index: nextValidIndex });
+        case 'NOTIFICATION_REQUESTED':
+            return Object.assign({}, state, { notificationRequested: true, notificationText: action.payload });
+        case 'NOTIFICATION_SENT':
+            return Object.assign({}, state, { notificationRequested: false, notificationText: '' });
         case 'VIEW_COMMIT':
             return Object.assign({}, state, { view: 'COMMIT' });
         case 'VIEW_LIST':

@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const commit_view_1 = require("./interface/commit-view");
-const interface_elements_1 = require("./interface/interface-elements");
 const list_view_1 = require("./interface/list-view");
+const notification_1 = require("./interface/notification");
+const progress_indicator_1 = require("./interface/progress-indicator");
 const screen_1 = require("./interface/screen");
 const action_creators_1 = require("./redux/action-creators");
 const store_1 = require("./redux/store");
@@ -43,8 +44,12 @@ function renderScreen(screen) {
             screen.append(list);
         }
         if (!progressBar) {
-            progressBar = interface_elements_1.getTextElement(interface_elements_1.constructProgressText(index, commits.length));
+            progressBar = progress_indicator_1.getProgressIndicator(progress_indicator_1.constructProgressText(index, commits.length));
             screen.append(progressBar);
+        }
+        if (state.notificationRequested) {
+            screen.append(notification_1.getNotification(state.notificationText));
+            store_1.store.dispatch(action_creators_1.notificationSent());
         }
         /*
 
@@ -55,7 +60,7 @@ function renderScreen(screen) {
             list.setItems(commits);
         }
         if (isNewCommits || isNewIndex) {
-            progressBar.setText(interface_elements_1.constructProgressText(index, commits.length));
+            progressBar.setText(progress_indicator_1.constructProgressText(index, commits.length));
             list.select(index);
         }
         if (view === 'LIST' && isNewView) {

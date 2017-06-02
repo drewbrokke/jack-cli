@@ -1,10 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Blessed = require("blessed");
-function constructProgressText(index = 0, total = 0) {
-    return `Line ${index + 1}/${total}`;
-}
-exports.constructProgressText = constructProgressText;
 function getCommitListElement(onKeyPressFn) {
     const list = getListElement();
     list.on('keypress', onKeyPressFn);
@@ -19,15 +15,8 @@ function getScreenElement(options) {
     return Blessed.screen(options);
 }
 exports.getScreenElement = getScreenElement;
-function getTextElement(content) {
-    return Blessed.text({
-        border: 'line',
-        content,
-        fill: true,
-        right: 0,
-        shrink: true,
-        top: 0,
-    });
+function getTextElement(options) {
+    return Blessed.text(options);
 }
 exports.getTextElement = getTextElement;
 /*
