@@ -2,9 +2,10 @@ import { ChildProcess } from 'child_process';
 
 import { getCommitElement } from './interface/commit-view';
 import { getListElement } from './interface/list-view';
+import { getNotification } from './interface/notification';
 import { constructProgressText, getProgressIndicator } from './interface/progress-indicator';
 import { getScreen } from './interface/screen';
-import { addCommits } from './redux/action-creators';
+import { addCommits, notificationSent } from './redux/action-creators';
 import { store } from './redux/store';
 import {
 	BlessedElement,
@@ -73,6 +74,12 @@ function renderScreen(screen: Screen): () => Screen {
 				constructProgressText(index, commits.length));
 
 			screen.append(progressBar);
+		}
+
+		if (state.notificationRequested) {
+			screen.append(getNotification(state.notificationText));
+
+			store.dispatch(notificationSent());
 		}
 
 		/*
