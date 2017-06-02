@@ -10,12 +10,6 @@ import {
 	TextOptions,
  } from '../types/types';
 
-export function constructProgressText(
-	index: number = 0, total: number = 0): string {
-
-	return `Line ${index + 1}/${total}`;
-}
-
 export function getCommitListElement(
 	onKeyPressFn: (ch: string, key: KeyEvent) => void): IListElement {
 
