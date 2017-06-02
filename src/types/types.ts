@@ -41,6 +41,8 @@ export interface IState {
 	commits: string[];
 	content: string;
 	SHA: string;
+	notificationRequested: boolean;
+	notificationText: string;
 }
 
 export interface IAction {
