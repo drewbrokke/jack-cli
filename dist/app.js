@@ -11,11 +11,11 @@ const store_1 = require("./redux/store");
 const git_util_1 = require("./util/git-util");
 function run(args) {
     store_1.store.subscribe(renderScreen(screen_1.getScreen()));
-    let dataString = '';
     const gitLogProcess = git_util_1.getGitLogProcess(args);
     gitLogProcess.stdout.setEncoding('utf8');
-    gitLogProcess.stdout.on('data', (data) => dataString += data);
-    gitLogProcess.on('close', () => store_1.store.dispatch(action_creators_1.addCommits(dataString.split('\n'))));
+    gitLogProcess.stdout.on('data', (data) => {
+        store_1.store.dispatch(action_creators_1.addCommits(data.trim().split('\n')));
+    });
 }
 exports.run = run;
 function renderScreen(screen) {
