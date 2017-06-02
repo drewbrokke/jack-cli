@@ -14,7 +14,19 @@ export function reducer(state: IState, action: IAction): IState {
 
 			const commits = [ ...currentCommits, ...newCommits ];
 
-			return { ...state, commits };
+			let SHA = currentSHA;
+
+			if (!SHA) {
+				SHA = getSHA(
+					getNextValidIndex(currentIndex, currentIndex, commits),
+					commits, SHA);
+			}
+
+			return {
+				...state,
+				SHA,
+				commits,
+			};
 
 		case 'DECREMENT_INDEX':
 			const previousValidIndex = getPreviousValidIndex(
