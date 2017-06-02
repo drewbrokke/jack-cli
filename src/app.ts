@@ -1,14 +1,15 @@
 import { ChildProcess } from 'child_process';
 
 import { getCommitElement } from './interface/commit-view';
-import { getListElement } from './interface/list-view';
-import { getNotification } from './interface/notification';
+import { getCommitListElement } from './interface/list-view';
+import { getNotificationContainer, notify } from './interface/notification';
 import { constructProgressText, getProgressIndicator } from './interface/progress-indicator';
 import { getScreen } from './interface/screen';
 import { addCommits, notificationSent } from './redux/action-creators';
 import { store } from './redux/store';
 import {
 	BlessedElement,
+	BoxElement,
 	IListElement,
 	IState,
 	Screen,
@@ -38,6 +39,7 @@ function renderScreen(screen: Screen): () => Screen {
 
 	let commit: ScrollableTextElement;
 	let list: IListElement;
+	let notificationContainer: BoxElement;
 	let progressBar: TextElement;
 
 	return (): Screen => {
@@ -64,7 +66,7 @@ function renderScreen(screen: Screen): () => Screen {
 		}
 
 		if (!list) {
-			list = getListElement();
+			list = getCommitListElement();
 
 			screen.append(list);
 		}
@@ -76,10 +78,10 @@ function renderScreen(screen: Screen): () => Screen {
 			screen.append(progressBar);
 		}
 
-		if (state.notificationRequested) {
-			screen.append(getNotification(state.notificationText));
+		if (!notificationContainer) {
+			notificationContainer = getNotificationContainer();
 
-			store.dispatch(notificationSent());
+			screen.append(notificationContainer);
 		}
 
 		/*
@@ -87,6 +89,12 @@ function renderScreen(screen: Screen): () => Screen {
 		UI update conditions
 
 		*/
+
+		if (state.notificationRequested) {
+			notify(state.notificationText);
+
+			store.dispatch(notificationSent());
+		}
 
 		if (isNewCommits) {
 			list.setItems(commits);
