@@ -19,22 +19,6 @@ function incrementIndex() {
     };
 }
 exports.incrementIndex = incrementIndex;
-function notificationRequested(text, type) {
-    return {
-        payload: {
-            text,
-            type,
-        },
-        type: 'NOTIFICATION_REQUESTED',
-    };
-}
-exports.notificationRequested = notificationRequested;
-function notificationSent() {
-    return {
-        type: 'NOTIFICATION_SENT',
-    };
-}
-exports.notificationSent = notificationSent;
 function viewCommit() {
     return {
         type: 'VIEW_COMMIT',

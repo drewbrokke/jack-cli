@@ -4,26 +4,42 @@ const help_text_1 = require("../util/help-text");
 const interface_elements_1 = require("./interface-elements");
 let notificationContainer;
 let helpBox;
-const colors = new Map();
-colors.set('ERROR', 'red');
-colors.set('INFO', 'blue');
-colors.set('SUCCESS', '#294');
-colors.set('WARNING', 'yellow');
+const COLOR_ERROR = 'red';
+const COLOR_INFO = 'blue';
+const COLOR_SUCCESS = 'green';
+const COLOR_WARNING = 'yellow';
 function getNotificationContainer() {
-    if (!notificationContainer) {
-        notificationContainer = interface_elements_1.getBoxElement({
-            bottom: 0,
-            right: 0,
-            shrink: true,
-        });
+    if (notificationContainer) {
+        return notificationContainer;
     }
+    notificationContainer = interface_elements_1.getBoxElement({
+        bottom: 0,
+        right: 0,
+        shrink: true,
+    });
     return notificationContainer;
 }
 exports.getNotificationContainer = getNotificationContainer;
-function notify(content, type) {
-    notificationContainer.append(getNotification(content, colors.get(type) || 'blue'));
+function notifyError(content) {
+    appendNotification(getNotification(content, COLOR_ERROR));
 }
-exports.notify = notify;
+exports.notifyError = notifyError;
+function notifyInfo(content) {
+    appendNotification(getNotification(content, COLOR_INFO));
+}
+exports.notifyInfo = notifyInfo;
+function notifySuccess(content) {
+    appendNotification(getNotification(content, COLOR_SUCCESS));
+}
+exports.notifySuccess = notifySuccess;
+function notifyWarning(content) {
+    appendNotification(getNotification(content, COLOR_WARNING));
+}
+exports.notifyWarning = notifyWarning;
+function appendNotification(notification) {
+    notificationContainer.append(notification);
+    notificationContainer.screen.render();
+}
 function toggleHelp() {
     if (!helpBox) {
         helpBox = getPersistentNotification(help_text_1.helpText, 'none');

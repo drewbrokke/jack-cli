@@ -7,8 +7,6 @@ const initialState = {
     commits: [],
     content: '',
     index: 0,
-    notificationText: '',
-    notificationType: 'NONE',
     split: false,
     view: 'LIST',
 };

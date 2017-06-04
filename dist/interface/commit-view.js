@@ -1,10 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const child_process_1 = require("child_process");
 const action_creators_1 = require("../redux/action-creators");
 const store_1 = require("../redux/store");
+const promisify_child_process_1 = require("../util/promisify-child-process");
 const interface_elements_1 = require("./interface-elements");
+let commitElement;
 function getCommitElement() {
-    const contentBox = interface_elements_1.getScrollableTextElement({
+    if (commitElement) {
+        return commitElement;
+    }
+    commitElement = interface_elements_1.getScrollableTextElement({
         bottom: 0,
         clickable: true,
         keys: true,
@@ -39,8 +45,42 @@ function getCommitElement() {
             default: break;
         }
     };
-    contentBox.on('keypress', handleKeypressFn);
-    contentBox.focus();
-    return contentBox;
+    commitElement.on('keypress', handleKeypressFn);
+    commitElement.focus();
+    store_1.store.subscribe(updateCommitElement());
+    return commitElement;
 }
 exports.getCommitElement = getCommitElement;
+function updateCommitElement() {
+    let lastState = store_1.store.getState();
+    const commitContentMap = new Map();
+    return () => {
+        const state = store_1.store.getState();
+        const { SHA, view } = state;
+        const isCommitView = view === 'COMMIT';
+        // Do render checks here
+        if (isCommitView && commitElement.hidden) {
+            commitElement.show();
+            commitElement.focus();
+        }
+        else if (view === 'LIST' && commitElement.visible) {
+            commitElement.hide();
+        }
+        if (isCommitView) {
+            const commitContent = commitContentMap.get(SHA);
+            if (!commitContent) {
+                promisify_child_process_1.promisifyChildProcess(child_process_1.spawn('git', ['show', '--color', SHA]))
+                    .then((commitContentResult) => {
+                    commitContentMap.set(SHA, commitContentResult);
+                    commitElement.setContent(commitContentResult);
+                    commitElement.screen.render();
+                });
+            }
+            else {
+                commitElement.setContent(commitContent);
+            }
+        }
+        lastState = state;
+        commitElement.screen.render();
+    };
+}

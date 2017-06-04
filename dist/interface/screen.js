@@ -1,48 +1,35 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const child_process_1 = require("child_process");
-const clipboardy = require("clipboardy");
-const opn = require("opn");
-const path = require("path");
-const action_creators_1 = require("../redux/action-creators");
 const store_1 = require("../redux/store");
+const commit_view_1 = require("./commit-view");
+const help_prompt_1 = require("./help-prompt");
 const interface_elements_1 = require("./interface-elements");
+const list_view_1 = require("./list-view");
 const notification_1 = require("./notification");
-const REPO_TOP_LEVEL = child_process_1.spawnSync('git', ['rev-parse', '--show-toplevel']).stdout.toString().split('\n')[0];
+const progress_indicator_1 = require("./progress-indicator");
+const commands_1 = require("../util/commands");
+let screen;
 function getScreen() {
-    const screen = interface_elements_1.getScreenElement({
+    if (screen) {
+        return screen;
+    }
+    screen = interface_elements_1.getScreenElement({
         autoPadding: true,
         smartCSR: true,
     });
     screen.key('?', notification_1.toggleHelp);
-    screen.key('c', cherryPickCommit);
-    screen.key('o', openFilesFromCommit);
-    screen.key('y', copySHAToClipboard);
+    screen.key('c', () => commands_1.cherryPickCommit(getSHA()));
+    screen.key('o', () => commands_1.openFilesFromCommit(getSHA()));
+    screen.key('y', () => commands_1.copySHAToClipboard(getSHA()));
     screen.key(['C-c', 'q', 'escape'], () => process.exit(0));
+    screen.append(commit_view_1.getCommitElement());
+    screen.append(list_view_1.getCommitListElement());
+    screen.append(help_prompt_1.getHelpPrompt());
+    screen.append(progress_indicator_1.getProgressIndicator());
+    screen.append(notification_1.getNotificationContainer());
     return screen;
 }
 exports.getScreen = getScreen;
-function cherryPickCommit() {
-    const { SHA } = store_1.store.getState();
-    const cherryPickSync = child_process_1.spawnSync('git', ['cherry-pick', SHA]);
-    if (cherryPickSync.status !== 0) {
-        store_1.store.dispatch(action_creators_1.notificationRequested(`Cherry-pick failed:\n\n${cherryPickSync.stderr.toString()}\n\nAborting cherry-pick.`, 'ERROR'));
-        child_process_1.spawn('git', ['cherry-pick', '--abort']);
-    }
-    else {
-        store_1.store.dispatch(action_creators_1.notificationRequested(`Successfully cherry-picked commit ${SHA} onto current branch.`, 'SUCCESS'));
-    }
-}
-function copySHAToClipboard() {
-    const { SHA } = store_1.store.getState();
-    clipboardy.writeSync(SHA);
-    store_1.store.dispatch(action_creators_1.notificationRequested(`Copied SHA to the clipboard: ${SHA}`, 'SUCCESS'));
-}
-function openFilesFromCommit() {
-    const { SHA } = store_1.store.getState();
-    child_process_1.exec(`git diff --name-only ${SHA}^..${SHA}`, (_error, stdout) => {
-        const files = stdout.split('\n').filter(Boolean);
-        files.map((file) => path.join(REPO_TOP_LEVEL, file)).forEach(opn);
-        store_1.store.dispatch(action_creators_1.notificationRequested(`Opening files:\n\n${files.join('\n')}`, 'INFO'));
-    });
+function getSHA() {
+    return store_1.store.getState().SHA;
 }
