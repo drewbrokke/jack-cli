@@ -3,13 +3,12 @@ import * as clipboardy from 'clipboardy';
 import * as opn from 'opn';
 import * as path from 'path';
 
-import { notificationRequested } from '../redux/action-creators';
 import { store } from '../redux/store';
 import {
 	Screen,
 } from '../types/types';
 import { getScreenElement } from './interface-elements';
-import { toggleHelp } from './notification';
+import { notifyError, notifyInfo, notifySuccess, toggleHelp } from './notification';
 
 const REPO_TOP_LEVEL: string = spawnSync('git', ['rev-parse', '--show-toplevel']).stdout.toString().split('\n')[0];
 
@@ -34,15 +33,11 @@ function cherryPickCommit(): void {
 	const cherryPickSync: SpawnSyncReturns<string> = spawnSync('git', ['cherry-pick', SHA]);
 
 	if (cherryPickSync.status !== 0) {
-		store.dispatch(
-			notificationRequested(
-				`Cherry-pick failed:\n\n${cherryPickSync.stderr.toString()}\n\nAborting cherry-pick.`, 'ERROR'));
+		notifyError(`Cherry-pick failed:\n\n${cherryPickSync.stderr.toString()}\n\nAborting cherry-pick.`);
 
 		spawn('git', ['cherry-pick', '--abort']);
 	} else {
-		store.dispatch(
-			notificationRequested(
-				`Successfully cherry-picked commit ${SHA} onto current branch.`, 'SUCCESS'));
+		notifySuccess(`Successfully cherry-picked commit ${SHA} onto current branch.`);
 	}
 }
 
@@ -51,7 +46,7 @@ function copySHAToClipboard(): void {
 
 	clipboardy.writeSync(SHA);
 
-	store.dispatch(notificationRequested(`Copied SHA to the clipboard: ${SHA}`, 'SUCCESS'));
+	notifySuccess(`Copied SHA to the clipboard: ${SHA}`);
 }
 
 function openFilesFromCommit(): void {
@@ -62,8 +57,6 @@ function openFilesFromCommit(): void {
 
 		files.map((file: string) => path.join(REPO_TOP_LEVEL, file)).forEach(opn);
 
-		store.dispatch(
-			notificationRequested(
-				`Opening files:\n\n${files.join('\n')}`, 'INFO'));
+		notifyInfo(`Opening files:\n\n${files.join('\n')}`);
 	});
 }
