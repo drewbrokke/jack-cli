@@ -3,8 +3,14 @@ import { store } from '../redux/store';
 import { KeyEvent, ScrollableTextElement } from '../types/types';
 import { getScrollableTextElement } from './interface-elements';
 
+let commitElement: ScrollableTextElement;
+
 export function getCommitElement(): ScrollableTextElement {
-	const contentBox: ScrollableTextElement = getScrollableTextElement({
+	if (commitElement) {
+		return commitElement;
+	}
+
+	commitElement = getScrollableTextElement({
 		bottom: 0,
 		clickable: true,
 		keys: true,
@@ -47,9 +53,9 @@ export function getCommitElement(): ScrollableTextElement {
 		}
 	};
 
-	contentBox.on('keypress', handleKeypressFn);
+	commitElement.on('keypress', handleKeypressFn);
 
-	contentBox.focus();
+	commitElement.focus();
 
-	return contentBox;
+	return commitElement;
 }
