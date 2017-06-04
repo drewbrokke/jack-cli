@@ -9,7 +9,6 @@ export function getCommitContentSync(sha: string): string {
 		'git',
 		[
 			'show',
-			'--abbrev-commit',
 			'--color',
 			sha,
 		],
