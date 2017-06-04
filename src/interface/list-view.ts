@@ -3,8 +3,14 @@ import { store } from '../redux/store';
 import { IListElement, KeyEvent } from '../types/types';
 import { getListElement } from './interface-elements';
 
+let commitListElement: IListElement;
+
 export function getCommitListElement(): IListElement {
-	const list: IListElement = getListElement({
+	if (commitListElement) {
+		return commitListElement;
+	}
+
+	commitListElement = getListElement({
 		bottom: 0,
 		left: 0,
 		mouse: true,
@@ -41,9 +47,42 @@ export function getCommitListElement(): IListElement {
 		}
 	};
 
-	list.on('keypress', handleKeypressFn);
+	commitListElement.on('keypress', handleKeypressFn);
 
-	list.focus();
+	commitListElement.focus();
 
-	return list;
+	store.subscribe(updateCommitListElement());
+
+	return commitListElement;
+}
+
+function updateCommitListElement() {
+	let lastState = store.getState();
+
+	return () => {
+		const state = store.getState();
+
+		const {commits, index, view} = state;
+
+		const isListView: boolean = view === 'LIST';
+
+		if (isListView && commitListElement.hidden) {
+			commitListElement.show();
+			commitListElement.focus();
+		} else if (view === 'COMMIT' && commitListElement.visible) {
+			commitListElement.hide();
+		}
+
+		if (commits !== lastState.commits) {
+			commitListElement.setItems(commits);
+		}
+
+		if (index !== lastState.index) {
+			commitListElement.select(index);
+		}
+
+		lastState = state;
+
+		commitListElement.screen.render();
+	};
 }

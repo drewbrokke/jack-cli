@@ -16,13 +16,15 @@ const COLOR_SUCCESS = 'green';
 const COLOR_WARNING = 'yellow';
 
 export function getNotificationContainer(): BoxElement {
-	if (!notificationContainer) {
-		notificationContainer = getBoxElement({
-			bottom: 0,
-			right: 0,
-			shrink: true,
-		});
+	if (notificationContainer) {
+		return notificationContainer;
 	}
+
+	notificationContainer = getBoxElement({
+		bottom: 0,
+		right: 0,
+		shrink: true,
+	});
 
 	return notificationContainer;
 }

@@ -1,6 +1,7 @@
 import { decrementIndex, incrementIndex, viewList } from '../redux/action-creators';
 import { store } from '../redux/store';
 import { KeyEvent, ScrollableTextElement } from '../types/types';
+import { getCommitContentSync } from '../util/git-util';
 import { getScrollableTextElement } from './interface-elements';
 
 let commitElement: ScrollableTextElement;
@@ -57,5 +58,46 @@ export function getCommitElement(): ScrollableTextElement {
 
 	commitElement.focus();
 
+	store.subscribe(updateCommitElement());
+
 	return commitElement;
+}
+
+function updateCommitElement() {
+	let lastState = store.getState();
+
+	const commitContentMap: Map<string, string> = new Map();
+
+	return () => {
+		const state = store.getState();
+
+		const {SHA, view} = state;
+
+		const isCommitView: boolean = view === 'COMMIT';
+
+		// Do render checks here
+
+		if (isCommitView && commitElement.hidden) {
+			commitElement.show();
+			commitElement.focus();
+		} else if (view === 'LIST' && commitElement.visible) {
+			commitElement.hide();
+		}
+
+		if (isCommitView) {
+			let content: string | undefined = commitContentMap.get(SHA);
+
+			if (!content) {
+				content = getCommitContentSync(SHA);
+
+				commitContentMap.set(SHA, content);
+			}
+
+			commitElement.setContent(content);
+		}
+
+		lastState = state;
+
+		commitElement.screen.render();
+	};
 }
