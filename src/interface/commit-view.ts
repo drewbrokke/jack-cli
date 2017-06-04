@@ -1,7 +1,9 @@
+import { spawn } from 'child_process';
+
 import { decrementIndex, incrementIndex, viewList } from '../redux/action-creators';
 import { store } from '../redux/store';
 import { KeyEvent, ScrollableTextElement } from '../types/types';
-import { getCommitContentSync } from '../util/git-util';
+import { promisifyChildProcess } from '../util/promisify-child-process';
 import { getScrollableTextElement } from './interface-elements';
 
 let commitElement: ScrollableTextElement;
@@ -85,15 +87,21 @@ function updateCommitElement() {
 		}
 
 		if (isCommitView) {
-			let content: string | undefined = commitContentMap.get(SHA);
+			const commitContent: string | undefined = commitContentMap.get(SHA);
 
-			if (!content) {
-				content = getCommitContentSync(SHA);
+			if (!commitContent) {
+				promisifyChildProcess(spawn('git', [ 'show', '--color', SHA ]))
+					.then((commitContentResult: string) => {
+						commitContentMap.set(SHA, commitContentResult);
 
-				commitContentMap.set(SHA, content);
+						commitElement.setContent(commitContentResult);
+
+						commitElement.screen.render();
+					});
+
+			} else {
+				commitElement.setContent(commitContent);
 			}
-
-			commitElement.setContent(content);
 		}
 
 		lastState = state;
