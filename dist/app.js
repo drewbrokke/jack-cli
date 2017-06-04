@@ -17,3 +17,7 @@ function run(args) {
     });
 }
 exports.run = run;
+function runFromPipedData() {
+    console.log('From Piped');
+}
+exports.runFromPipedData = runFromPipedData;
