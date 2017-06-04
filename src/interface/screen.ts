@@ -1,4 +1,4 @@
-import { ChildProcess, exec, spawn, spawnSync, SpawnSyncReturns } from 'child_process';
+import { exec, spawn, spawnSync, SpawnSyncReturns } from 'child_process';
 import * as clipboardy from 'clipboardy';
 import * as opn from 'opn';
 import * as path from 'path';

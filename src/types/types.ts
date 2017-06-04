@@ -28,19 +28,8 @@ export type ActionType =
 	'ADD_COMMITS' |
 	'DECREMENT_INDEX' |
 	'INCREMENT_INDEX' |
-	'NEXT_COMMIT' |
-	'NOTIFICATION_REQUESTED' |
-	'NOTIFICATION_SENT' |
-	'PREVIOUS_COMMIT' |
 	'VIEW_COMMIT' |
 	'VIEW_LIST';
-
-export type NotificationType =
-	'ERROR' |
-	'INFO' |
-	'NONE' |
-	'SUCCESS' |
-	'WARNING';
 
 export interface IState {
 	view: View;
@@ -49,8 +38,6 @@ export interface IState {
 	commits: string[];
 	content: string;
 	SHA: string;
-	notificationText: string;
-	notificationType: NotificationType;
 }
 
 export interface IAction {

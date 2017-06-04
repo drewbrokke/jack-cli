@@ -1,4 +1,4 @@
-import { IAction, NotificationType } from '../types/types';
+import { IAction } from '../types/types';
 
 export function addCommits(commits: string[]): IAction {
 	return {
@@ -16,24 +16,6 @@ export function decrementIndex(): IAction {
 export function incrementIndex(): IAction {
 	return {
 		type: 'INCREMENT_INDEX',
-	};
-}
-
-export function notificationRequested(
-	text: string, type: NotificationType): IAction {
-
-	return {
-		payload: {
-			text,
-			type,
-		},
-		type: 'NOTIFICATION_REQUESTED',
-	};
-}
-
-export function notificationSent(): IAction {
-	return {
-		type: 'NOTIFICATION_SENT',
 	};
 }
 
