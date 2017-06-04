@@ -1,4 +1,4 @@
-import { exec, spawn, spawnSync, SpawnSyncReturns } from 'child_process';
+import { ChildProcess, exec, spawn, spawnSync, SpawnSyncReturns } from 'child_process';
 import * as clipboardy from 'clipboardy';
 import * as opn from 'opn';
 import * as path from 'path';
@@ -20,9 +20,8 @@ export function cherryPickCommit(SHA: string): void {
 }
 
 export function copySHAToClipboard(SHA: string): void {
-	clipboardy.writeSync(SHA);
-
-	notifySuccess(`Copied SHA to the clipboard: ${SHA}`);
+	clipboardy.write(SHA)
+		.then(() => notifySuccess(`Copied SHA to the clipboard: ${SHA}`));
 }
 
 export function openFilesFromCommit(SHA: string): void {
@@ -32,5 +31,24 @@ export function openFilesFromCommit(SHA: string): void {
 		files.map((file: string) => path.join(REPO_TOP_LEVEL, file)).forEach(opn);
 
 		notifyInfo(`Opening files:\n\n${files.join('\n')}`);
+	});
+}
+
+function promisifyChildProcess(childProcess: ChildProcess): Promise<any> {
+	return new Promise((resolve, reject) => {
+		let dataString = '';
+
+		childProcess.stdout.setEncoding('utf8');
+
+		childProcess.stdout.on('data', (data: string) => dataString += data);
+		childProcess.stderr.on('error', (error: Error) => reject(error));
+
+		childProcess.on('close', (code: number) => {
+			if (code === 0) {
+				resolve(dataString);
+			} else {
+				reject(`Process exited with exit code ${code}`);
+			}
+		});
 	});
 }
