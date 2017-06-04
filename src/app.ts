@@ -3,10 +3,10 @@ import { ChildProcess } from 'child_process';
 import { getCommitElement } from './interface/commit-view';
 import { getHelpPrompt } from './interface/help-prompt';
 import { getCommitListElement } from './interface/list-view';
-import { getNotificationContainer, notify } from './interface/notification';
+import { getNotificationContainer } from './interface/notification';
 import { constructProgressText, getProgressIndicator } from './interface/progress-indicator';
 import { getScreen } from './interface/screen';
-import { addCommits, notificationSent } from './redux/action-creators';
+import { addCommits } from './redux/action-creators';
 import { store } from './redux/store';
 import {
 	BlessedElement,
@@ -97,12 +97,6 @@ function renderScreen(screen: Screen): () => Screen {
 		UI update conditions
 
 		*/
-
-		if (state.notificationType !== 'NONE') {
-			notify(state.notificationText, state.notificationType);
-
-			store.dispatch(notificationSent());
-		}
 
 		if (isNewCommits) {
 			commitList.setItems(commits);
