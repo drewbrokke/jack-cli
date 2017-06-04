@@ -1,5 +1,6 @@
 import { IAction, IState } from '../types/types';
-import { COMMIT_SHA_REGEX } from '../util/git-util';
+
+export const COMMIT_SHA_REGEX: RegExp = new RegExp(/[0-9a-f]{7,40}\b/);
 
 export function reducer(state: IState, action: IAction): IState {
 	const currentIndex = state.index;
