@@ -11,12 +11,10 @@ import { getBoxElement, getTextElement } from './interface-elements';
 let notificationContainer: BoxElement;
 let helpBox: TextElement;
 
-const colors: Map<NotificationType, string> = new Map();
-
-colors.set('ERROR', 'red');
-colors.set('INFO', 'blue');
-colors.set('SUCCESS', '#294');
-colors.set('WARNING', 'yellow');
+const COLOR_ERROR = 'red';
+const COLOR_INFO = 'blue';
+const COLOR_SUCCESS = 'green';
+const COLOR_WARNING = 'yellow';
 
 export function getNotificationContainer(): BoxElement {
 	if (!notificationContainer) {
@@ -30,9 +28,26 @@ export function getNotificationContainer(): BoxElement {
 	return notificationContainer;
 }
 
-export function notify(content: string, type: NotificationType) {
-	notificationContainer.append(
-		getNotification(content, colors.get(type) || 'blue'));
+export function notifyError(content: string) {
+	appendNotification(getNotification(content, COLOR_ERROR));
+}
+
+export function notifyInfo(content: string) {
+	appendNotification(getNotification(content, COLOR_INFO));
+}
+
+export function notifySuccess(content: string) {
+	appendNotification(getNotification(content, COLOR_SUCCESS));
+}
+
+export function notifyWarning(content: string) {
+	appendNotification(getNotification(content, COLOR_WARNING));
+}
+
+function appendNotification(notification: TextElement) {
+	notificationContainer.append(notification);
+
+	notificationContainer.screen.render();
 }
 
 export function toggleHelp() {
