@@ -1,6 +1,5 @@
 import {
 	BoxElement,
-	NotificationType,
 	Screen,
 	TextElement,
 	TextOptions,
