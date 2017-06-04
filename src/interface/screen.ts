@@ -7,13 +7,23 @@ import { store } from '../redux/store';
 import {
 	Screen,
 } from '../types/types';
+import { getCommitElement } from './commit-view';
+import { getHelpPrompt } from './help-prompt';
 import { getScreenElement } from './interface-elements';
-import { notifyError, notifyInfo, notifySuccess, toggleHelp } from './notification';
+import { getCommitListElement } from './list-view';
+import { getNotificationContainer, notifyError, notifyInfo, notifySuccess, toggleHelp } from './notification';
+import { getProgressIndicator } from './progress-indicator';
 
 const REPO_TOP_LEVEL: string = spawnSync('git', ['rev-parse', '--show-toplevel']).stdout.toString().split('\n')[0];
 
+let screen: Screen;
+
 export function getScreen(): Screen {
-	const screen: Screen = getScreenElement({
+	if (screen) {
+		return screen;
+	}
+
+	screen = getScreenElement({
 		autoPadding: true,
 		smartCSR: true,
 	});
@@ -23,6 +33,12 @@ export function getScreen(): Screen {
 	screen.key('o', openFilesFromCommit);
 	screen.key('y', copySHAToClipboard);
 	screen.key(['C-c', 'q', 'escape'], () => process.exit(0));
+
+	screen.append(getCommitElement());
+	screen.append(getCommitListElement());
+	screen.append(getHelpPrompt());
+	screen.append(getProgressIndicator());
+	screen.append(getNotificationContainer());
 
 	return screen;
 }
