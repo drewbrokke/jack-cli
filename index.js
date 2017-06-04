@@ -2,4 +2,8 @@
 
 const app = require('./dist/app');
 
-app.run(process.argv.slice(2));
+if (process.stdin.isTTY) {
+	app.run(process.argv.slice(2));
+} else {
+	app.runFromPipedData();
+}
