@@ -21,3 +21,7 @@ export function run(args: string[]): void {
 		store.dispatch(addCommits(data.trim().split('\n')));
 	});
 }
+
+export function runFromPipedData(): void {
+	console.log('From Piped');
+}
