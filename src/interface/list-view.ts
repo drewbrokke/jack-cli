@@ -1,6 +1,6 @@
 import { decrementIndex, incrementIndex, viewCommit } from '../redux/action-creators';
 import { store } from '../redux/store';
-import { IListElement, KeyEvent } from '../types/types';
+import { IListElement } from '../types/types';
 import { getListElement } from './interface-elements';
 
 let commitListElement: IListElement;
@@ -23,31 +23,9 @@ export function getCommitListElement(): IListElement {
 		top: 0,
 	});
 
-	const handleKeypressFn = (_ch: string, key: KeyEvent) => {
-		switch (key.name) {
-			case 'down':
-			case 'j':
-				store.dispatch(incrementIndex());
-
-				break;
-
-			case 'k':
-			case 'up':
-				store.dispatch(decrementIndex());
-
-				break;
-
-			case 'enter':
-			case 'space':
-				store.dispatch(viewCommit());
-
-				break;
-
-			default: break;
-		}
-	};
-
-	commitListElement.on('keypress', handleKeypressFn);
+	commitListElement.key(['down', 'j'], () => store.dispatch(incrementIndex()));
+	commitListElement.key(['k', 'up'], () => store.dispatch(decrementIndex()));
+	commitListElement.key(['enter', 'space'], () => store.dispatch(viewCommit()));
 
 	commitListElement.focus();
 

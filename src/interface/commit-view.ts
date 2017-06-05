@@ -2,7 +2,7 @@ import { spawn } from 'child_process';
 
 import { decrementIndex, incrementIndex, viewList } from '../redux/action-creators';
 import { store } from '../redux/store';
-import { KeyEvent, ScrollableTextElement } from '../types/types';
+import { ScrollableTextElement } from '../types/types';
 import { promisifyChildProcess } from '../util/promisify-child-process';
 import { getScrollableTextElement } from './interface-elements';
 
@@ -26,37 +26,9 @@ export function getCommitElement(): ScrollableTextElement {
 		vi: true,
 	});
 
-	const handleKeypressFn = (_ch: string, key: KeyEvent) => {
-		switch (key.name) {
-			case 'down':
-			case 'j':
-			case 'right':
-				if (key.shift || key.name === 'right') {
-					store.dispatch(incrementIndex());
-				}
-
-				break;
-
-			case 'k':
-			case 'left':
-			case 'up':
-				if (key.shift || key.name === 'left') {
-					store.dispatch(decrementIndex());
-				}
-
-				break;
-
-			case 'enter':
-			case 'space':
-				store.dispatch(viewList());
-
-				break;
-
-			default: break;
-		}
-	};
-
-	commitElement.on('keypress', handleKeypressFn);
+	commitElement.key(['right', 'S-down', 'S-j'], () => store.dispatch(incrementIndex()));
+	commitElement.key(['left', 'S-k', 'S-up'], () => store.dispatch(decrementIndex()));
+	commitElement.key(['enter', 'space'], () => store.dispatch(viewList()));
 
 	commitElement.focus();
 
