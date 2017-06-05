@@ -18,6 +18,8 @@ function run(args) {
 }
 exports.run = run;
 function runFromPipedData() {
-    console.log('From Piped');
+    process.stdout.write('Piping into jack is not currently supported.\n');
+    process.stdout.write('If you would like to contribute or comment, please see the issue on GitHub at https://github.com/drewbrokke/jack/issues/9.\n');
+    process.exit(1);
 }
 exports.runFromPipedData = runFromPipedData;
