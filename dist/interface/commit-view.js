@@ -73,11 +73,13 @@ function updateCommitElement() {
                     .then((commitContentResult) => {
                     commitContentMap.set(SHA, commitContentResult);
                     commitElement.setContent(commitContentResult);
+                    commitElement.scrollTo(0);
                     commitElement.screen.render();
                 });
             }
-            else {
+            else if (commitContent !== commitElement.content) {
                 commitElement.setContent(commitContent);
+                commitElement.scrollTo(0);
             }
         }
         lastState = state;
