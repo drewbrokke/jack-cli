@@ -15,10 +15,6 @@ export type TextElement = Blessed.Widgets.TextElement;
 export type TextOptions = Blessed.Widgets.TextOptions;
 
 export interface IListElement extends Blessed.Widgets.ListElement {
-	selected?: number;
-
-	enterSelected?(): void;
-	pushItem(child: BlessedElement | string): number;
 	setItems(items: BlessedElement[] | string[]): void;
 }
 
