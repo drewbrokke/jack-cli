@@ -1,9 +1,13 @@
 import { decrementIndex, incrementIndex, viewCommit } from '../redux/action-creators';
 import { store } from '../redux/store';
-import { IListElement } from '../types/types';
+import { IAction, IListElement } from '../types/types';
+import { stash } from '../util/stash';
 import { getListElement } from './interface-elements';
+import { notifyInfo } from './notification';
 
 let commitListElement: IListElement;
+
+const NAV_INTERVAL = 'NAV_INTERVAL';
 
 export function getCommitListElement(): IListElement {
 	if (commitListElement) {
@@ -23,8 +27,37 @@ export function getCommitListElement(): IListElement {
 		top: 0,
 	});
 
-	commitListElement.key(['down', 'j'], () => store.dispatch(incrementIndex()));
-	commitListElement.key(['k', 'up'], () => store.dispatch(decrementIndex()));
+	function doUpdateIndex(action: (interval: number) => IAction) {
+		let interval = 1;
+
+		const intervalFromStash: number | undefined = stash.get(NAV_INTERVAL);
+
+		if (intervalFromStash) {
+			interval = intervalFromStash;
+		}
+
+		store.dispatch(action(interval));
+
+		stash.delete(NAV_INTERVAL);
+
+		notifyInfo(`Movement interval reset.`);
+	}
+
+	commitListElement.key('1234567890'.split(''), (keyName: string) => {
+		let newInterval = keyName;
+
+		const intervalFromStash: number | undefined = stash.get(NAV_INTERVAL);
+
+		if (intervalFromStash) {
+			newInterval = `${intervalFromStash}${newInterval}`;
+		}
+
+		stash.set(NAV_INTERVAL, parseInt(newInterval, 10));
+
+		notifyInfo(`Movement interval: ${newInterval}`);
+	});
+	commitListElement.key(['down', 'j'], () => doUpdateIndex(incrementIndex));
+	commitListElement.key(['k', 'up'], () => doUpdateIndex(decrementIndex));
 	commitListElement.key(['enter', 'space'], () => store.dispatch(viewCommit()));
 
 	commitListElement.focus();
