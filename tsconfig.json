@@ -1,57 +1,20 @@
 {
     "compileOnSave": true,
     "compilerOptions": {
-        // Basic Options
-        "target": "es5",
-        "module": "commonjs",
-        // "listFiles": true,
-        "lib": ["ES2015"],
-        // "allowJs": true,
-        // "checkJs": true,
-        // "jsx": "preserve",
-        // "declaration": true,
-        // "sourceMap": true,
-        // "outFile": "./",
-        "outDir": "./dist",
-        "rootDir": "./src",
-        // "removeComments": true,
-        // "noEmit": true,
-        // "importHelpers": true,
-        // "downlevelIteration": true,
-        // "isolatedModules": true,
-
-        // Strict Type-Checking Options
-        "strict": true,
-        "noImplicitAny": false,
-        "strictNullChecks": true,
-        "noImplicitThis": true,
         "alwaysStrict": true,
-
-        // Additional Checks
+        "lib": ["ES2015"],
+        "module": "commonjs",
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": false,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "noImplicitReturns": true,
-        "noFallthroughCasesInSwitch": true,
-
-        // Module Resolution Options
-        // "moduleResolution": "node",
-        // "baseUrl": "./",
-        // "paths": {},
-        // "rootDirs": [],
-        // "typeRoots": [],
-        // "types": [],
-        // "allowSyntheticDefaultImports": true,
-
-        // Source Map Options
-        // "sourceRoot": "./",
-        // "mapRoot": "./",
-        // "inlineSourceMap": true,
-        // "inlineSources": true,
-
-        // Experimental Options
-        // "experimentalDecorators": true,
-        // "emitDecoratorMetadata": true,
-
-        "skipLibCheck": true
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "skipLibCheck": true,
+        "strict": true,
+        "strictNullChecks": true,
+        "target": "es5"
     }
 }
