@@ -3,50 +3,71 @@ import { IAction, IState } from '../types/types';
 export const COMMIT_SHA_REGEX: RegExp = new RegExp(/[0-9a-f]{7,40}\b/);
 
 export function reducer(state: IState, action: IAction): IState {
-	const currentIndex = state.index;
-	const currentCommits = state.commits;
+	const currentCommitIndex = state.commitIndex;
+	const currentIndexesWithSHAs = state.indexesWithSHAs;
+	const currentLines = state.lines;
 	const currentSHA = state.SHA;
 
 	switch (action.type) {
 		case 'ADD_COMMITS':
-			const newCommits = typeof action.payload === 'string'
+			const newLines = typeof action.payload === 'string'
 				? Array.of(action.payload)
 				: action.payload;
 
-			const commits = [ ...currentCommits, ...newCommits ];
+			const lines = [ ...currentLines, ...newLines ];
+
+			const newIndexesWithSHAs: number[] = newLines
+				.map((line: string, index: number) => {
+					if (COMMIT_SHA_REGEX.test(line)) {
+						return index + currentLines.length;
+					}
+
+					return 0;
+				})
+				.filter(Boolean);
+
+			const indexesWithSHAs: number[] = [ ...currentIndexesWithSHAs, ...newIndexesWithSHAs ];
 
 			let SHA = currentSHA;
 
 			if (!SHA) {
-				SHA = getSHA(
-					getNextValidIndex(currentIndex, currentIndex, commits),
-					commits, SHA);
+				SHA = getSHA(indexesWithSHAs[currentCommitIndex], lines, SHA);
 			}
 
 			return {
 				...state,
 				SHA,
-				commits,
+				indexesWithSHAs,
+				lines,
 			};
 
 		case 'DECREMENT_INDEX':
-			const previousValidIndex = getPreviousValidIndex(
-				currentIndex - 1, currentIndex, currentCommits);
+			const previousCommitIndex =
+				(currentCommitIndex - 1 >= 0) ? currentCommitIndex - 1 : 0;
+			const previousListIndex = currentIndexesWithSHAs[previousCommitIndex];
 
 			return {
 				...state,
-				SHA: getSHA(previousValidIndex, currentCommits, currentSHA),
-				index: previousValidIndex,
+				SHA: getSHA(previousListIndex, currentLines, currentSHA),
+				commitIndex: previousCommitIndex,
+				listIndex: previousListIndex,
 			};
 
 		case 'INCREMENT_INDEX':
-			const nextValidIndex = getNextValidIndex(
-				currentIndex + 1, currentIndex, currentCommits);
+			const currentIndexesWithSHAsLength = currentIndexesWithSHAs.length;
+
+			const nextCommitIndex =
+				(currentCommitIndex + 1 < currentIndexesWithSHAsLength)
+					? currentCommitIndex + 1
+					: currentIndexesWithSHAsLength - 1;
+
+			const nextListIndex = currentIndexesWithSHAs[nextCommitIndex];
 
 			return {
 				...state,
-				SHA: getSHA(nextValidIndex, currentCommits, currentSHA),
-				index: nextValidIndex,
+				SHA: getSHA(nextListIndex, currentLines, currentSHA),
+				commitIndex: nextCommitIndex,
+				listIndex: nextListIndex,
 			};
 
 		case 'VIEW_COMMIT':
@@ -58,30 +79,6 @@ export function reducer(state: IState, action: IAction): IState {
 		default:
 			return state;
 	}
-}
-
-function getNextValidIndex(index: number, prevValidIndex: number, commits: string[]): number {
-	if (index >= commits.length) {
-		return prevValidIndex;
-	}
-
-	if (COMMIT_SHA_REGEX.test(commits[index])) {
-		return index;
-	}
-
-	return getNextValidIndex(index + 1, prevValidIndex, commits);
-}
-
-function getPreviousValidIndex(index: number, prevValidIndex: number, commits: string[]): number {
-	if (index < 0) {
-		return prevValidIndex;
-	}
-
-	if (COMMIT_SHA_REGEX.test(commits[index])) {
-		return index;
-	}
-
-	return getPreviousValidIndex(index - 1, prevValidIndex, commits);
 }
 
 function getSHA(index: number, commits: string[], currentSHA: string): string {
