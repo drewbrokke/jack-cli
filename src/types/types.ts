@@ -1,5 +1,7 @@
 import * as Blessed from 'blessed';
 
+// Type Aliases
+
 export type BlessedElement = Blessed.Widgets.BlessedElement;
 export type BoxElement = Blessed.Widgets.BoxElement;
 export type BoxOptions = Blessed.Widgets.BoxOptions;
@@ -18,7 +20,7 @@ export interface IListElement extends Blessed.Widgets.ListElement {
 	setItems(items: BlessedElement[] | string[]): void;
 }
 
-export type View = 'COMMIT' | 'LIST';
+// Custom Types
 
 export type ActionType =
 	'ADD_COMMITS' |
@@ -26,6 +28,11 @@ export type ActionType =
 	'INCREMENT_INDEX' |
 	'VIEW_COMMIT' |
 	'VIEW_LIST';
+
+export interface IAction {
+	type: ActionType;
+	payload?: any;
+}
 
 export interface IState {
 	commitIndex: number;
@@ -37,8 +44,4 @@ export interface IState {
 	split: boolean;
 	view: View;
 }
-
-export interface IAction {
-	type: ActionType;
-	payload?: any;
-}
+export type View = 'COMMIT' | 'LIST';
