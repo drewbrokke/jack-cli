@@ -43,7 +43,6 @@ export function getCommitListElement(): IListElement {
 
 			notifyInfo(`Movement interval reset.`);
 		}
-
 	}
 
 	commitListElement.key('1234567890'.split(''), (keyName: string) => {
