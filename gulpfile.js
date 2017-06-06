@@ -16,4 +16,8 @@ gulp.task("tslint", () =>
 		.pipe(tslint.report())
 );
 
+gulp.task('watch', () => {
+	gulp.watch('src/**/*.ts', ['build', "tslint"]);
+})
+
 gulp.task('default', ['build']);
