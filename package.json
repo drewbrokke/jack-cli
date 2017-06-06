@@ -12,7 +12,9 @@
     "jack": "index.js"
   },
   "scripts": {
-    "build": "./build.sh"
+    "build": "gulp build",
+    "tslint": "gulp tslint",
+    "postinstall": "gulp build"
   },
   "author": "Drew Brokke <drew.brokke@liferay.com> (https://github.com/drewbrokke)",
   "license": "ISC",
@@ -25,7 +27,12 @@
   "devDependencies": {
     "@types/blessed": "^0.1.5",
     "@types/node": "^7.0.22",
-    "@types/opn": "^3.0.28"
+    "@types/opn": "^3.0.28",
+    "gulp": "^3.9.1",
+    "gulp-tslint": "^8.1.1",
+    "gulp-typescript": "^3.1.7",
+    "tslint": "^5.4.2",
+    "typescript": "^2.3.4"
   },
   "keywords": [
     "cli",
