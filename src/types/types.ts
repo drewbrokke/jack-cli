@@ -32,12 +32,14 @@ export type ActionType =
 	'VIEW_LIST';
 
 export interface IState {
-	view: View;
-	split: boolean;
-	index: number;
-	commits: string[];
+	commitIndex: number;
 	content: string;
+	indexesWithSHAs: number[];
+	lines: string[];
+	listIndex: number;
 	SHA: string;
+	split: boolean;
+	view: View;
 }
 
 export interface IAction {
