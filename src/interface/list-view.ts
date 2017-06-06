@@ -7,7 +7,7 @@ import { notifyInfo } from './notification';
 
 let commitListElement: IListElement;
 
-const NAV_INTERVAL = 'NAV_INTERVAL';
+const NAV_INTERVAL: string = 'NAV_INTERVAL';
 
 export function getCommitListElement(): IListElement {
 	if (commitListElement) {
