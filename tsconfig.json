@@ -2,10 +2,10 @@
     "compileOnSave": true,
     "compilerOptions": {
         // Basic Options
-        "target": "es2015",
+        "target": "es5",
         "module": "commonjs",
         // "listFiles": true,
-        // "lib": [],
+        "lib": ["ES2015"],
         // "allowJs": true,
         // "checkJs": true,
         // "jsx": "preserve",
@@ -22,7 +22,7 @@
 
         // Strict Type-Checking Options
         "strict": true,
-        "noImplicitAny": true,
+        "noImplicitAny": false,
         "strictNullChecks": true,
         "noImplicitThis": true,
         "alwaysStrict": true,
@@ -31,7 +31,7 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "noImplicitReturns": true,
-        "noFallthroughCasesInSwitch": true
+        "noFallthroughCasesInSwitch": true,
 
         // Module Resolution Options
         // "moduleResolution": "node",
@@ -51,5 +51,7 @@
         // Experimental Options
         // "experimentalDecorators": true,
         // "emitDecoratorMetadata": true,
+
+        "skipLibCheck": true
     }
 }
