@@ -7,14 +7,16 @@ export function addCommits(commits: string[]): IAction {
 	};
 }
 
-export function decrementIndex(): IAction {
+export function decrementIndex(amount: number = 1): IAction {
 	return {
+		payload: amount,
 		type: 'DECREMENT_INDEX',
 	};
 }
 
-export function incrementIndex(): IAction {
+export function incrementIndex(amount: number = 1): IAction {
 	return {
+		payload: amount,
 		type: 'INCREMENT_INDEX',
 	};
 }

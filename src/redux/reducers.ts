@@ -43,7 +43,9 @@ export function reducer(state: IState, action: IAction): IState {
 
 		case 'DECREMENT_INDEX':
 			const previousCommitIndex =
-				(currentCommitIndex - 1 >= 0) ? currentCommitIndex - 1 : 0;
+				(currentCommitIndex - action.payload >= 0)
+					? currentCommitIndex - action.payload
+					: 0;
 			const previousListIndex = currentIndexesWithSHAs[previousCommitIndex];
 
 			return {
@@ -57,8 +59,8 @@ export function reducer(state: IState, action: IAction): IState {
 			const currentIndexesWithSHAsLength = currentIndexesWithSHAs.length;
 
 			const nextCommitIndex =
-				(currentCommitIndex + 1 < currentIndexesWithSHAsLength)
-					? currentCommitIndex + 1
+				(currentCommitIndex + action.payload < currentIndexesWithSHAsLength)
+					? currentCommitIndex + action.payload
 					: currentIndexesWithSHAsLength - 1;
 
 			const nextListIndex = currentIndexesWithSHAs[nextCommitIndex];
