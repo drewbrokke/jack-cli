@@ -13,6 +13,7 @@
   },
   "scripts": {
     "build": "gulp build",
+    "dev": "gulp watch",
     "tslint": "gulp tslint",
     "postinstall": "gulp build"
   },
