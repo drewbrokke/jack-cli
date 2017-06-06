@@ -10,7 +10,6 @@ gulp.task('build', function () {
 		.pipe(gulp.dest('dist'));
 });
 
-
 gulp.task("tslint", () =>
 	gulp.src('src/**/*.ts')
 		.pipe(tslint())
