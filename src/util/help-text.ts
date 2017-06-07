@@ -13,6 +13,8 @@ List view
 - Select next item:                         down | j
 - Select previous item:                     up | k
 - Move by intervals (like Vim)              (number) then (up | down | j | k)
+- Page down                                 f | Page Down
+- Page up                                   b | Page Up
 - Go to Commit View (git show the commit):  space | enter
 
 Commit view
