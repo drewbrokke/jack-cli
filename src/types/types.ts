@@ -17,6 +17,7 @@ export type TextElement = Blessed.Widgets.TextElement;
 export type TextOptions = Blessed.Widgets.TextOptions;
 
 export interface IListElement extends Blessed.Widgets.ListElement {
+	getItemIndex(items: BlessedElement | string): number;
 	setItems(items: BlessedElement[] | string[]): void;
 }
 
