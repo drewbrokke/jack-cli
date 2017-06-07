@@ -91,7 +91,7 @@ function updateCommitListElement() {
 		const lineIndex = state.indexesWithSHAs[index];
 		const nextLine = state.lines[lineIndex];
 
-		if (commitListElement.children.length < screenHeight) {
+		if (lines !== lastState.lines && commitListElement.children.length < screenHeight) {
 			commitListElement.setItems(lines.slice(lineIndex, lineIndex + screenHeight));
 		}
 
