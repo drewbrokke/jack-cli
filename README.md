@@ -12,6 +12,10 @@ npm i -g jack-cli
 ### Generating a list
 Use normal `git log` syntax.  **jack** just calls `git log` and passes all arguments.
 ```
+jack
+
+jack --grep 'some commit message pattern'
+
 jack 00ca1d8efd20^..head
 
 jack -n 100
@@ -29,6 +33,7 @@ jack -n 100
 #### List view
 - **Select next item:**                         `down | j`
 - **Select previous item:**                     `up | k`
+- **Move by intervals (like Vim)**              `(number)` then `up | down | j | k`
 - **Go to Commit View (git show the commit):**  `space | enter`
 
 #### Commit view
@@ -44,6 +49,3 @@ jack -n 100
     + **Scroll down full screen:**              `ctrl + f`
     + **Scroll to top:**                        `g`
     + **Scroll to bottom:**                     `shift + g`
-
-## Limitations
-It's not currently recommended to use **jack** with really big logs (> 2000 commits), as performance starts to suffer in the list view with that many items.  This is mostly due to the interface itself, but we'll work to make it as performant as possible.  In the meantime, hopefully you're not in a situation where you have to review more than 2000 commits at a single time :)
