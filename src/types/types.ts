@@ -36,7 +36,6 @@ export interface IAction {
 
 export interface IState {
 	index: number;
-	content: string;
 	indexesWithSHAs: number[];
 	lines: string[];
 	SHA: string;
