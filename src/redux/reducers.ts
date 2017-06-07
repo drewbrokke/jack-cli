@@ -42,10 +42,7 @@ export function reducer(state: IState, action: IAction): IState {
 			};
 
 		case 'DECREMENT_INDEX':
-			const previousIndex =
-				(currentIndex - action.payload >= 0)
-					? currentIndex - action.payload
-					: 0;
+			const previousIndex = Math.max(currentIndex - action.payload, 0);
 
 			return {
 				...state,
@@ -54,12 +51,7 @@ export function reducer(state: IState, action: IAction): IState {
 			};
 
 		case 'INCREMENT_INDEX':
-			const currentIndexesWithSHAsLength = currentIndexesWithSHAs.length;
-
-			const nextIndex =
-				(currentIndex + action.payload < currentIndexesWithSHAsLength)
-					? currentIndex + action.payload
-					: currentIndexesWithSHAsLength - 1;
+			const nextIndex = Math.min(currentIndex + action.payload, currentIndexesWithSHAs.length - 1);
 
 			return {
 				...state,
