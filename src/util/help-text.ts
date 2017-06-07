@@ -12,6 +12,7 @@ Navigation Key Commands:
 List view
 - Select next item:                         down | j
 - Select previous item:                     up | k
+- Move by intervals (like Vim)              (number) then (up | down | j | k)
 - Go to Commit View (git show the commit):  space | enter
 
 Commit view
