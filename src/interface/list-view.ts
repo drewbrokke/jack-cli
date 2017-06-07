@@ -60,6 +60,8 @@ export function getCommitListElement(): IListElement {
 	});
 	commitListElement.key(['down', 'j'], () => doUpdateIndex(incrementIndex));
 	commitListElement.key(['k', 'up'], () => doUpdateIndex(decrementIndex));
+	commitListElement.key(['b', 'pageup'], () => store.dispatch(decrementIndex(Number(commitListElement.height))));
+	commitListElement.key(['f', 'pagedown'], () => store.dispatch(incrementIndex(Number(commitListElement.height))));
 	commitListElement.key(['enter', 'space'], () => store.dispatch(viewCommit()));
 
 	commitListElement.focus();
