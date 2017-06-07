@@ -30,13 +30,13 @@ function updateProgressIndicator() {
 	return () => {
 		const state = store.getState();
 
-		const {listIndex} = state;
-		const {length} = state.lines;
+		const {index} = state;
+		const {length} = state.indexesWithSHAs;
 
-		if (length !== lastState.lines.length ||
-			listIndex !== lastState.listIndex) {
+		if (length !== lastState.indexesWithSHAs.length ||
+			index !== lastState.index) {
 
-			progressIndicator.setText(constructProgressText(listIndex, length));
+			progressIndicator.setText(constructProgressText(index, length));
 		}
 
 		lastState = state;
@@ -48,5 +48,5 @@ function updateProgressIndicator() {
 function constructProgressText(
 	index: number = 0, total: number = 0): string {
 
-	return `Line ${index + 1}/${total}`;
+	return `Commit ${index + 1}/${total}`;
 }

@@ -35,13 +35,13 @@ export interface IAction {
 }
 
 export interface IState {
-	commitIndex: number;
+	index: number;
 	content: string;
 	indexesWithSHAs: number[];
 	lines: string[];
-	listIndex: number;
 	SHA: string;
 	split: boolean;
 	view: View;
 }
+
 export type View = 'COMMIT' | 'LIST';

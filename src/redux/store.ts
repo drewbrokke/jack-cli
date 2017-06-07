@@ -5,11 +5,10 @@ import { reducer } from './reducers';
 
 const initialState: IState = {
 	SHA: '',
-	commitIndex: 0,
+	index: 0,
 	content: '',
 	indexesWithSHAs: [0],
 	lines: [],
-	listIndex: 0,
 	split: false,
 	view: 'LIST',
 };

@@ -3,7 +3,7 @@ import { IAction, IState } from '../types/types';
 export const COMMIT_SHA_REGEX: RegExp = new RegExp(/[0-9a-f]{7,40}\b/);
 
 export function reducer(state: IState, action: IAction): IState {
-	const currentCommitIndex = state.commitIndex;
+	const currentIndex = state.index;
 	const currentIndexesWithSHAs = state.indexesWithSHAs;
 	const currentLines = state.lines;
 	const currentSHA = state.SHA;
@@ -31,7 +31,7 @@ export function reducer(state: IState, action: IAction): IState {
 			let SHA = currentSHA;
 
 			if (!SHA) {
-				SHA = getSHA(indexesWithSHAs[currentCommitIndex], lines, SHA);
+				SHA = getSHA(indexesWithSHAs[currentIndex], lines, SHA);
 			}
 
 			return {
@@ -42,34 +42,29 @@ export function reducer(state: IState, action: IAction): IState {
 			};
 
 		case 'DECREMENT_INDEX':
-			const previousCommitIndex =
-				(currentCommitIndex - action.payload >= 0)
-					? currentCommitIndex - action.payload
+			const previousIndex =
+				(currentIndex - action.payload >= 0)
+					? currentIndex - action.payload
 					: 0;
-			const previousListIndex = currentIndexesWithSHAs[previousCommitIndex];
 
 			return {
 				...state,
-				SHA: getSHA(previousListIndex, currentLines, currentSHA),
-				commitIndex: previousCommitIndex,
-				listIndex: previousListIndex,
+				SHA: getSHA(currentIndexesWithSHAs[previousIndex], currentLines, currentSHA),
+				index: previousIndex,
 			};
 
 		case 'INCREMENT_INDEX':
 			const currentIndexesWithSHAsLength = currentIndexesWithSHAs.length;
 
-			const nextCommitIndex =
-				(currentCommitIndex + action.payload < currentIndexesWithSHAsLength)
-					? currentCommitIndex + action.payload
+			const nextIndex =
+				(currentIndex + action.payload < currentIndexesWithSHAsLength)
+					? currentIndex + action.payload
 					: currentIndexesWithSHAsLength - 1;
-
-			const nextListIndex = currentIndexesWithSHAs[nextCommitIndex];
 
 			return {
 				...state,
-				SHA: getSHA(nextListIndex, currentLines, currentSHA),
-				commitIndex: nextCommitIndex,
-				listIndex: nextListIndex,
+				SHA: getSHA(currentIndexesWithSHAs[nextIndex], currentLines, currentSHA),
+				index: nextIndex,
 			};
 
 		case 'VIEW_COMMIT':
