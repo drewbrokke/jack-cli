@@ -86,12 +86,29 @@ function updateCommitListElement() {
 			commitListElement.hide();
 		}
 
-		if (lines !== lastState.lines) {
-			commitListElement.setItems(lines);
+		const screenHeight: number = commitListElement.screen.height as number;
+
+		const lineIndex = state.indexesWithSHAs[index];
+		const nextLine = state.lines[lineIndex];
+
+		if (commitListElement.children.length < screenHeight) {
+			commitListElement.setItems(lines.slice(lineIndex, lineIndex + screenHeight));
 		}
 
-		if (index !== lastState.index) {
-			commitListElement.select(state.indexesWithSHAs[index]);
+		if (index !== lastState.index && commitListElement.getItemIndex(nextLine) !== -1) {
+			commitListElement.select(commitListElement.getItemIndex(nextLine));
+		} else if (index > lastState.index) {
+			const newLines = lines.slice(lineIndex - screenHeight, lineIndex + 1);
+
+			commitListElement.setItems(newLines);
+
+			commitListElement.select(newLines.indexOf(nextLine));
+		} else if (index < lastState.index) {
+			const newLines = lines.slice(lineIndex, lineIndex + screenHeight);
+
+			commitListElement.setItems(newLines);
+
+			commitListElement.select(newLines.indexOf(nextLine));
 		}
 
 		lastState = state;
