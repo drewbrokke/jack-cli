@@ -75,7 +75,7 @@ function updateCommitListElement() {
 	return () => {
 		const state = store.getState();
 
-		const {lines, listIndex, view} = state;
+		const {index, lines, view} = state;
 
 		const isListView: boolean = view === 'LIST';
 
@@ -90,8 +90,8 @@ function updateCommitListElement() {
 			commitListElement.setItems(lines);
 		}
 
-		if (listIndex !== lastState.listIndex) {
-			commitListElement.select(listIndex);
+		if (index !== lastState.index) {
+			commitListElement.select(state.indexesWithSHAs[index]);
 		}
 
 		lastState = state;
