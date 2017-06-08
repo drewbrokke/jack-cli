@@ -28,6 +28,7 @@ Global Actions | Keys
 Exit **jack** | `q` / `esc` / `ctrl + c`
 Show/hide help dialog | `?`
 Cherry-pick commit to current branch | `c`
+Interactive rebase from current commit | `i`
 Open changed files in default editor | `o`
 Copy current commit's SHA to clipboard | `y`
 

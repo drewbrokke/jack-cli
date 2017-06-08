@@ -4,6 +4,7 @@ Global Key Commands:
 - Show/hide this help dialog:               ?
 
 - Cherry-pick commit to current branch:     c
+- Interactive rebase from current commit:   i
 - Open changed files in default editor:     o
 - Copy current commit's SHA to clipboard:   y
 
