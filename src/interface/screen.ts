@@ -23,6 +23,10 @@ export function getScreen(): Screen {
 
 	screen.key('?', toggleHelp);
 	screen.key('c', () => cherryPickCommit(getSHA()));
+	screen.key('i', () =>
+		screen.exec(
+			'git', ['rebase', '-i', `${getSHA()}^`], {},
+			() => process.exit(0)));
 	screen.key('o', () => openFilesFromCommit(getSHA()));
 	screen.key('y', () => copySHAToClipboard(getSHA()));
 	screen.key(['C-c', 'q', 'escape'], () => process.exit(0));
