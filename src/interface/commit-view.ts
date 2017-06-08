@@ -62,7 +62,7 @@ function updateCommitElement() {
 			const commitContent: string | undefined = commitContentMap.get(SHA);
 
 			if (!commitContent) {
-				promisifyChildProcess(spawn('git', [ 'show', '--color', SHA ]))
+				promisifyChildProcess(spawn('git', [ 'show', '--patch-with-stat', '--color', SHA ]))
 					.then((commitContentResult: string) => {
 						commitContentMap.set(SHA, commitContentResult);
 
