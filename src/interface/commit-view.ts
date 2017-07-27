@@ -6,15 +6,9 @@ import { ScrollableTextElement } from '../types/types';
 import { promisifyChildProcess } from '../util/promisify-child-process';
 import { getScrollableTextElement } from './interface-elements';
 
-let commitElement: ScrollableTextElement;
-
 export function getCommitElement(): ScrollableTextElement {
-	if (commitElement) {
-		return commitElement;
-	}
-
-	commitElement = getScrollableTextElement({
-		bottom: 0,
+	const commitElement: ScrollableTextElement = getScrollableTextElement({
+		bottom: 1,
 		clickable: true,
 		keys: true,
 		left: 0,
@@ -32,12 +26,12 @@ export function getCommitElement(): ScrollableTextElement {
 
 	commitElement.focus();
 
-	store.subscribe(updateCommitElement());
+	store.subscribe(updateCommitElement(commitElement));
 
 	return commitElement;
 }
 
-function updateCommitElement() {
+function updateCommitElement(commitElement) {
 	let lastState = store.getState();
 
 	const commitContentMap: Map<string, string> = new Map();
@@ -45,43 +39,41 @@ function updateCommitElement() {
 	return () => {
 		const state = store.getState();
 
-		const {SHA, view} = state;
-
-		const isCommitView: boolean = view === 'COMMIT';
-
-		// Do render checks here
-
-		if (isCommitView && commitElement.hidden) {
-			commitElement.show();
-			commitElement.focus();
-		} else if (view === 'LIST' && commitElement.visible) {
-			commitElement.hide();
-		}
-
-		if (isCommitView) {
-			const commitContent: string | undefined = commitContentMap.get(SHA);
-
-			if (!commitContent) {
-				promisifyChildProcess(spawn('git', [ 'show', '--patch-with-stat', '--color', SHA ]))
-					.then((commitContentResult: string) => {
-						commitContentMap.set(SHA, commitContentResult);
-
-						commitElement.setContent(commitContentResult);
-
-						commitElement.scrollTo(0);
-
-						commitElement.screen.render();
-					});
-
-			} else if (commitContent !== commitElement.content) {
-				commitElement.setContent(commitContent);
-
-				commitElement.scrollTo(0);
-			}
-		}
+		if (state.SHA === lastState.SHA && commitElement.content) return lastState = state;
 
 		lastState = state;
 
-		commitElement.screen.render();
+		const {SHA} = state;
+
+		if (commitContentMap.get(SHA)) {
+			commitElement.setContent(commitContentMap.get(SHA));
+
+			commitElement.scrollTo(0);
+
+			return commitElement.screen.render();
+		}
+
+		return promisifyChildProcess(
+				spawn(
+					'git',
+					[
+						'show',
+						'--patch-with-stat',
+						'--stat-width',
+						'1000',
+						'--color',
+						SHA,
+					],
+				),
+			)
+			.then((commitContentResult: string) => {
+				commitContentMap.set(SHA, commitContentResult);
+
+				commitElement.setContent(commitContentResult);
+
+				commitElement.scrollTo(0);
+
+				return commitElement.screen.render();
+			});
 	};
 }

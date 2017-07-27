@@ -9,14 +9,8 @@ import { getProgressIndicator } from './progress-indicator';
 
 import { cherryPickCommit, copySHAToClipboard, openFilesFromCommit } from '../util/commands';
 
-let screen: Screen;
-
 export function getScreen(): Screen {
-	if (screen) {
-		return screen;
-	}
-
-	screen = getScreenElement({
+	const screen: Screen = getScreenElement({
 		autoPadding: true,
 		smartCSR: true,
 	});
@@ -31,14 +25,37 @@ export function getScreen(): Screen {
 	screen.key('y', () => copySHAToClipboard(getSHA()));
 	screen.key(['C-c', 'q', 'escape'], () => process.exit(0));
 
-	screen.append(getCommitElement());
-	screen.append(getCommitListElement());
+	const commitElement = getCommitElement();
+	const commitListElement = getCommitListElement();
+
+	screen.append(commitElement);
+	screen.append(commitListElement);
 	screen.append(getHelpPrompt());
 	screen.append(getProgressIndicator());
 	screen.append(getNotificationContainer());
 
+	store.subscribe(updateView(screen, commitElement, commitListElement));
+
 	return screen;
 }
+
+const updateView = (screen, commitElement, commitListElement) => () => {
+	const state = store.getState();
+
+	if (state.view === 'LIST' && screen.focused !== commitListElement) {
+		commitElement.setBack();
+		commitListElement.focus();
+
+		return screen.render();
+	}
+
+	if (state.view === 'COMMIT' && screen.focused !== commitElement) {
+		commitListElement.setBack();
+		commitElement.focus();
+
+		return screen.render();
+	}
+};
 
 function getSHA(): string {
 	return store.getState().SHA;
