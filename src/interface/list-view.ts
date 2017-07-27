@@ -15,7 +15,7 @@ export function getCommitListElement(): IListElement {
 	}
 
 	commitListElement = getListElement({
-		bottom: 0,
+		bottom: 1,
 		left: 0,
 		mouse: true,
 		right: 0,
@@ -78,16 +78,7 @@ function updateCommitListElement() {
 	return () => {
 		const state = store.getState();
 
-		const {index, lines, view} = state;
-
-		const isListView: boolean = view === 'LIST';
-
-		if (isListView && commitListElement.hidden) {
-			commitListElement.show();
-			commitListElement.focus();
-		} else if (view === 'COMMIT' && commitListElement.visible) {
-			commitListElement.hide();
-		}
+		const {index, lines} = state;
 
 		const listHeight: number = commitListElement.height as number;
 
