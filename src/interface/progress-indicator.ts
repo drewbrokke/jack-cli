@@ -4,27 +4,22 @@ import {
  } from '../types/types';
 import { getTextElement } from './interface-elements';
 
-let progressIndicator: TextElement;
-
 export function getProgressIndicator(): TextElement {
-	if (progressIndicator) {
-		return progressIndicator;
-	}
-
-	progressIndicator =  getTextElement({
-		border: 'line',
-		fill: true,
+	const progressIndicator: TextElement =  getTextElement({
+		bg: '#006680',
+		bottom: 0,
+		height: 1,
 		right: 0,
 		shrink: true,
-		top: 3,
+		width: '100%',
 	});
 
-	store.subscribe(updateProgressIndicator());
+	store.subscribe(updateProgressIndicator(progressIndicator));
 
 	return progressIndicator;
 }
 
-function updateProgressIndicator() {
+function updateProgressIndicator(progressIndicator) {
 	let lastState = store.getState();
 
 	return () => {
