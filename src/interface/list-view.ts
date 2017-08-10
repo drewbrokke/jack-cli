@@ -28,17 +28,13 @@ export function getCommitListElement(): IListElement {
 	});
 
 	function doUpdateIndex(action: (interval: number) => IAction) {
-		let interval = 1;
-
-		const intervalFromStash: number | undefined = stash.get(NAV_INTERVAL);
-
-		if (intervalFromStash) {
-			interval = intervalFromStash;
-		}
+		const interval: number = stash.has(NAV_INTERVAL)
+			? stash.get(NAV_INTERVAL)
+			: 1;
 
 		store.dispatch(action(interval));
 
-		if (intervalFromStash) {
+		if (stash.has(NAV_INTERVAL)) {
 			stash.delete(NAV_INTERVAL);
 
 			notifyInfo(`Movement interval reset.`);
@@ -46,13 +42,9 @@ export function getCommitListElement(): IListElement {
 	}
 
 	commitListElement.key('1234567890'.split(''), (keyName: string) => {
-		let newInterval = keyName;
-
-		const intervalFromStash: number | undefined = stash.get(NAV_INTERVAL);
-
-		if (intervalFromStash) {
-			newInterval = `${intervalFromStash}${newInterval}`;
-		}
+		const newInterval: string = stash.has(NAV_INTERVAL)
+			? `${stash.get(NAV_INTERVAL)}${keyName}`
+			: keyName;
 
 		stash.set(NAV_INTERVAL, parseInt(newInterval, 10));
 
