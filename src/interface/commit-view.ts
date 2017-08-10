@@ -15,7 +15,6 @@ export function getCommitElement(): ScrollableTextElement {
 		mouse: true,
 		right: 0,
 		scrollable: true,
-		scrollbar: true,
 		top: 0,
 		vi: true,
 	});
