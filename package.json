@@ -14,24 +14,15 @@
   "scripts": {
     "build": "gulp build",
     "dev": "gulp watch",
-    "tslint": "gulp tslint",
-    "postinstall": "gulp build"
+    "tslint": "gulp tslint"
   },
   "author": "Drew Brokke <drew.brokke@liferay.com> (https://github.com/drewbrokke)",
   "license": "ISC",
   "dependencies": {
-    "@types/blessed": "^0.1.5",
-    "@types/node": "^7.0.22",
-    "@types/opn": "^3.0.28",
     "blessed": "^0.1.81",
     "clipboardy": "^1.1.2",
-    "gulp": "^3.9.1",
-    "gulp-tslint": "^8.1.1",
-    "gulp-typescript": "^3.1.7",
     "opn": "^5.0.0",
-    "redux": "^3.6.0",
-    "tslint": "^5.4.2",
-    "typescript": "^2.3.4"
+    "redux": "^3.6.0"
   },
   "keywords": [
     "cli",
@@ -48,5 +39,15 @@
     "quick",
     "quicklook",
     "show"
-  ]
+  ],
+  "devDependencies": {
+    "@types/blessed": "^0.1.6",
+    "@types/node": "^7.0.39",
+    "@types/opn": "^3.0.28",
+    "gulp": "^3.9.1",
+    "gulp-tslint": "^8.1.2",
+    "gulp-typescript": "^3.2.1",
+    "tslint": "^5.6.0",
+    "typescript": "^2.4.2"
+  }
 }
