@@ -24,23 +24,19 @@ function getCommitListElement() {
         top: 0,
     });
     function doUpdateIndex(action) {
-        var interval = 1;
-        var intervalFromStash = stash_1.stash.get(NAV_INTERVAL);
-        if (intervalFromStash) {
-            interval = intervalFromStash;
-        }
+        var interval = stash_1.stash.has(NAV_INTERVAL)
+            ? stash_1.stash.get(NAV_INTERVAL)
+            : 1;
         store_1.store.dispatch(action(interval));
-        if (intervalFromStash) {
+        if (stash_1.stash.has(NAV_INTERVAL)) {
             stash_1.stash.delete(NAV_INTERVAL);
             notification_1.notifyInfo("Movement interval reset.");
         }
     }
     commitListElement.key('1234567890'.split(''), function (keyName) {
-        var newInterval = keyName;
-        var intervalFromStash = stash_1.stash.get(NAV_INTERVAL);
-        if (intervalFromStash) {
-            newInterval = "" + intervalFromStash + newInterval;
-        }
+        var newInterval = stash_1.stash.has(NAV_INTERVAL)
+            ? "" + stash_1.stash.get(NAV_INTERVAL) + keyName
+            : keyName;
         stash_1.stash.set(NAV_INTERVAL, parseInt(newInterval, 10));
         notification_1.notifyInfo("Movement interval: " + newInterval);
     });
