@@ -29,6 +29,7 @@ Exit **jack** | `q` / `esc` / `ctrl + c`
 Show/hide help dialog | `?`
 Cherry-pick commit to current branch | `c`
 Interactive rebase from current commit | `i`
+Copy current commit message to the clipboard | `m`
 Open changed files in default editor | `o`
 Copy current commit's SHA to clipboard | `y`
 
