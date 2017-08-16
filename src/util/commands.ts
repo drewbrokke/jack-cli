@@ -17,6 +17,14 @@ export function cherryPickCommit(SHA: string): void {
 		});
 }
 
+export function copyCommitMessageToClipboard(SHA: string): void {
+	promisifyChildProcess(spawn('git', ['show', SHA, '-s', '--pretty=format:%s']))
+		.then((message: string) => {
+			clipboardy.write(message)
+				.then(notifySuccess(`Copied commit message to the clipoard:\n"${message}"`));
+		});
+}
+
 export function copySHAToClipboard(SHA: string): void {
 	clipboardy.write(SHA)
 		.then(() => notifySuccess(`Copied SHA to the clipboard: ${SHA}`));

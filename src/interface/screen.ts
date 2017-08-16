@@ -7,7 +7,12 @@ import { getCommitListElement } from './list-view';
 import { getNotificationContainer, toggleHelp } from './notification';
 import { getProgressIndicator } from './progress-indicator';
 
-import { cherryPickCommit, copySHAToClipboard, openFilesFromCommit } from '../util/commands';
+import {
+	cherryPickCommit,
+	copyCommitMessageToClipboard,
+	copySHAToClipboard,
+	openFilesFromCommit,
+} from '../util/commands';
 
 export function getScreen(): Screen {
 	const screen: Screen = getScreenElement({
@@ -21,6 +26,7 @@ export function getScreen(): Screen {
 		screen.exec(
 			'git', ['rebase', '-i', `${getSHA()}^`], {},
 			() => process.exit(0)));
+	screen.key('m', () => copyCommitMessageToClipboard(getSHA()));
 	screen.key('o', () => openFilesFromCommit(getSHA()));
 	screen.key('y', () => copySHAToClipboard(getSHA()));
 	screen.key(['C-c', 'q', 'escape'], () => process.exit(0));
