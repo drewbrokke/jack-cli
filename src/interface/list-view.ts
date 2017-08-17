@@ -17,7 +17,6 @@ export function getCommitListElement(): IListElement {
 	commitListElement = getListElement({
 		bottom: 1,
 		left: 0,
-		mouse: true,
 		right: 0,
 		style: {
 			selected: {
