@@ -5,7 +5,12 @@ import { getCommitElement } from './commit-view';
 import { getHelpPrompt } from './help-prompt';
 import { getScreenElement } from './interface-elements';
 import { getCommitListElement } from './list-view';
-import { getNotificationContainer, notifyInfo, toggleHelp } from './notification';
+import {
+	getNotificationContainer,
+	notifyInfo,
+	notifyWarning,
+	toggleHelp,
+} from './notification';
 import { getProgressIndicator } from './progress-indicator';
 
 const ANCHOR_COMMIT = 'ANCHOR_COMMIT';
@@ -25,6 +30,13 @@ export function getScreen(): Screen {
 	});
 
 	screen.key('?', toggleHelp);
+	screen.key('x', () => {
+		const commit = getSHA();
+
+		stash.set(ANCHOR_COMMIT, commit);
+
+		notifyInfo(`Marked commit for diffing: ${commit}`);
+	});
 	screen.key('c', () => cherryPickCommit(getSHA()));
 	screen.key('d', () => doDiff((ancestorSHA, childSHA) =>
 		screen.spawn('git', ['diff', `${ancestorSHA}^..${childSHA}`], {})));
@@ -87,9 +99,7 @@ const doDiff = (callback: (ancestorSHA: string, childSHA: string) => void): void
 				stash.delete(ANCHOR_COMMIT);
 			});
 	} else {
-		stash.set(ANCHOR_COMMIT, currentCommit);
-
-		notifyInfo(`Marked commit for diffing: ${currentCommit}`);
+		notifyWarning('You must first mark an anchor commit for diffing with the "x" key');
 	}
 };
 
