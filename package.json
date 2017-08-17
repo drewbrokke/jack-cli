@@ -16,6 +16,7 @@
     "dev": "gulp watch",
     "tslint": "gulp tslint"
   },
+  "prepublishOnly": "npm run build",
   "author": "Drew Brokke <drew.brokke@liferay.com> (https://github.com/drewbrokke)",
   "license": "ISC",
   "dependencies": {
