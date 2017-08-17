@@ -30,6 +30,26 @@ export function copySHAToClipboard(SHA: string): void {
 		.then(() => notifySuccess(`Copied SHA to the clipboard: ${SHA}`));
 }
 
+export function getParentChildObject(ancestorSHA: string, childSHA: string) {
+	return new Promise((resolve) => {
+		const gitMergeBaseProcess = spawn('git', ['merge-base', '--is-ancestor', ancestorSHA, childSHA]);
+
+		gitMergeBaseProcess.on('close', (code: number) => {
+			if (code === 0) {
+				resolve({
+					ancestor: ancestorSHA,
+					child: childSHA,
+				});
+			} else {
+				resolve({
+					ancestor: childSHA,
+					child: ancestorSHA,
+				});
+			}
+		});
+	});
+}
+
 export function openFilesFromCommit(SHA: string): void {
 	if (REPO_TOP_LEVEL) {
 		doOpenFilesFromCommit(SHA, REPO_TOP_LEVEL);

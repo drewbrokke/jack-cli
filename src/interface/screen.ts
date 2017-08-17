@@ -1,16 +1,20 @@
 import { store } from '../redux/store';
 import { Screen } from '../types/types';
+import { stash } from '../util/stash';
 import { getCommitElement } from './commit-view';
 import { getHelpPrompt } from './help-prompt';
 import { getScreenElement } from './interface-elements';
 import { getCommitListElement } from './list-view';
-import { getNotificationContainer, toggleHelp } from './notification';
+import { getNotificationContainer, notifyInfo, toggleHelp } from './notification';
 import { getProgressIndicator } from './progress-indicator';
+
+const ANCHOR_COMMIT = 'ANCHOR_COMMIT';
 
 import {
 	cherryPickCommit,
 	copyCommitMessageToClipboard,
 	copySHAToClipboard,
+	getParentChildObject,
 	openFilesFromCommit,
 } from '../util/commands';
 
@@ -22,12 +26,16 @@ export function getScreen(): Screen {
 
 	screen.key('?', toggleHelp);
 	screen.key('c', () => cherryPickCommit(getSHA()));
+	screen.key('d', () => doDiff((ancestorSHA, childSHA) =>
+		screen.spawn('git', ['diff', `${ancestorSHA}^..${childSHA}`], {})));
 	screen.key('i', () =>
 		screen.exec(
 			'git', ['rebase', '-i', `${getSHA()}^`], {},
 			() => process.exit(0)));
 	screen.key('m', () => copyCommitMessageToClipboard(getSHA()));
 	screen.key('o', () => openFilesFromCommit(getSHA()));
+	screen.key('p', () => doDiff((ancestorSHA, childSHA) =>
+		screen.spawn('git', ['diff', `${ancestorSHA}^..${childSHA}`, '--name-only'], {})));
 	screen.key('y', () => copySHAToClipboard(getSHA()));
 	screen.key(['C-c', 'q', 'escape'], () => process.exit(0));
 
@@ -60,6 +68,28 @@ const updateView = (screen, commitElement, commitListElement) => () => {
 		commitElement.focus();
 
 		return screen.render();
+	}
+};
+
+const doDiff = (callback: (ancestorSHA: string, childSHA: string) => void): void => {
+	const currentCommit = getSHA();
+
+	if (stash.has(ANCHOR_COMMIT)) {
+		const anchorCommit = stash.get(ANCHOR_COMMIT);
+
+		getParentChildObject(anchorCommit, currentCommit)
+			.then(({ancestor, child}) => {
+				callback(ancestor, child);
+
+				stash.delete(ANCHOR_COMMIT);
+			})
+			.catch(() => {
+				stash.delete(ANCHOR_COMMIT);
+			});
+	} else {
+		stash.set(ANCHOR_COMMIT, currentCommit);
+
+		notifyInfo(`Marked commit for diffing: ${currentCommit}`);
 	}
 };
 
