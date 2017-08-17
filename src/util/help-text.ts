@@ -7,7 +7,14 @@ Global Key Commands:
 - Interactive rebase from current commit:          i
 - Copy current commit message to the clipboard:    m
 - Open changed files in default editor:            o
+- Show paths changed between two commits:          p
 - Copy current commit's SHA to clipboard:          y
+- Showing the total diff between two commits:
+    Press either of these keys to mark a commit,
+    then press again on a different commit to
+    show the total diff between the two commits
+    + Show diff                                    d
+    + Show name-only diff (show paths)             p
 
 Navigation Key Commands:
 
