@@ -45,9 +45,9 @@ export function getScreen(): Screen {
 			'git', ['rebase', '-i', `${getSHA()}^`], {},
 			() => process.exit(0)));
 	screen.key('m', () => copyCommitMessageToClipboard(getSHA()));
-	screen.key('o', () => openFilesFromCommit(getSHA()));
-	screen.key('p', () => doDiff((ancestorSHA, childSHA) =>
+	screen.key('n', () => doDiff((ancestorSHA, childSHA) =>
 		screen.spawn('git', ['diff', `${ancestorSHA}^..${childSHA}`, '--name-only'], {})));
+	screen.key('o', () => openFilesFromCommit(getSHA()));
 	screen.key('y', () => copySHAToClipboard(getSHA()));
 	screen.key(['C-c', 'q', 'escape'], () => process.exit(0));
 

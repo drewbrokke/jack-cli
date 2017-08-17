@@ -34,7 +34,7 @@ Open changed files in default editor | `o`
 Copy current commit's SHA to clipboard | `y`
 **Mark** a commit for diffing | x
 Show diff (requires **marked** commit) | d
-Show name-only diff (requires **marked** commit) | p
+Show name-only diff (requires **marked** commit) | n
 
 List Navigation | Keys
 --------------- | ----

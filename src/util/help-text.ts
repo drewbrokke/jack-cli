@@ -12,7 +12,7 @@ Global Key Commands:
 
 - Mark a commit for diffing........................x
 - Show diff (requires marked commit)               d
-- Show name-only diff (requires marked commit)     p
+- Show name-only diff (requires marked commit)     n
 
 Navigation Key Commands:
 
