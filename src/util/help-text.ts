@@ -9,12 +9,10 @@ Global Key Commands:
 - Open changed files in default editor:            o
 - Show paths changed between two commits:          p
 - Copy current commit's SHA to clipboard:          y
-- Showing the total diff between two commits:
-    Press either of these keys to mark a commit,
-    then press again on a different commit to
-    show the total diff between the two commits
-    + Show diff                                    d
-    + Show name-only diff (show paths)             p
+
+- Mark a commit for diffing........................x
+- Show diff (requires marked commit)               d
+- Show name-only diff (requires marked commit)     p
 
 Navigation Key Commands:
 

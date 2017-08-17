@@ -32,8 +32,9 @@ Interactive rebase from current commit | `i`
 Copy current commit message to the clipboard | `m`
 Open changed files in default editor | `o`
 Copy current commit's SHA to clipboard | `y`
-Show diff | `d`
-Show name-only diff (show paths) | `p`
+**Mark** a commit for diffing | x
+Show diff (requires **marked** commit) | d
+Show name-only diff (requires **marked** commit) | p
 
 List Navigation | Keys
 --------------- | ----
