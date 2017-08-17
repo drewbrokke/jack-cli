@@ -1,3 +1,5 @@
+import { generateTags } from 'blessed';
+
 import {
 	BoxElement,
 	Screen,
@@ -10,43 +12,76 @@ import { getBoxElement, getTextElement } from './interface-elements';
 let notificationContainer: BoxElement;
 let helpBox: TextElement;
 
-const COLOR_ERROR = 'red';
-const COLOR_INFO = 'blue';
-const COLOR_SUCCESS = 'green';
-const COLOR_WARNING = 'yellow';
-
 export function getNotificationContainer(): BoxElement {
 	if (notificationContainer) {
 		return notificationContainer;
 	}
 
 	notificationContainer = getBoxElement({
+		border: {
+			type: 'bg',
+		},
 		bottom: 0,
+		padding: {
+			left: 1,
+			right: 1,
+		},
 		right: 0,
 		shrink: true,
+		tags: true,
 	});
 
 	return notificationContainer;
 }
 
+export function notify(content: string) {
+	appendNotification(content);
+}
+
 export function notifyError(content: string) {
-	appendNotification(getNotification(content, COLOR_ERROR));
+	appendNotification(content, 'red');
 }
 
 export function notifyInfo(content: string) {
-	appendNotification(getNotification(content, COLOR_INFO));
+	appendNotification(content, 'blue');
 }
 
 export function notifySuccess(content: string) {
-	appendNotification(getNotification(content, COLOR_SUCCESS));
+	appendNotification(content, 'green');
 }
 
 export function notifyWarning(content: string) {
-	appendNotification(getNotification(content, COLOR_WARNING));
+	appendNotification(content, 'yellow');
 }
 
-function appendNotification(notification: TextElement) {
-	notificationContainer.append(notification);
+function appendNotification(content: string, color: string | null = null) {
+	if (notificationContainer.content.length) {
+		const longestLineLength = content.split('\n')
+			.reduce(
+				(acc, cur) => {
+					return (acc >= cur.length) ? acc : cur.length;
+				}, 0);
+
+		notificationContainer.pushLine('-'.repeat(longestLineLength));
+	}
+
+	if (color) {
+		notificationContainer.pushLine(generateTags({bold: true, fg: color}, content));
+	} else {
+		notificationContainer.pushLine(content);
+	}
+
+	notificationContainer.border.type = 'line';
+
+	setTimeout(() => {
+		notificationContainer.shiftLine(content.split('\n').length + 1);
+
+		if (!notificationContainer.content.length) {
+			notificationContainer.border.type = 'bg';
+		}
+
+		notificationContainer.screen.render();
+	}, 5000);
 
 	notificationContainer.screen.render();
 }
@@ -65,40 +100,6 @@ export function toggleHelp() {
 
 // Helper functions
 
-function getNotification(content: string, bg: string): TextElement {
-	const options: TextOptions = {
-		align: 'center',
-		bg,
-		clickable: true,
-		content,
-		padding: {
-			bottom: 1,
-			left: 2,
-			right: 2,
-			top: 1,
-		},
-		shrink: true,
-		valign: 'middle',
-	};
-
-	const notification: TextElement = getTextElement(options);
-	const screen: Screen = notification.screen;
-
-	const notificationDestroyTimer: NodeJS.Timer = setTimeout(() => {
-		notification.destroy();
-		screen.render();
-	}, 5000);
-
-	notification.on('mouseup', () => {
-		clearTimeout(notificationDestroyTimer);
-
-		notification.destroy();
-		screen.render();
-	});
-
-	return notification;
-}
-
 function getPersistentNotification(content: string, bg: string): TextElement {
 	const options: TextOptions = {
 		align: 'center',
@@ -106,12 +107,6 @@ function getPersistentNotification(content: string, bg: string): TextElement {
 		border: 'line',
 		clickable: true,
 		content,
-		padding: {
-			bottom: 1,
-			left: 2,
-			right: 2,
-			top: 1,
-		},
 		shrink: true,
 		valign: 'middle',
 	};
@@ -120,7 +115,7 @@ function getPersistentNotification(content: string, bg: string): TextElement {
 	const screen: Screen = notification.screen;
 
 	notification.on('mouseup', () => {
-		notification.destroy();
+		notification.toggle();
 		screen.render();
 	});
 
