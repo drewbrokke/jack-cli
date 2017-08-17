@@ -2,7 +2,6 @@ import { generateTags } from 'blessed';
 
 import {
 	BoxElement,
-	Screen,
 	TextElement,
 	TextOptions,
 } from '../types/types';
@@ -105,18 +104,12 @@ function getPersistentNotification(content: string, bg: string): TextElement {
 		align: 'center',
 		bg,
 		border: 'line',
-		clickable: true,
 		content,
 		shrink: true,
 		valign: 'middle',
 	};
 
 	const notification: TextElement = getTextElement(options);
-
-	notification.on('mouseup', () => {
-		notification.toggle();
-		notification.screen.render();
-	});
 
 	notification.focus();
 

@@ -29,6 +29,8 @@ export function getScreen(): Screen {
 		smartCSR: true,
 	});
 
+	screen._listenedMouse = true;
+
 	screen.key('?', toggleHelp);
 	screen.key('x', () => {
 		const commit = getSHA();
