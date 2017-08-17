@@ -112,11 +112,10 @@ function getPersistentNotification(content: string, bg: string): TextElement {
 	};
 
 	const notification: TextElement = getTextElement(options);
-	const screen: Screen = notification.screen;
 
 	notification.on('mouseup', () => {
 		notification.toggle();
-		screen.render();
+		notification.screen.render();
 	});
 
 	notification.focus();
