@@ -20,7 +20,9 @@ import {
 	copyCommitMessageToClipboard,
 	copySHAToClipboard,
 	getParentChildObject,
+	openCommitRangeDiffFile,
 	openFilesFromCommit,
+	openSingleCommitDiffFile,
 } from '../util/commands';
 
 export function getScreen(): Screen {
@@ -35,19 +37,32 @@ export function getScreen(): Screen {
 	screen.key('x', () => {
 		const commit = getSHA();
 
-		stash.set(ANCHOR_COMMIT, commit);
+		if (stash.has(ANCHOR_COMMIT) && stash.get(ANCHOR_COMMIT) === commit) {
+			stash.delete(ANCHOR_COMMIT);
 
-		notifyInfo(`Marked commit for diffing: ${commit}`);
+			notifyInfo(`Unmarked commit`);
+		} else {
+			stash.set(ANCHOR_COMMIT, commit);
+
+			notifyInfo(`Marked commit for diffing: ${commit}`);
+		}
 	});
 	screen.key('c', () => cherryPickCommit(getSHA()));
-	screen.key('d', () => doDiff((ancestorSHA, childSHA) =>
+	screen.key('d', () => sortSHAs((ancestorSHA, childSHA) =>
 		screen.spawn('git', ['diff', `${ancestorSHA}^..${childSHA}`], {})));
+	screen.key('e', () => {
+		if (stash.has(ANCHOR_COMMIT)) {
+			sortSHAs(openCommitRangeDiffFile);
+		} else {
+			openSingleCommitDiffFile(getSHA());
+		}
+	});
 	screen.key('i', () =>
 		screen.exec(
 			'git', ['rebase', '-i', `${getSHA()}^`], {},
 			() => process.exit(0)));
 	screen.key('m', () => copyCommitMessageToClipboard(getSHA()));
-	screen.key('n', () => doDiff((ancestorSHA, childSHA) =>
+	screen.key('n', () => sortSHAs((ancestorSHA, childSHA) =>
 		screen.spawn('git', ['diff', `${ancestorSHA}^..${childSHA}`, '--name-only'], {})));
 	screen.key('o', () => openFilesFromCommit(getSHA()));
 	screen.key('y', () => copySHAToClipboard(getSHA()));
@@ -85,7 +100,7 @@ const updateView = (screen, commitElement, commitListElement) => () => {
 	}
 };
 
-const doDiff = (callback: (ancestorSHA: string, childSHA: string) => void): void => {
+const sortSHAs = (callback: (ancestorSHA: string, childSHA: string) => void): void => {
 	const currentCommit = getSHA();
 
 	if (stash.has(ANCHOR_COMMIT)) {
@@ -96,9 +111,11 @@ const doDiff = (callback: (ancestorSHA: string, childSHA: string) => void): void
 				callback(ancestor, child);
 
 				stash.delete(ANCHOR_COMMIT);
+				notifyInfo(`Unmarked commit`);
 			})
 			.catch(() => {
 				stash.delete(ANCHOR_COMMIT);
+				notifyInfo(`Unmarked commit`);
 			});
 	} else {
 		notifyWarning('You must first mark an anchor commit for diffing with the "x" key');

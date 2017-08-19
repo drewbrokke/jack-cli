@@ -1,6 +1,8 @@
-import { spawn } from 'child_process';
+import { ChildProcess, spawn } from 'child_process';
 import * as clipboardy from 'clipboardy';
+import { createWriteStream, unlinkSync } from 'fs';
 import * as opn from 'opn';
+import { homedir } from 'os';
 import * as path from 'path';
 
 import { notifyError, notifyInfo, notifySuccess } from '../interface/notification';
@@ -28,6 +30,18 @@ export function copyCommitMessageToClipboard(SHA: string): void {
 export function copySHAToClipboard(SHA: string): void {
 	clipboardy.write(SHA)
 		.then(() => notifySuccess(`Copied SHA to the clipboard: ${SHA}`));
+}
+
+export function openSingleCommitDiffFile(SHA: string): void {
+	createAndOpenProcessOutputFile(
+		`temp-patch-${SHA}-at-${new Date().getTime()}.diff`,
+		spawn('git', [ 'show', '--patch-with-stat', SHA ], {}));
+}
+
+export function openCommitRangeDiffFile(ancestorSHA: string, childSHA: string) {
+	createAndOpenProcessOutputFile(
+		`temp-patch-${ancestorSHA}-${childSHA}-at-${new Date().getTime()}.diff`,
+		spawn('git', ['diff', `${ancestorSHA}^..${childSHA}`], {}));
 }
 
 export function getParentChildObject(ancestorSHA: string, childSHA: string) {
@@ -80,4 +94,24 @@ function doOpenFilesFromCommit(SHA: string, repoTopLevel: string): void {
 
 function handleOpenFilesFromCommitError(errorMessage: string) {
 	notifyError(`Could not open files:\n\n${errorMessage}`);
+}
+
+function createAndOpenProcessOutputFile(fileName: string, gitProcess: ChildProcess): void {
+	const filePath = path.join(homedir(), fileName);
+
+	const fileStream = createWriteStream(filePath);
+
+	gitProcess.stdout.pipe(fileStream);
+
+	gitProcess.on('close', () => {
+		fileStream.end();
+
+		opn(filePath, {wait: false})
+			.then((opnProcess) => opnProcess.on('close', () => unlinkSync(filePath)))
+			.catch((e) => {
+				unlinkSync(filePath);
+
+				notifyError(e);
+			});
+	});
 }
