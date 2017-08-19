@@ -34,6 +34,7 @@ Open changed files in default editor | `o`
 Copy current commit's SHA to clipboard | `y`
 **Mark** a commit for diffing | x
 Show diff (requires **marked** commit) | d
+Open diff file in the default editor. If there is a marked commit, the diff file will show the total diff between the two. | e
 Show name-only diff (requires **marked** commit) | n
 
 List Navigation | Keys

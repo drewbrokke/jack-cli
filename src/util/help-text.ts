@@ -12,6 +12,9 @@ Global Key Commands:
 
 - Mark a commit for diffing........................x
 - Show diff (requires marked commit)               d
+- Open diff file in the default editor             e
+  If there is a marked commit, the diff file will
+  show the total diff between the two.
 - Show name-only diff (requires marked commit)     n
 
 Navigation Key Commands:
