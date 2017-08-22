@@ -24,7 +24,7 @@ export const gitShow = (SHA: string): Promise<string> =>
 export const gitTopLevel = (): Promise<string> =>
 	spawnPromise('git', ['rev-parse', '--show-toplevel']);
 
-export const isAncestor = (maybeAncestorSHA: string, maybeChildSHA: string): Promise<boolean> =>
-	gitMergeBase(maybeAncestorSHA, maybeChildSHA)
-		.then(() => Promise.resolve(true))
-		.catch(() => Promise.resolve(false));
+export const sortSHAs = (SHA1: string, SHA2: string): Promise<string[]> =>
+	gitMergeBase(SHA1, SHA2)
+		.then(() => Promise.resolve([SHA1, SHA2]))
+		.catch(() => Promise.resolve([SHA2, SHA1]));

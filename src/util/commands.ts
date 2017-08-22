@@ -12,7 +12,6 @@ import {
 	gitDiffNameOnly,
 	gitShow,
 	gitTopLevel,
-	isAncestor,
 } from './git-util';
 
 export function cherryPickCommit(SHA: string): Promise<any> {
@@ -35,11 +34,6 @@ export function copyCommitMessageToClipboard(SHA: string): Promise<any> {
 
 export function copySHAToClipboard(SHA: string): Promise<any> {
 	return clipboardy.write(SHA);
-}
-
-export function sortSHAs(SHA1: string, SHA2: string): Promise<string[]> {
-	return isAncestor(SHA1, SHA2)
-		.then((isAncestorCommit) => isAncestorCommit ? [SHA1, SHA2] : [SHA2, SHA1]);
 }
 
 export function openSingleCommitDiffFile(SHA: string): Promise<any> {

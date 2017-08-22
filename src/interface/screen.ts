@@ -24,8 +24,8 @@ import {
 	openCommitRangeDiffFile,
 	openFilesFromCommit,
 	openSingleCommitDiffFile,
-	sortSHAs,
 } from '../util/commands';
+import { sortSHAs } from '../util/git-util';
 
 export function getScreen(): Screen {
 	const screen: Screen = getScreenElement({
