@@ -37,6 +37,94 @@ export function getScreen(): Screen {
 
 	screen.key('?', toggleHelp);
 
+	screen.key('c', async () => {
+		const SHA = getSHA();
+
+		notifyInfo(`Attempting to cherry-pick commit ${SHA}`);
+
+		try {
+			await cherryPickCommit(getSHA());
+
+			notifySuccess(`Successfully cherry-picked commit ${SHA}`);
+		} catch (errorMessage) {
+			notifyError(`Unable to cherry-pick commit ${SHA}:\n\n${errorMessage}\n\nAborting cherry-pick.`);
+		}
+	});
+
+	screen.key('d', async () => {
+		if (!stash.has(ANCHOR_COMMIT)) {
+			return notifyWarning('You must first mark an anchor commit for diffing with the "x" key');
+		}
+
+		try {
+			const [ancestorSHA, childSHA] = await sortSHAs(stash.get(ANCHOR_COMMIT), getSHA());
+
+			screen.spawn('git', ['diff', `${ancestorSHA}^..${childSHA}`], {});
+		} catch (errorMessage) {
+			notifyError(`Could not get diff:\n\n${errorMessage}`);
+		}
+
+		unmarkAnchorCommit();
+	});
+
+	screen.key('e', async () => {
+		try {
+			if (stash.has(ANCHOR_COMMIT)) {
+				const [ancestorSHA, childSHA] = await sortSHAs(stash.get(ANCHOR_COMMIT), getSHA());
+
+				await openCommitRangeDiffFile(ancestorSHA, childSHA);
+			} else {
+
+				await openSingleCommitDiffFile(getSHA());
+			}
+		} catch (errorMessage) {
+			notifyError(`Could not open diff:\n\n${errorMessage}`);
+		}
+
+		if (stash.has(ANCHOR_COMMIT)) {
+			unmarkAnchorCommit();
+		}
+	});
+
+	screen.key('i', () =>
+		screen.exec(
+			'git', ['rebase', '-i', `${getSHA()}^`], {},
+			() => process.exit(0)));
+
+	screen.key('m', async () => {
+		try {
+			const message = await copyCommitMessageToClipboard(getSHA());
+
+			notifySuccess(`Copied commit message to the clipoard:\n"${message}"`);
+		} catch (errorMessage) {
+			notifyError(`Could not copy the commit message to the clipboard:\n\n${errorMessage}`);
+		}
+	});
+
+	screen.key('n', async () => {
+		if (!stash.has(ANCHOR_COMMIT)) {
+			return notifyWarning('You must first mark an anchor commit for diffing with the "x" key');
+		}
+
+		try {
+			const [ancestorSHA, childSHA] = await sortSHAs(stash.get(ANCHOR_COMMIT), getSHA());
+
+			screen.spawn('git', ['diff', `${ancestorSHA}^..${childSHA}`, '--name-only'], {});
+		} catch (errorMessage) {
+			notifyError(`Could not get diff list:;\n\n${errorMessage}`);
+		}
+
+		unmarkAnchorCommit();
+	});
+
+	screen.key('o', async () => {
+		try {
+			await openFilesFromCommit(getSHA());
+		} catch (errorMessage) {
+			notifyError(`Could not open the files:\n\n${errorMessage}`);
+		}
+	});
+
 	screen.key('x', () => {
 		const commit = getSHA();
 
@@ -50,70 +138,16 @@ export function getScreen(): Screen {
 		}
 	});
 
-	screen.key('c', () => {
-		const SHA = getSHA();
-		notifyInfo(`Attempting to cherry-pick commit ${SHA}`);
-		cherryPickCommit(getSHA())
-			.then(() => notifySuccess(`Successfully cherry-picked commit ${SHA}`))
-			.catch((errorMessage) => notifyError(`Unable to cherry-pick commit ${SHA}:\n\n${errorMessage}\n\nAborting cherry-pick.`));
-	});
-
-	screen.key('d', () => {
-		if (!stash.has(ANCHOR_COMMIT)) {
-			return notifyWarning('You must first mark an anchor commit for diffing with the "x" key');
-		}
-
-		sortSHAs(stash.get(ANCHOR_COMMIT), getSHA())
-			.then(([ancestorSHA, childSHA]) => screen.spawn('git', ['diff', `${ancestorSHA}^..${childSHA}`], {}))
-			.then(unmarkAnchorCommit)
-			.catch((errorMessage) => notifyError(`Could not get diff:\n\n${errorMessage}`));
-	});
-
-	screen.key('e', () => {
-		if (stash.has(ANCHOR_COMMIT)) {
-			sortSHAs(stash.get(ANCHOR_COMMIT), getSHA())
-				.then(([ancestorSHA, childSHA]) => openCommitRangeDiffFile(ancestorSHA, childSHA))
-				.then(unmarkAnchorCommit)
-				.catch((errorMessage) => notifyError(`Could not open diff:\n\n${errorMessage}`));
-		} else {
-			openSingleCommitDiffFile(getSHA())
-				.catch((errorMessage) => notifyError(`Could not open diff:\n\n${errorMessage}`));
-		}
-	});
-
-	screen.key('i', () =>
-		screen.exec(
-			'git', ['rebase', '-i', `${getSHA()}^`], {},
-			() => process.exit(0)));
-
-	screen.key('m', () => {
-		copyCommitMessageToClipboard(getSHA())
-			.then((message) => notifySuccess(`Copied commit message to the clipoard:\n"${message}"`))
-			.catch((errorMessage) => notifyError(`Could not copy the commit message to the clipboard:\n\n${errorMessage}`));
-	});
-
-	screen.key('n', () => {
-		if (!stash.has(ANCHOR_COMMIT)) {
-			return notifyWarning('You must first mark an anchor commit for diffing with the "x" key');
-		}
-
-		sortSHAs(stash.get(ANCHOR_COMMIT), getSHA())
-			.then(([ancestorSHA, childSHA]) => screen.spawn('git', ['diff', `${ancestorSHA}^..${childSHA}`, '--name-only'], {}))
-			.then(unmarkAnchorCommit)
-			.catch((errorMessage) => notifyError(`Could not get diff list:;\n\n${errorMessage}`));
-	});
-
-	screen.key('o', () => {
-		openFilesFromCommit(getSHA())
-			.catch((errorMessage) => notifyError(`Could not open the files:\n\n${errorMessage}`));
-	});
-
-	screen.key('y', () => {
+	screen.key('y', async () => {
 		const SHA = getSHA();
 
-		copySHAToClipboard(SHA)
-			.then(() => notifySuccess(`Copied SHA to the clipboard: ${SHA}`))
-			.catch((errorMessage) => notifyError(`Could not copy the SHA to the clipboard:\n\n${errorMessage}`));
+		try {
+			await copySHAToClipboard(SHA);
+
+			notifySuccess(`Copied SHA to the clipboard: ${SHA}`);
+		} catch (errorMessage) {
+			notifyError(`Could not copy the SHA to the clipboard:\n\n${errorMessage}`);
+		}
 	});
 
 	screen.key(['C-c', 'q', 'escape'], () => process.exit(0));
