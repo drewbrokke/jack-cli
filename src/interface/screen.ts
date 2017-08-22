@@ -18,14 +18,17 @@ import { getProgressIndicator } from './progress-indicator';
 const ANCHOR_COMMIT = 'ANCHOR_COMMIT';
 
 import {
-	cherryPickCommit,
 	copyCommitMessageToClipboard,
 	copySHAToClipboard,
 	openCommitRangeDiffFile,
 	openFilesFromCommit,
 	openSingleCommitDiffFile,
-} from '../util/commands';
-import { sortSHAs } from '../util/git-util';
+} from '../util/external-commands';
+import {
+	gitCherryPick,
+	gitCherryPickAbort,
+	sortSHAs,
+} from '../util/git-util';
 
 export function getScreen(): Screen {
 	const screen: Screen = getScreenElement({
@@ -43,11 +46,13 @@ export function getScreen(): Screen {
 		notifyInfo(`Attempting to cherry-pick commit ${SHA}`);
 
 		try {
-			await cherryPickCommit(getSHA());
+			await gitCherryPick(SHA);
 
 			notifySuccess(`Successfully cherry-picked commit ${SHA}`);
 		} catch (errorMessage) {
 			notifyError(`Unable to cherry-pick commit ${SHA}:\n\n${errorMessage}\n\nAborting cherry-pick.`);
+
+			gitCherryPickAbort();
 		}
 	});
 

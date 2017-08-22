@@ -5,23 +5,12 @@ import { homedir } from 'os';
 import * as path from 'path';
 
 import {
-	gitCherryPick,
-	gitCherryPickAbort,
 	gitCommitMessage,
 	gitDiff,
 	gitDiffNameOnly,
 	gitShow,
 	gitTopLevel,
 } from './git-util';
-
-export function cherryPickCommit(SHA: string): Promise<any> {
-	return gitCherryPick(SHA)
-		.catch((errorMessage: string) => {
-			gitCherryPickAbort();
-
-			return Promise.reject(errorMessage);
-		});
-}
 
 export function copyCommitMessageToClipboard(SHA: string): Promise<any> {
 	return gitCommitMessage(SHA)
