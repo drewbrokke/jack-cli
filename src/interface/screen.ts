@@ -30,7 +30,7 @@ import {
 	sortSHAs,
 } from '../util/git-util';
 
-export function getScreen(): Screen {
+export const getScreen = (): Screen => {
 	const screen: Screen = getScreenElement({
 		autoPadding: true,
 		smartCSR: true,
@@ -169,7 +169,11 @@ export function getScreen(): Screen {
 	store.subscribe(updateView(screen, commitElement, commitListElement));
 
 	return screen;
-}
+};
+
+const getSHA = (): string => {
+	return store.getState().SHA;
+};
 
 const unmarkAnchorCommit = () => {
 	stash.delete(ANCHOR_COMMIT);
@@ -194,7 +198,3 @@ const updateView = (screen, commitElement, commitListElement) => () => {
 		return screen.render();
 	}
 };
-
-function getSHA(): string {
-	return store.getState().SHA;
-}
