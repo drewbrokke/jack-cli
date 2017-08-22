@@ -1,5 +1,5 @@
 import { store } from '../redux/store';
-import { Screen } from '../types/types';
+import { IScreen } from '../types/types';
 import { stash } from '../util/stash';
 import { getCommitElement } from './commit-view';
 import { getHelpPrompt } from './help-prompt';
@@ -30,8 +30,8 @@ import {
 	sortSHAs,
 } from '../util/git-util';
 
-export const getScreen = (): Screen => {
-	const screen: Screen = getScreenElement({
+export const getScreen = (): IScreen => {
+	const screen: IScreen = getScreenElement({
 		autoPadding: true,
 		smartCSR: true,
 	});

@@ -3,8 +3,8 @@ import {
 	BoxElement,
 	BoxOptions,
 	IListElement,
+	IScreen,
 	ListOptions,
-	Screen,
 	ScreenOptions,
 	ScrollableTextElement,
 	ScrollableTextOptions,
@@ -26,8 +26,8 @@ export function getScrollableTextElement(
 	return Blessed.scrollabletext(options);
 }
 
-export function getScreenElement(options: ScreenOptions): Screen {
-	return Blessed.screen(options);
+export function getScreenElement(options: ScreenOptions): IScreen {
+	return Blessed.screen(options) as IScreen;
 }
 
 export function getTextElement(options: TextOptions): TextElement {
