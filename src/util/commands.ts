@@ -1,117 +1,90 @@
-import { ChildProcess, spawn } from 'child_process';
 import * as clipboardy from 'clipboardy';
-import { createWriteStream, unlinkSync } from 'fs';
+import { unlinkSync, writeFile } from 'fs';
 import * as opn from 'opn';
 import { homedir } from 'os';
 import * as path from 'path';
 
-import { notifyError, notifyInfo, notifySuccess } from '../interface/notification';
-import { promisifyChildProcess } from './promisify-child-process';
+import {
+	gitCherryPick,
+	gitCherryPickAbort,
+	gitCommitMessage,
+	gitDiff,
+	gitDiffNameOnly,
+	gitShow,
+	gitTopLevel,
+	isAncestor,
+} from './git-util';
 
-let REPO_TOP_LEVEL: string;
-
-export function cherryPickCommit(SHA: string): void {
-	promisifyChildProcess(spawn('git', ['cherry-pick', SHA]))
-		.then(() => notifySuccess(`Successfully cherry-picked commit ${SHA} onto current branch.`))
+export function cherryPickCommit(SHA: string): Promise<any> {
+	return gitCherryPick(SHA)
 		.catch((errorMessage: string) => {
-			notifyError(`Cherry-pick failed:\n\n${errorMessage}\n\nAborting cherry-pick.`);
-			spawn('git', ['cherry-pick', '--abort']);
+			gitCherryPickAbort();
+
+			return Promise.reject(errorMessage);
 		});
 }
 
-export function copyCommitMessageToClipboard(SHA: string): void {
-	promisifyChildProcess(spawn('git', ['show', SHA, '-s', '--pretty=format:%s']))
+export function copyCommitMessageToClipboard(SHA: string): Promise<any> {
+	return gitCommitMessage(SHA)
 		.then((message: string) => {
-			clipboardy.write(message)
-				.then(notifySuccess(`Copied commit message to the clipoard:\n"${message}"`));
+			clipboardy.write(message);
+
+			return message;
 		});
 }
 
-export function copySHAToClipboard(SHA: string): void {
-	clipboardy.write(SHA)
-		.then(() => notifySuccess(`Copied SHA to the clipboard: ${SHA}`));
+export function copySHAToClipboard(SHA: string): Promise<any> {
+	return clipboardy.write(SHA);
 }
 
-export function openSingleCommitDiffFile(SHA: string): void {
-	createAndOpenProcessOutputFile(
-		`temp-patch-${SHA}-at-${new Date().getTime()}.diff`,
-		spawn('git', [ 'show', '--patch-with-stat', SHA ], {}));
+export function sortSHAs(SHA1: string, SHA2: string): Promise<string[]> {
+	return isAncestor(SHA1, SHA2)
+		.then((isAncestorCommit) => isAncestorCommit ? [SHA1, SHA2] : [SHA2, SHA1]);
 }
 
-export function openCommitRangeDiffFile(ancestorSHA: string, childSHA: string) {
-	createAndOpenProcessOutputFile(
-		`temp-patch-${ancestorSHA}-${childSHA}-at-${new Date().getTime()}.diff`,
-		spawn('git', ['diff', `${ancestorSHA}^..${childSHA}`], {}));
+export function openSingleCommitDiffFile(SHA: string): Promise<any> {
+	return gitShow(SHA)
+		.then((content: string) =>
+			openTempFile(
+				`temp-patch-${SHA}-at-${new Date().getTime()}.diff`,
+				content));
 }
 
-export function getParentChildObject(ancestorSHA: string, childSHA: string) {
-	return new Promise((resolve) => {
-		const gitMergeBaseProcess = spawn('git', ['merge-base', '--is-ancestor', ancestorSHA, childSHA]);
-
-		gitMergeBaseProcess.on('close', (code: number) => {
-			if (code === 0) {
-				resolve({
-					ancestor: ancestorSHA,
-					child: childSHA,
-				});
-			} else {
-				resolve({
-					ancestor: childSHA,
-					child: ancestorSHA,
-				});
-			}
-		});
-	});
+export function openCommitRangeDiffFile(ancestorSHA: string, childSHA: string): Promise<any> {
+	return gitDiff(ancestorSHA, childSHA)
+		.then((content: string) =>
+			openTempFile(
+				`temp-patch-${ancestorSHA}-${childSHA}-at-${new Date().getTime()}.diff`,
+				content));
 }
 
-export function openFilesFromCommit(SHA: string): void {
-	if (REPO_TOP_LEVEL) {
-		doOpenFilesFromCommit(SHA, REPO_TOP_LEVEL);
-	} else {
-		promisifyChildProcess(spawn('git', ['rev-parse', '--show-toplevel']))
-			.then((repoTopLevel: string) => {
-				REPO_TOP_LEVEL = repoTopLevel;
+export async function openFilesFromCommit(SHA: string): Promise<any> {
+	const topLevel = await gitTopLevel();
 
-				doOpenFilesFromCommit(SHA, repoTopLevel);
-			})
-			.catch(handleOpenFilesFromCommitError);
-	}
+	const filesString = await gitDiffNameOnly(SHA, SHA);
+
+	const filesArray = filesString.split('\n')
+		.map((file) => path.join(topLevel, file));
+
+	return Promise.all(filesArray.map(opn));
 }
 
-// Helper functions
-
-function doOpenFilesFromCommit(SHA: string, repoTopLevel: string): void {
-	promisifyChildProcess(spawn('git', ['diff', '--name-only', `${SHA}^..${SHA}`]))
-		.then((filesString: string) => {
-			const files: string[] = filesString.split('\n');
-
-			files.map((file: string) => path.join(repoTopLevel, file)).forEach(opn);
-
-			notifyInfo(`Opening files:\n\n${filesString}`);
-		})
-		.catch(handleOpenFilesFromCommitError);
-}
-
-function handleOpenFilesFromCommitError(errorMessage: string) {
-	notifyError(`Could not open files:\n\n${errorMessage}`);
-}
-
-function createAndOpenProcessOutputFile(fileName: string, gitProcess: ChildProcess): void {
+function openTempFile(fileName: string, content: string): Promise<any> {
 	const filePath = path.join(homedir(), fileName);
 
-	const fileStream = createWriteStream(filePath);
+	return new Promise((resolve, reject) => {
+		writeFile(filePath, content, {encoding: 'utf8'}, () => {
+			opn(filePath, {wait: false})
+				.then((opnProcess) => opnProcess.on('close', () => {
+					unlinkSync(filePath);
 
-	gitProcess.stdout.pipe(fileStream);
+					resolve(filePath);
+				}))
+				.catch((e) => {
+					unlinkSync(filePath);
 
-	gitProcess.on('close', () => {
-		fileStream.end();
-
-		opn(filePath, {wait: false})
-			.then((opnProcess) => opnProcess.on('close', () => unlinkSync(filePath)))
-			.catch((e) => {
-				unlinkSync(filePath);
-
-				notifyError(e);
-			});
+					reject(e);
+				});
+		});
 	});
 }
