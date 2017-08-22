@@ -12,36 +12,31 @@ import {
 	gitTopLevel,
 } from './git-util';
 
-export function copyCommitMessageToClipboard(SHA: string): Promise<any> {
-	return gitCommitMessage(SHA)
+export const copyCommitMessageToClipboard = (SHA: string): Promise<any> =>
+	gitCommitMessage(SHA)
 		.then((message: string) => {
 			clipboardy.write(message);
 
 			return message;
 		});
-}
 
-export function copySHAToClipboard(SHA: string): Promise<any> {
-	return clipboardy.write(SHA);
-}
+export const copySHAToClipboard = (SHA: string): Promise<any> => clipboardy.write(SHA);
 
-export function openSingleCommitDiffFile(SHA: string): Promise<any> {
-	return gitShow(SHA)
+export const openSingleCommitDiffFile = (SHA: string): Promise<any> =>
+	gitShow(SHA)
 		.then((content: string) =>
 			openTempFile(
 				`temp-patch-${SHA}-at-${new Date().getTime()}.diff`,
 				content));
-}
 
-export function openCommitRangeDiffFile(ancestorSHA: string, childSHA: string): Promise<any> {
-	return gitDiff(ancestorSHA, childSHA)
+export const openCommitRangeDiffFile = (ancestorSHA: string, childSHA: string): Promise<any> =>
+	gitDiff(ancestorSHA, childSHA)
 		.then((content: string) =>
 			openTempFile(
 				`temp-patch-${ancestorSHA}-${childSHA}-at-${new Date().getTime()}.diff`,
 				content));
-}
 
-export async function openFilesFromCommit(SHA: string): Promise<any> {
+export const openFilesFromCommit = async (SHA: string): Promise<any> => {
 	const topLevel = await gitTopLevel();
 
 	const filesString = await gitDiffNameOnly(SHA, SHA);
@@ -50,9 +45,9 @@ export async function openFilesFromCommit(SHA: string): Promise<any> {
 		.map((file) => path.join(topLevel, file));
 
 	return Promise.all(filesArray.map(opn));
-}
+};
 
-function openTempFile(fileName: string, content: string): Promise<any> {
+const openTempFile = (fileName: string, content: string): Promise<any> => {
 	const filePath = path.join(homedir(), fileName);
 
 	return new Promise((resolve, reject) => {
@@ -70,4 +65,4 @@ function openTempFile(fileName: string, content: string): Promise<any> {
 				});
 		});
 	});
-}
+};
