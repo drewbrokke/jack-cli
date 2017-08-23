@@ -1,6 +1,6 @@
 import { ChildProcess, spawn } from 'child_process';
 
-export function promisifyChildProcess(childProcess: ChildProcess): Promise<any> {
+export const promisifyChildProcess = (childProcess: ChildProcess): Promise<any> => {
 	return new Promise((resolve, reject) => {
 		let dataString = '';
 		let errorString = '';
@@ -19,8 +19,7 @@ export function promisifyChildProcess(childProcess: ChildProcess): Promise<any> 
 			}
 		});
 	});
-}
+};
 
-export function spawnPromise(command: string, args: string[], config = {}): Promise<string> {
-	return promisifyChildProcess(spawn(command, args, config));
-}
+export const spawnPromise = (command: string, args: string[], config = {}): Promise<string> =>
+	promisifyChildProcess(spawn(command, args, config));
