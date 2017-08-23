@@ -11,6 +11,9 @@
   "bin": {
     "jack": "index.js"
   },
+  "engines": {
+    "node": ">=4"
+  },
   "scripts": {
     "build": "gulp build",
     "dev": "gulp watch",
