@@ -6,12 +6,7 @@ import { getTextElement } from './interface-elements';
 
 export function getProgressIndicator(): TextElement {
 	const progressIndicator: TextElement =  getTextElement({
-		bg: '#006680',
-		bottom: 0,
-		height: 1,
-		right: 0,
-		shrink: true,
-		width: '100%',
+		left: 0,
 	});
 
 	store.subscribe(updateProgressIndicator(progressIndicator));

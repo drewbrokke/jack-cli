@@ -2,7 +2,6 @@ import { store } from '../redux/store';
 import { IScreen } from '../types/types';
 import { stash } from '../util/stash';
 import { getCommitElement } from './commit-view';
-import { getHelpPrompt } from './help-prompt';
 import { getScreenElement } from './interface-elements';
 import { getCommitListElement } from './list-view';
 import {
@@ -13,7 +12,6 @@ import {
 	notifyWarning,
 	toggleHelp,
 } from './notification';
-import { getProgressIndicator } from './progress-indicator';
 
 const ANCHOR_COMMIT = 'ANCHOR_COMMIT';
 
@@ -29,6 +27,7 @@ import {
 	gitCherryPickAbort,
 	sortSHAs,
 } from '../util/git-util';
+import { getStatusBar } from "./status-bar";
 
 export const getScreen = (): IScreen => {
 	const screen: IScreen = getScreenElement({
@@ -162,8 +161,7 @@ export const getScreen = (): IScreen => {
 
 	screen.append(commitElement);
 	screen.append(commitListElement);
-	screen.append(getHelpPrompt());
-	screen.append(getProgressIndicator());
+	screen.append(getStatusBar());
 	screen.append(getNotificationContainer());
 
 	store.subscribe(updateView(screen, commitElement, commitListElement));
