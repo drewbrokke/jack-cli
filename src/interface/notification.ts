@@ -29,11 +29,20 @@ export const getNotificationContainer = (): BoxElement => {
 	return notificationContainer;
 };
 
-export const notify = (content: string) => appendNotification(content);
-export const notifyError = (content: string) => appendNotification(content, 'red');
-export const notifyInfo = (content: string) => appendNotification(content, 'blue');
-export const notifySuccess = (content: string) => appendNotification(content, 'green');
-export const notifyWarning = (content: string) => appendNotification(content, 'yellow');
+export const notify = (content: string) =>
+	appendNotification(content);
+
+export const notifyError = (content: string) =>
+	appendNotification(content, 'red');
+
+export const notifyInfo = (content: string) =>
+	appendNotification(content, 'blue');
+
+export const notifySuccess = (content: string) =>
+	appendNotification(content, 'green');
+
+export const notifyWarning = (content: string) =>
+	appendNotification(content, 'yellow');
 
 const appendNotification = (content: string, color: string | null = null) => {
 	if (notificationContainer.content.length) {

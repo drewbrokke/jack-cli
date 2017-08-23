@@ -47,7 +47,12 @@ export const getScreen = (): IScreen => {
 
 			notifySuccess(`Successfully cherry-picked commit ${SHA}`);
 		} catch (errorMessage) {
-			notifyError(`Unable to cherry-pick commit ${SHA}:\n\n${errorMessage}\n\nAborting cherry-pick.`);
+			notifyError(
+`Unable to cherry-pick commit ${SHA}:
+
+${errorMessage}
+
+Aborting cherry-pick.`);
 
 			gitCherryPickAbort();
 		}
@@ -55,11 +60,14 @@ export const getScreen = (): IScreen => {
 
 	screen.key('d', async () => {
 		if (!stash.has(ANCHOR_COMMIT)) {
-			return notifyWarning('You must first mark an anchor commit for diffing with the "x" key');
+			return notifyWarning(
+				'You must first mark an anchor commit for diffing with the ' +
+				'"x" key');
 		}
 
 		try {
-			const [ancestorSHA, childSHA] = await sortSHAs(stash.get(ANCHOR_COMMIT), getSHA());
+			const [ancestorSHA, childSHA] =
+				await sortSHAs(stash.get(ANCHOR_COMMIT), getSHA());
 
 			screen.spawn('git', ['diff', `${ancestorSHA}^..${childSHA}`], {});
 		} catch (errorMessage) {
@@ -72,7 +80,8 @@ export const getScreen = (): IScreen => {
 	screen.key('e', async () => {
 		try {
 			if (stash.has(ANCHOR_COMMIT)) {
-				const [ancestorSHA, childSHA] = await sortSHAs(stash.get(ANCHOR_COMMIT), getSHA());
+				const [ancestorSHA, childSHA] =
+					await sortSHAs(stash.get(ANCHOR_COMMIT), getSHA());
 
 				await openCommitRangeDiffFile(ancestorSHA, childSHA);
 			} else {
@@ -97,21 +106,29 @@ export const getScreen = (): IScreen => {
 		try {
 			const message = await copyCommitMessageToClipboard(getSHA());
 
-			notifySuccess(`Copied commit message to the clipoard:\n"${message}"`);
+			notifySuccess(`Copied commit message to the clipoard:\n\n"${message}"`);
 		} catch (errorMessage) {
-			notifyError(`Could not copy the commit message to the clipboard:\n\n${errorMessage}`);
+			notifyError(
+`Could not copy the commit message to the clipboard:
+
+${errorMessage}`);
 		}
 	});
 
 	screen.key('n', async () => {
 		if (!stash.has(ANCHOR_COMMIT)) {
-			return notifyWarning('You must first mark an anchor commit for diffing with the "x" key');
+			return notifyWarning(
+				'You must first mark an anchor commit for diffing with the ' +
+				'"x" key');
 		}
 
 		try {
-			const [ancestorSHA, childSHA] = await sortSHAs(stash.get(ANCHOR_COMMIT), getSHA());
+			const [ancestorSHA, childSHA] =
+				await sortSHAs(stash.get(ANCHOR_COMMIT), getSHA());
 
-			screen.spawn('git', ['diff', `${ancestorSHA}^..${childSHA}`, '--name-only'], {});
+			screen.spawn(
+				'git', ['diff', `${ancestorSHA}^..${childSHA}`, '--name-only'],
+				{});
 		} catch (errorMessage) {
 			notifyError(`Could not get diff list:;\n\n${errorMessage}`);
 		}

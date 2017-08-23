@@ -21,7 +21,8 @@ export const copyCommitMessageToClipboard = (SHA: string): Promise<any> =>
 			return message;
 		});
 
-export const copySHAToClipboard = (SHA: string): Promise<any> => clipboardy.write(SHA);
+export const copySHAToClipboard = (SHA: string): Promise<any> =>
+	clipboardy.write(SHA);
 
 export const openSingleCommitDiffFile = (SHA: string): Promise<any> =>
 	gitShow(SHA)
@@ -30,12 +31,13 @@ export const openSingleCommitDiffFile = (SHA: string): Promise<any> =>
 				`temp-patch-${SHA}-at-${new Date().getTime()}.diff`,
 				content));
 
-export const openCommitRangeDiffFile = (ancestorSHA: string, childSHA: string): Promise<any> =>
-	gitDiff(ancestorSHA, childSHA)
-		.then((content: string) =>
-			openTempFile(
-				`temp-patch-${ancestorSHA}-${childSHA}-at-${new Date().getTime()}.diff`,
-				content));
+export const openCommitRangeDiffFile =
+	(ancestorSHA: string, childSHA: string): Promise<any> =>
+		gitDiff(ancestorSHA, childSHA)
+			.then((content: string) =>
+				openTempFile(
+					`temp-patch-${ancestorSHA}-${childSHA}-at-${new Date().getTime()}.diff`,
+					content));
 
 export const openFilesFromCommit = async (SHA: string): Promise<any> => {
 	const topLevel = await gitTopLevel();
@@ -58,13 +60,16 @@ const openTempFile = (fileName: string, content: string): Promise<any> => {
 			}
 
 			if (stash.has(KEY_TEMP_FILES)) {
-				stash.set(KEY_TEMP_FILES, stash.get(KEY_TEMP_FILES).concat([filePath]));
+				stash.set(
+					KEY_TEMP_FILES,
+					stash.get(KEY_TEMP_FILES).concat([filePath]));
 			} else {
 				stash.set(KEY_TEMP_FILES, [filePath]);
 			}
 
 			opn(filePath, {wait: false})
-				.then((opnProcess) => opnProcess.on('close', () => resolve(filePath)))
+				.then((opnProcess) =>
+					opnProcess.on('close', () => resolve(filePath)))
 				.catch((opnError) => reject(opnError));
 		});
 	});

@@ -1,4 +1,8 @@
-import { decrementIndex, incrementIndex, viewList } from '../redux/action-creators';
+import {
+	decrementIndex,
+	incrementIndex,
+	viewList,
+} from '../redux/action-creators';
 import { store } from '../redux/store';
 import { ScrollableTextElement } from '../types/types';
 import { spawnPromise } from '../util/promisify-child-process';
@@ -17,9 +21,17 @@ export const getCommitElement = (): ScrollableTextElement => {
 		vi: true,
 	});
 
-	commitElement.key(['right', 'S-down', 'S-j'], () => store.dispatch(incrementIndex()));
-	commitElement.key(['left', 'S-k', 'S-up'], () => store.dispatch(decrementIndex()));
-	commitElement.key(['enter', 'space'], () => store.dispatch(viewList()));
+	commitElement.key(
+		['right', 'S-down', 'S-j'],
+		() => store.dispatch(incrementIndex()));
+
+	commitElement.key(
+		['left', 'S-k', 'S-up'],
+		() => store.dispatch(decrementIndex()));
+
+	commitElement.key(
+		['enter', 'space'],
+		() => store.dispatch(viewList()));
 
 	commitElement.focus();
 
@@ -36,7 +48,11 @@ const updateCommitElement = (commitElement) => {
 	return () => {
 		const state = store.getState();
 
-		if (state.SHA === lastState.SHA && commitElement.content) return lastState = state;
+		if (state.SHA === lastState.SHA &&
+			commitElement.content) {
+
+			return lastState = state;
+		}
 
 		lastState = state;
 
@@ -50,7 +66,9 @@ const updateCommitElement = (commitElement) => {
 			return commitElement.screen.render();
 		}
 
-		return spawnPromise('git', ['show', '--patch-with-stat', '--stat-width', '1000', '--color', SHA])
+		return spawnPromise(
+			'git',
+			['show', '--patch-with-stat', '--stat-width', '1000', '--color', SHA])
 			.then((commitContentResult: string) => {
 				commitContentMap.set(SHA, commitContentResult);
 
@@ -61,6 +79,9 @@ const updateCommitElement = (commitElement) => {
 				return commitElement.screen.render();
 			})
 			.catch((errorMessage) =>
-				notifyWarning(`There was an issue getting the commit content for ${SHA}:\n\n${errorMessage}`));
+				notifyWarning(
+`There was an issue getting the commit content for ${SHA}:
+
+${errorMessage}`));
 	};
 };

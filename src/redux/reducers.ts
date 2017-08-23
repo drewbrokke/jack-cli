@@ -26,7 +26,8 @@ export const reducer = (state: IState, action: IAction): IState => {
 				})
 				.filter(Boolean);
 
-			const indexesWithSHAs: number[] = [ ...currentIndexesWithSHAs, ...newIndexesWithSHAs ];
+			const indexesWithSHAs: number[] =
+				[ ...currentIndexesWithSHAs, ...newIndexesWithSHAs ];
 
 			let SHA = currentSHA;
 
@@ -46,16 +47,22 @@ export const reducer = (state: IState, action: IAction): IState => {
 
 			return {
 				...state,
-				SHA: getSHA(currentIndexesWithSHAs[previousIndex], currentLines, currentSHA),
+				SHA: getSHA(
+					currentIndexesWithSHAs[previousIndex], currentLines,
+					currentSHA),
 				index: previousIndex,
 			};
 
 		case 'INCREMENT_INDEX':
-			const nextIndex = Math.min(currentIndex + action.payload, currentIndexesWithSHAs.length - 1);
+			const nextIndex = Math.min(
+				currentIndex + action.payload,
+				currentIndexesWithSHAs.length - 1);
 
 			return {
 				...state,
-				SHA: getSHA(currentIndexesWithSHAs[nextIndex], currentLines, currentSHA),
+				SHA: getSHA(
+					currentIndexesWithSHAs[nextIndex], currentLines,
+					currentSHA),
 				index: nextIndex,
 			};
 
@@ -70,8 +77,11 @@ export const reducer = (state: IState, action: IAction): IState => {
 	}
 };
 
-const getSHA = (index: number, commits: string[], currentSHA: string): string => {
-	const matches: RegExpExecArray | null = COMMIT_SHA_REGEX.exec(commits[index]);
+const getSHA =
+	(index: number, commits: string[], currentSHA: string): string => {
+
+	const matches: RegExpExecArray | null =
+		COMMIT_SHA_REGEX.exec(commits[index]);
 
 	if (!matches) {
 		return currentSHA;
