@@ -8,6 +8,7 @@
         "curly": ["ignore-same-line"],
         "indent": "tabs",
         "max-line-length": 80,
+        "only-arrow-functions": true,
         "quotemark": [true, "single", "avoid-escape"],
         "variable-name": ["allow-leading-underscore"]
     },
