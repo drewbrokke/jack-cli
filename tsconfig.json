@@ -2,7 +2,7 @@
     "compileOnSave": true,
     "compilerOptions": {
         "alwaysStrict": true,
-        "lib": ["ES2015"],
+        "lib": ["es2015"],
         "module": "commonjs",
         "noFallthroughCasesInSwitch": true,
         "noImplicitAny": false,
