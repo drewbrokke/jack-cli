@@ -1,17 +1,5 @@
 import { store } from '../redux/store';
 import { IScreen } from '../types/types';
-import { stash } from '../util/stash';
-import { getScreenElement } from './interface-elements';
-import {
-	getNotificationContainer,
-	notifyError,
-	notifyInfo,
-	notifySuccess,
-	notifyWarning,
-} from './notification';
-
-const ANCHOR_COMMIT = 'ANCHOR_COMMIT';
-
 import {
 	copyCommitMessageToClipboard,
 	copySHAToClipboard,
@@ -24,9 +12,20 @@ import {
 	gitCherryPickAbort,
 	sortSHAs,
 } from '../util/git-util';
+import { stash } from '../util/stash';
 import { getHelpDialog, toggleHelp } from "./help-dialog";
+import { getScreenElement } from './interface-elements';
 import { getMainContentContainer } from "./main-content-container";
+import {
+	getNotificationContainer,
+	notifyError,
+	notifyInfo,
+	notifySuccess,
+	notifyWarning,
+} from './notification';
 import { getStatusBar } from "./status-bar";
+
+const ANCHOR_COMMIT = 'ANCHOR_COMMIT';
 
 export const getScreen = (): IScreen => {
 	const screen: IScreen = getScreenElement({
