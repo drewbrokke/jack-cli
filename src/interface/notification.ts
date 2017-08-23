@@ -18,9 +18,9 @@ export function getNotificationContainer(): BoxElement {
 
 	notificationContainer = getBoxElement({
 		border: {
-			type: 'bg',
+			type: 'line',
 		},
-		bottom: 0,
+		bottom: 1,
 		padding: {
 			left: 1,
 			right: 1,
@@ -29,6 +29,8 @@ export function getNotificationContainer(): BoxElement {
 		shrink: true,
 		tags: true,
 	});
+
+	notificationContainer.hide();
 
 	return notificationContainer;
 }
@@ -56,32 +58,25 @@ export function notifyWarning(content: string) {
 function appendNotification(content: string, color: string | null = null) {
 	if (notificationContainer.content.length) {
 		const longestLineLength = content.split('\n')
-			.reduce(
-				(acc, cur) => {
-					return (acc >= cur.length) ? acc : cur.length;
-				}, 0);
+			.reduce((acc, cur) => (acc >= cur.length) ? acc : cur.length, 0);
 
 		notificationContainer.pushLine('-'.repeat(longestLineLength));
 	}
 
-	if (color) {
-		notificationContainer.pushLine(generateTags({bold: true, fg: color}, content));
-	} else {
-		notificationContainer.pushLine(content);
-	}
-
-	notificationContainer.border.type = 'line';
+	notificationContainer.pushLine(
+		color ? generateTags({bold: true, fg: color}, content) : content);
 
 	setTimeout(() => {
 		notificationContainer.shiftLine(content.split('\n').length + 1);
 
 		if (!notificationContainer.content.length) {
-			notificationContainer.border.type = 'bg';
+			notificationContainer.hide();
 		}
 
 		notificationContainer.screen.render();
 	}, 5000);
 
+	notificationContainer.show();
 	notificationContainer.screen.render();
 }
 
