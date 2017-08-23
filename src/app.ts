@@ -1,9 +1,11 @@
 import { ChildProcess, spawn } from 'child_process';
+import { unlinkSync } from 'fs';
 
 import { getScreen } from './interface/screen';
 import { addCommits } from './redux/action-creators';
 import { store } from './redux/store';
 import { IScreen } from "./types/types";
+import { KEY_TEMP_FILES, stash } from './util/stash';
 
 export function run(args: string[]): void {
 	const gitLogProcess: ChildProcess = spawn('git', ['log', '--color=always', ...args]);
@@ -26,6 +28,14 @@ export function run(args: string[]): void {
 			process.stderr.write(errorString);
 
 			process.exit(code);
+		}
+	});
+
+	process.on('exit', () => {
+		if (stash.has(KEY_TEMP_FILES)) {
+			const tempFilesArray: string[] = stash.get(KEY_TEMP_FILES);
+
+			tempFilesArray.forEach((file) => unlinkSync(file));
 		}
 	});
 
