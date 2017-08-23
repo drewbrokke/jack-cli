@@ -4,7 +4,7 @@ import { unlinkSync } from 'fs';
 import { getScreen } from './interface/screen';
 import { addCommits } from './redux/action-creators';
 import { store } from './redux/store';
-import { IScreen } from "./types/types";
+import { IScreen } from './types/types';
 import { KEY_TEMP_FILES, stash } from './util/stash';
 
 export function run(args: string[]): void {

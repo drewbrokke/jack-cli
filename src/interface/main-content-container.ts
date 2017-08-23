@@ -1,8 +1,8 @@
-import { store } from "../redux/store";
+import { store } from '../redux/store';
 import { BoxElement } from '../types/types';
-import { getCommitElement } from "./commit-view";
+import { getCommitElement } from './commit-view';
 import { getBoxElement } from './interface-elements';
-import { getCommitListElement } from "./list-view";
+import { getCommitListElement } from './list-view';
 
 let mainContentContainer: BoxElement;
 
