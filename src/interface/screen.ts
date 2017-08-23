@@ -8,7 +8,6 @@ import {
 	notifyInfo,
 	notifySuccess,
 	notifyWarning,
-	toggleHelp,
 } from './notification';
 
 const ANCHOR_COMMIT = 'ANCHOR_COMMIT';
@@ -25,6 +24,7 @@ import {
 	gitCherryPickAbort,
 	sortSHAs,
 } from '../util/git-util';
+import { getHelpDialog, toggleHelp } from "./help-dialog";
 import { getMainContentContainer } from "./main-content-container";
 import { getStatusBar } from "./status-bar";
 
@@ -158,6 +158,7 @@ export const getScreen = (): IScreen => {
 	screen.append(getMainContentContainer());
 	screen.append(getStatusBar());
 	screen.append(getNotificationContainer());
+	screen.append(getHelpDialog());
 
 	return screen;
 };

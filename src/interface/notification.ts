@@ -1,15 +1,9 @@
 import { generateTags } from 'blessed';
 
-import {
-	BoxElement,
-	TextElement,
-	TextOptions,
-} from '../types/types';
-import { helpText } from '../util/help-text';
-import { getBoxElement, getTextElement } from './interface-elements';
+import { BoxElement } from '../types/types';
+import { getBoxElement } from './interface-elements';
 
 let notificationContainer: BoxElement;
-let helpBox: TextElement;
 
 export function getNotificationContainer(): BoxElement {
 	if (notificationContainer) {
@@ -78,35 +72,4 @@ function appendNotification(content: string, color: string | null = null) {
 
 	notificationContainer.show();
 	notificationContainer.screen.render();
-}
-
-export function toggleHelp() {
-	if (!helpBox) {
-		helpBox = getPersistentNotification(helpText, 'none');
-
-		notificationContainer.append(helpBox);
-	} else {
-		helpBox.toggle();
-	}
-
-	notificationContainer.screen.render();
-}
-
-// Helper functions
-
-function getPersistentNotification(content: string, bg: string): TextElement {
-	const options: TextOptions = {
-		align: 'center',
-		bg,
-		border: 'line',
-		content,
-		shrink: true,
-		valign: 'middle',
-	};
-
-	const notification: TextElement = getTextElement(options);
-
-	notification.focus();
-
-	return notification;
 }
