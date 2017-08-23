@@ -1,9 +1,7 @@
 import { store } from '../redux/store';
 import { IScreen } from '../types/types';
 import { stash } from '../util/stash';
-import { getCommitElement } from './commit-view';
 import { getScreenElement } from './interface-elements';
-import { getCommitListElement } from './list-view';
 import {
 	getNotificationContainer,
 	notifyError,
@@ -27,6 +25,7 @@ import {
 	gitCherryPickAbort,
 	sortSHAs,
 } from '../util/git-util';
+import { getMainContentContainer } from "./main-content-container";
 import { getStatusBar } from "./status-bar";
 
 export const getScreen = (): IScreen => {
@@ -156,15 +155,9 @@ export const getScreen = (): IScreen => {
 
 	screen.key(['C-c', 'q', 'escape'], () => process.exit(0));
 
-	const commitElement = getCommitElement();
-	const commitListElement = getCommitListElement();
-
-	screen.append(commitElement);
-	screen.append(commitListElement);
+	screen.append(getMainContentContainer());
 	screen.append(getStatusBar());
 	screen.append(getNotificationContainer());
-
-	store.subscribe(updateView(screen, commitElement, commitListElement));
 
 	return screen;
 };
@@ -177,22 +170,4 @@ const unmarkAnchorCommit = () => {
 	stash.delete(ANCHOR_COMMIT);
 
 	notifyInfo(`Unmarked commit`);
-};
-
-const updateView = (screen, commitElement, commitListElement) => () => {
-	const state = store.getState();
-
-	if (state.view === 'LIST' && screen.focused !== commitListElement) {
-		commitElement.setBack();
-		commitListElement.focus();
-
-		return screen.render();
-	}
-
-	if (state.view === 'COMMIT' && screen.focused !== commitElement) {
-		commitListElement.setBack();
-		commitElement.focus();
-
-		return screen.render();
-	}
 };

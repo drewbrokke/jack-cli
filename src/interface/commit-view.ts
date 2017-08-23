@@ -8,7 +8,7 @@ import { getScrollableTextElement } from './interface-elements';
 
 export function getCommitElement(): ScrollableTextElement {
 	const commitElement: ScrollableTextElement = getScrollableTextElement({
-		bottom: 1,
+		bottom: 0,
 		clickable: true,
 		keys: true,
 		left: 0,
