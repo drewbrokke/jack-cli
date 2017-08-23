@@ -10,7 +10,7 @@ Global Key Commands:
 - Show paths changed between two commits:          p
 - Copy current commit's SHA to clipboard:          y
 
-- Mark a commit for diffing........................x
+- Mark a commit for diffing                        x
 - Show diff (requires marked commit)               d
 - Open diff file in the default editor             e
   If there is a marked commit, the diff file will
