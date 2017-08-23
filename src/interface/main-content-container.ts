@@ -6,7 +6,7 @@ import { getCommitListElement } from './list-view';
 
 let mainContentContainer: BoxElement;
 
-export function getMainContentContainer(): BoxElement {
+export const getMainContentContainer = (): BoxElement => {
 	mainContentContainer = getBoxElement({
 		bottom: 1,
 		left: 0,
@@ -23,7 +23,7 @@ export function getMainContentContainer(): BoxElement {
 	store.subscribe(updateView(commitElement, commitListElement));
 
 	return mainContentContainer;
-}
+};
 
 const updateView = (commitElement, commitListElement) => () => {
 	const state = store.getState();

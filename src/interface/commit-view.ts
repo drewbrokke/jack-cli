@@ -5,7 +5,7 @@ import { spawnPromise } from '../util/promisify-child-process';
 import { getScrollableTextElement } from './interface-elements';
 import { notifyWarning } from './notification';
 
-export function getCommitElement(): ScrollableTextElement {
+export const getCommitElement = (): ScrollableTextElement => {
 	const commitElement: ScrollableTextElement = getScrollableTextElement({
 		bottom: 0,
 		clickable: true,
@@ -26,9 +26,9 @@ export function getCommitElement(): ScrollableTextElement {
 	store.subscribe(updateCommitElement(commitElement));
 
 	return commitElement;
-}
+};
 
-function updateCommitElement(commitElement) {
+const updateCommitElement = (commitElement) => {
 	let lastState = store.getState();
 
 	const commitContentMap: Map<string, string> = new Map();
@@ -63,4 +63,4 @@ function updateCommitElement(commitElement) {
 			.catch((errorMessage) =>
 				notifyWarning(`There was an issue getting the commit content for ${SHA}:\n\n${errorMessage}`));
 	};
-}
+};

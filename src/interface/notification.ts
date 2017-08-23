@@ -5,7 +5,7 @@ import { getBoxElement } from './interface-elements';
 
 let notificationContainer: BoxElement;
 
-export function getNotificationContainer(): BoxElement {
+export const getNotificationContainer = (): BoxElement => {
 	if (notificationContainer) {
 		return notificationContainer;
 	}
@@ -27,29 +27,15 @@ export function getNotificationContainer(): BoxElement {
 	notificationContainer.hide();
 
 	return notificationContainer;
-}
+};
 
-export function notify(content: string) {
-	appendNotification(content);
-}
+export const notify = (content: string) => appendNotification(content);
+export const notifyError = (content: string) => appendNotification(content, 'red');
+export const notifyInfo = (content: string) => appendNotification(content, 'blue');
+export const notifySuccess = (content: string) => appendNotification(content, 'green');
+export const notifyWarning = (content: string) => appendNotification(content, 'yellow');
 
-export function notifyError(content: string) {
-	appendNotification(content, 'red');
-}
-
-export function notifyInfo(content: string) {
-	appendNotification(content, 'blue');
-}
-
-export function notifySuccess(content: string) {
-	appendNotification(content, 'green');
-}
-
-export function notifyWarning(content: string) {
-	appendNotification(content, 'yellow');
-}
-
-function appendNotification(content: string, color: string | null = null) {
+const appendNotification = (content: string, color: string | null = null) => {
 	if (notificationContainer.content.length) {
 		const longestLineLength = content.split('\n')
 			.reduce((acc, cur) => (acc >= cur.length) ? acc : cur.length, 0);
@@ -72,4 +58,4 @@ function appendNotification(content: string, color: string | null = null) {
 
 	notificationContainer.show();
 	notificationContainer.screen.render();
-}
+};

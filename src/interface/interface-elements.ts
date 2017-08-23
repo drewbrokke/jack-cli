@@ -12,24 +12,17 @@ import {
 	TextOptions,
  } from '../types/types';
 
-export function getBoxElement(options: BoxOptions): BoxElement {
-	return Blessed.box(options);
-}
+export const getBoxElement = (options: BoxOptions): BoxElement =>
+	Blessed.box(options);
 
-export function getListElement(options: ListOptions): IListElement {
-	return Blessed.list(options);
-}
+export const getListElement = (options: ListOptions): IListElement =>
+	Blessed.list(options);
 
-export function getScrollableTextElement(
-	options: ScrollableTextOptions): ScrollableTextElement {
+export const getScrollableTextElement = (options: ScrollableTextOptions): ScrollableTextElement =>
+	Blessed.scrollabletext(options);
 
-	return Blessed.scrollabletext(options);
-}
+export const getScreenElement = (options: ScreenOptions): IScreen =>
+	Blessed.screen(options) as IScreen;
 
-export function getScreenElement(options: ScreenOptions): IScreen {
-	return Blessed.screen(options) as IScreen;
-}
-
-export function getTextElement(options: TextOptions): TextElement {
-	return Blessed.text(options);
-}
+export const getTextElement = (options: TextOptions): TextElement =>
+	Blessed.text(options);

@@ -9,7 +9,7 @@ let commitListElement: IListElement;
 
 const NAV_INTERVAL: string = 'NAV_INTERVAL';
 
-export function getCommitListElement(): IListElement {
+export const getCommitListElement = (): IListElement => {
 	if (commitListElement) {
 		return commitListElement;
 	}
@@ -26,7 +26,7 @@ export function getCommitListElement(): IListElement {
 		top: 0,
 	});
 
-	function doUpdateIndex(action: (interval: number) => IAction) {
+	const doUpdateIndex = (action: (interval: number) => IAction) => {
 		const interval: number = stash.has(NAV_INTERVAL)
 			? stash.get(NAV_INTERVAL)
 			: 1;
@@ -38,7 +38,7 @@ export function getCommitListElement(): IListElement {
 
 			notifyInfo(`Movement interval reset.`);
 		}
-	}
+	};
 
 	commitListElement.key('1234567890'.split(''), (keyName: string) => {
 		const newInterval: string = stash.has(NAV_INTERVAL)
@@ -61,9 +61,9 @@ export function getCommitListElement(): IListElement {
 	store.subscribe(updateCommitListElement());
 
 	return commitListElement;
-}
+};
 
-function updateCommitListElement() {
+const updateCommitListElement = () => {
 	let lastState = store.getState();
 
 	return () => {
@@ -100,4 +100,4 @@ function updateCommitListElement() {
 
 		commitListElement.screen.render();
 	};
-}
+};

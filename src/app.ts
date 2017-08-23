@@ -7,7 +7,7 @@ import { store } from './redux/store';
 import { IScreen } from './types/types';
 import { KEY_TEMP_FILES, stash } from './util/stash';
 
-export function run(args: string[]): void {
+export const run = (args: string[]): void => {
 	const gitLogProcess: ChildProcess = spawn('git', ['log', '--color=always', ...args]);
 	const screen: IScreen = getScreen();
 
@@ -40,11 +40,11 @@ export function run(args: string[]): void {
 	});
 
 	screen.render();
-}
+};
 
-export function runFromPipedData(): void {
+export const runFromPipedData = (): void => {
 	process.stderr.write('Piping into jack is not currently supported.\n');
 	process.stderr.write('If you would like to contribute or comment, please see the issue on GitHub at https://github.com/drewbrokke/jack/issues/9.\n');
 
 	process.exit(1);
-}
+};

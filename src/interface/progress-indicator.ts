@@ -4,7 +4,7 @@ import {
  } from '../types/types';
 import { getTextElement } from './interface-elements';
 
-export function getProgressIndicator(): TextElement {
+export const getProgressIndicator = (): TextElement => {
 	const progressIndicator: TextElement =  getTextElement({
 		left: 0,
 	});
@@ -12,9 +12,9 @@ export function getProgressIndicator(): TextElement {
 	store.subscribe(updateProgressIndicator(progressIndicator));
 
 	return progressIndicator;
-}
+};
 
-function updateProgressIndicator(progressIndicator) {
+const updateProgressIndicator = (progressIndicator) => {
 	let lastState = store.getState();
 
 	return () => {
@@ -33,10 +33,7 @@ function updateProgressIndicator(progressIndicator) {
 
 		progressIndicator.screen.render();
 	};
-}
+};
 
-function constructProgressText(
-	index: number = 0, total: number = 0): string {
-
-	return `Commit ${index + 1}/${total}`;
-}
+const constructProgressText = (index: number = 0, total: number = 0): string =>
+	`Commit ${index + 1}/${total}`;

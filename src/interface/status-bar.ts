@@ -4,7 +4,7 @@ import { getProgressIndicator } from './progress-indicator';
 
 let statusBar: BoxElement;
 
-export function getStatusBar(): BoxElement {
+export const getStatusBar = (): BoxElement => {
 	statusBar = getBoxElement({
 		bottom: 0,
 		height: 1,
@@ -17,4 +17,4 @@ export function getStatusBar(): BoxElement {
 	statusBar.append(getTextElement({ content: 'Press "?" to show/hide help.', right: 0 }));
 
 	return statusBar;
-}
+};

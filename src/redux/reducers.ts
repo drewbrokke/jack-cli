@@ -2,7 +2,7 @@ import { IAction, IState } from '../types/types';
 
 export const COMMIT_SHA_REGEX: RegExp = new RegExp(/[0-9a-f]{7,40}\b/);
 
-export function reducer(state: IState, action: IAction): IState {
+export const reducer = (state: IState, action: IAction): IState => {
 	const currentIndex = state.index;
 	const currentIndexesWithSHAs = state.indexesWithSHAs;
 	const currentLines = state.lines;
@@ -68,9 +68,9 @@ export function reducer(state: IState, action: IAction): IState {
 		default:
 			return state;
 	}
-}
+};
 
-function getSHA(index: number, commits: string[], currentSHA: string): string {
+const getSHA = (index: number, commits: string[], currentSHA: string): string => {
 	const matches: RegExpExecArray | null = COMMIT_SHA_REGEX.exec(commits[index]);
 
 	if (!matches) {
@@ -84,4 +84,4 @@ function getSHA(index: number, commits: string[], currentSHA: string): string {
 	}
 
 	return currentSHA;
-}
+};

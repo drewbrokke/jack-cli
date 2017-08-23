@@ -7,7 +7,7 @@ import { getTextElement } from './interface-elements';
 
 let helpDialog: TextElement;
 
-export function getHelpDialog() {
+export const getHelpDialog = () => {
 	if (helpDialog) {
 		return helpDialog;
 	}
@@ -31,10 +31,10 @@ export function getHelpDialog() {
 	helpDialog.hide();
 
 	return helpDialog;
-}
+};
 
-export function toggleHelp() {
+export const toggleHelp = () => {
 	helpDialog.toggle();
 
 	helpDialog.screen.render();
-}
+};
