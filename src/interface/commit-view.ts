@@ -1,10 +1,9 @@
-import { spawn } from 'child_process';
-
 import { decrementIndex, incrementIndex, viewList } from '../redux/action-creators';
 import { store } from '../redux/store';
 import { ScrollableTextElement } from '../types/types';
-import { promisifyChildProcess } from '../util/promisify-child-process';
+import { spawnPromise } from '../util/promisify-child-process';
 import { getScrollableTextElement } from './interface-elements';
+import { notifyWarning } from './notification';
 
 export function getCommitElement(): ScrollableTextElement {
 	const commitElement: ScrollableTextElement = getScrollableTextElement({
@@ -51,19 +50,7 @@ function updateCommitElement(commitElement) {
 			return commitElement.screen.render();
 		}
 
-		return promisifyChildProcess(
-				spawn(
-					'git',
-					[
-						'show',
-						'--patch-with-stat',
-						'--stat-width',
-						'1000',
-						'--color',
-						SHA,
-					],
-				),
-			)
+		return spawnPromise('git', ['show', '--patch-with-stat', '--stat-width', '1000', '--color', SHA])
 			.then((commitContentResult: string) => {
 				commitContentMap.set(SHA, commitContentResult);
 
@@ -72,6 +59,8 @@ function updateCommitElement(commitElement) {
 				commitElement.scrollTo(0);
 
 				return commitElement.screen.render();
-			});
+			})
+			.catch((errorMessage) =>
+				notifyWarning(`There was an issue getting the commit content for ${SHA}:\n\n${errorMessage}`));
 	};
 }
