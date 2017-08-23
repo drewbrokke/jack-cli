@@ -3,23 +3,33 @@ import { ChildProcess, spawn } from 'child_process';
 import { getScreen } from './interface/screen';
 import { addCommits } from './redux/action-creators';
 import { store } from './redux/store';
+import { IScreen } from "./types/types";
 
 export function run(args: string[]): void {
-	getScreen().render();
+	const gitLogProcess: ChildProcess = spawn('git', ['log', '--color=always', ...args]);
+	const screen: IScreen = getScreen();
 
-	const gitLogProcess: ChildProcess = spawn(
-		'git',
-		[
-			'log',
-			'--color=always',
-			...args,
-		],
-	);
+	let errorString = '';
 
 	gitLogProcess.stdout.setEncoding('utf8');
 	gitLogProcess.stdout.on('data', (data: string) => {
 		store.dispatch(addCommits(data.trim().split('\n')));
 	});
+
+	gitLogProcess.stderr.on('data', (data: string) => errorString += data);
+
+	gitLogProcess.on('close', (code: number) => {
+		if (code > 0) {
+			screen.destroy();
+
+			process.stderr.write('jack encountered an error with the call to "git log":\n\n');
+			process.stderr.write(errorString);
+
+			process.exit(code);
+		}
+	});
+
+	screen.render();
 }
 
 export function runFromPipedData(): void {
