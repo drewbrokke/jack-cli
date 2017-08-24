@@ -5,13 +5,11 @@ import {
 } from '../redux/action-creators';
 import { store } from '../redux/store';
 import { IAction, IListElement } from '../types/types';
-import { stash } from '../util/stash';
+import { KEY_NAV_INTERVAL, stash } from '../util/stash';
 import { getListElement } from './interface-elements';
 import { notifyInfo } from './notification';
 
 let commitListElement: IListElement;
-
-const NAV_INTERVAL: string = 'NAV_INTERVAL';
 
 export const getCommitListElement = (): IListElement => {
 	if (commitListElement) {
@@ -31,25 +29,25 @@ export const getCommitListElement = (): IListElement => {
 	});
 
 	const doUpdateIndex = (action: (interval: number) => IAction) => {
-		const interval: number = stash.has(NAV_INTERVAL)
-			? stash.get(NAV_INTERVAL)
+		const interval: number = stash.has(KEY_NAV_INTERVAL)
+			? stash.get(KEY_NAV_INTERVAL)
 			: 1;
 
 		store.dispatch(action(interval));
 
-		if (stash.has(NAV_INTERVAL)) {
-			stash.delete(NAV_INTERVAL);
+		if (stash.has(KEY_NAV_INTERVAL)) {
+			stash.delete(KEY_NAV_INTERVAL);
 
 			notifyInfo(`Movement interval reset.`);
 		}
 	};
 
 	commitListElement.key('1234567890'.split(''), (keyName: string) => {
-		const newInterval: string = stash.has(NAV_INTERVAL)
-			? `${stash.get(NAV_INTERVAL)}${keyName}`
+		const newInterval: string = stash.has(KEY_NAV_INTERVAL)
+			? `${stash.get(KEY_NAV_INTERVAL)}${keyName}`
 			: keyName;
 
-		stash.set(NAV_INTERVAL, parseInt(newInterval, 10));
+		stash.set(KEY_NAV_INTERVAL, parseInt(newInterval, 10));
 
 		notifyInfo(`Movement interval: ${newInterval}`);
 	});

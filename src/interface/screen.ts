@@ -12,7 +12,7 @@ import {
 	gitCherryPickAbort,
 	sortSHAs,
 } from '../util/git-util';
-import { stash } from '../util/stash';
+import { KEY_ANCHOR_COMMIT, stash } from '../util/stash';
 import { getHelpDialog, toggleHelp } from './help-dialog';
 import { getScreenElement } from './interface-elements';
 import { getMainContentContainer } from './main-content-container';
@@ -24,8 +24,6 @@ import {
 	notifyWarning,
 } from './notification';
 import { getStatusBar } from './status-bar';
-
-const ANCHOR_COMMIT = 'ANCHOR_COMMIT';
 
 export const getScreen = (): IScreen => {
 	const screen: IScreen = getScreenElement({
@@ -59,7 +57,7 @@ Aborting cherry-pick.`);
 	});
 
 	screen.key('d', async () => {
-		if (!stash.has(ANCHOR_COMMIT)) {
+		if (!stash.has(KEY_ANCHOR_COMMIT)) {
 			return notifyWarning(
 				'You must first mark an anchor commit for diffing with the ' +
 				'"x" key');
@@ -67,7 +65,7 @@ Aborting cherry-pick.`);
 
 		try {
 			const [ancestorSHA, childSHA] =
-				await sortSHAs(stash.get(ANCHOR_COMMIT), getSHA());
+				await sortSHAs(stash.get(KEY_ANCHOR_COMMIT), getSHA());
 
 			screen.spawn('git', ['diff', `${ancestorSHA}^..${childSHA}`], {});
 		} catch (errorMessage) {
@@ -79,9 +77,9 @@ Aborting cherry-pick.`);
 
 	screen.key('e', async () => {
 		try {
-			if (stash.has(ANCHOR_COMMIT)) {
+			if (stash.has(KEY_ANCHOR_COMMIT)) {
 				const [ancestorSHA, childSHA] =
-					await sortSHAs(stash.get(ANCHOR_COMMIT), getSHA());
+					await sortSHAs(stash.get(KEY_ANCHOR_COMMIT), getSHA());
 
 				await openCommitRangeDiffFile(ancestorSHA, childSHA);
 			} else {
@@ -92,7 +90,7 @@ Aborting cherry-pick.`);
 			notifyError(`Could not open diff:\n\n${errorMessage}`);
 		}
 
-		if (stash.has(ANCHOR_COMMIT)) {
+		if (stash.has(KEY_ANCHOR_COMMIT)) {
 			unmarkAnchorCommit();
 		}
 	});
@@ -116,7 +114,7 @@ ${errorMessage}`);
 	});
 
 	screen.key('n', async () => {
-		if (!stash.has(ANCHOR_COMMIT)) {
+		if (!stash.has(KEY_ANCHOR_COMMIT)) {
 			return notifyWarning(
 				'You must first mark an anchor commit for diffing with the ' +
 				'"x" key');
@@ -124,7 +122,7 @@ ${errorMessage}`);
 
 		try {
 			const [ancestorSHA, childSHA] =
-				await sortSHAs(stash.get(ANCHOR_COMMIT), getSHA());
+				await sortSHAs(stash.get(KEY_ANCHOR_COMMIT), getSHA());
 
 			screen.spawn(
 				'git', ['diff', `${ancestorSHA}^..${childSHA}`, '--name-only'],
@@ -147,10 +145,10 @@ ${errorMessage}`);
 	screen.key('x', () => {
 		const commit = getSHA();
 
-		if (stash.has(ANCHOR_COMMIT) && stash.get(ANCHOR_COMMIT) === commit) {
+		if (stash.has(KEY_ANCHOR_COMMIT) && stash.get(KEY_ANCHOR_COMMIT) === commit) {
 			unmarkAnchorCommit();
 		} else {
-			stash.set(ANCHOR_COMMIT, commit);
+			stash.set(KEY_ANCHOR_COMMIT, commit);
 
 			notifyInfo(`Marked commit for diffing: ${commit}`);
 
@@ -184,7 +182,7 @@ const getSHA = (): string => {
 };
 
 const unmarkAnchorCommit = () => {
-	stash.delete(ANCHOR_COMMIT);
+	stash.delete(KEY_ANCHOR_COMMIT);
 
 	notifyInfo(`Unmarked commit`);
 };
