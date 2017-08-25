@@ -35,7 +35,7 @@ export const getScreen = (): IScreen => {
 
 	screen.key('?', toggleHelp);
 
-	screen.key('c', async () => {
+	screen.key('S-c', async () => {
 		const SHA = getSHA();
 
 		notifyInfo(`Attempting to cherry-pick commit ${SHA}`);
@@ -96,7 +96,7 @@ Aborting cherry-pick.`);
 		}
 	});
 
-	screen.key('i', () =>
+	screen.key('S-i', () =>
 		screen.exec(
 			'git', ['rebase', '-i', `${getSHA()}^`], {},
 			() => process.exit(0)));
