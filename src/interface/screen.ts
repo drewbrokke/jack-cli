@@ -21,7 +21,6 @@ import {
 	notifyError,
 	notifyInfo,
 	notifySuccess,
-	notifyWarning,
 } from './notification';
 import { getStatusBar } from './status-bar';
 
@@ -57,22 +56,24 @@ Aborting cherry-pick.`);
 	});
 
 	screen.key('d', async () => {
-		if (!stash.has(KEY_ANCHOR_COMMIT)) {
-			return notifyWarning(
-				'You must first mark an anchor commit for diffing with the ' +
-				'"x" key');
-		}
+		const SHA = getSHA();
 
 		try {
-			const [ancestorSHA, childSHA] =
-				await sortSHAs(stash.get(KEY_ANCHOR_COMMIT), getSHA());
+			if (stash.has(KEY_ANCHOR_COMMIT)) {
+				const [ancestorSHA, childSHA] =
+					await sortSHAs(stash.get(KEY_ANCHOR_COMMIT), SHA);
 
-			screen.spawn('git', ['diff', `${ancestorSHA}^..${childSHA}`], {});
+				spawnDiff(screen, ancestorSHA, childSHA);
+			} else {
+				spawnDiff(screen, SHA, SHA);
+			}
 		} catch (errorMessage) {
 			notifyError(`Could not get diff:\n\n${errorMessage}`);
 		}
 
-		unmarkAnchorCommit();
+		if (stash.has(KEY_ANCHOR_COMMIT)) {
+			unmarkAnchorCommit();
+		}
 	});
 
 	screen.key('e', async () => {
@@ -83,7 +84,6 @@ Aborting cherry-pick.`);
 
 				await openCommitRangeDiffFile(ancestorSHA, childSHA);
 			} else {
-
 				await openSingleCommitDiffFile(getSHA());
 			}
 		} catch (errorMessage) {
@@ -114,24 +114,24 @@ ${errorMessage}`);
 	});
 
 	screen.key('n', async () => {
-		if (!stash.has(KEY_ANCHOR_COMMIT)) {
-			return notifyWarning(
-				'You must first mark an anchor commit for diffing with the ' +
-				'"x" key');
-		}
+		const SHA = getSHA();
 
 		try {
-			const [ancestorSHA, childSHA] =
-				await sortSHAs(stash.get(KEY_ANCHOR_COMMIT), getSHA());
+			if (stash.has(KEY_ANCHOR_COMMIT)) {
+				const [ancestorSHA, childSHA] =
+					await sortSHAs(stash.get(KEY_ANCHOR_COMMIT), SHA);
 
-			screen.spawn(
-				'git', ['diff', `${ancestorSHA}^..${childSHA}`, '--name-only'],
-				{});
+				spawnDiffNameOnly(screen, ancestorSHA, childSHA);
+			} else {
+				spawnDiffNameOnly(screen, SHA, SHA);
+			}
 		} catch (errorMessage) {
 			notifyError(`Could not get diff list:;\n\n${errorMessage}`);
 		}
 
-		unmarkAnchorCommit();
+		if (stash.has(KEY_ANCHOR_COMMIT)) {
+			unmarkAnchorCommit();
+		}
 	});
 
 	screen.key('o', async () => {
@@ -180,6 +180,14 @@ ${errorMessage}`);
 const getSHA = (): string => {
 	return store.getState().SHA;
 };
+
+const spawnDiff = (screen: IScreen, SHA1: string, SHA2: string) =>
+	screen.spawn(
+		'git',
+		['diff', `${SHA1}^..${SHA2}`, '--patch', '--stat-width=1000'], {});
+
+const spawnDiffNameOnly = (screen: IScreen, SHA1: string, SHA2: string) =>
+	screen.spawn('git', ['diff', `${SHA1}^..${SHA2}`, '--name-only'], {});
 
 const unmarkAnchorCommit = () => {
 	stash.delete(KEY_ANCHOR_COMMIT);
