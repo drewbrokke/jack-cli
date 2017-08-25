@@ -23,6 +23,7 @@ export const getHelpDialog = () => {
 		},
 		right: 0,
 		shrink: true,
+		tags: true,
 		top: 0,
 	};
 
