@@ -1,44 +1,39 @@
 export const helpText = `
-Global Key Commands:
-- Exit jack:                                       q | esc | ctrl + c
-- Show/hide this help dialog:                      ?
+Essentials:
+Navigate between commits                      j/k | down/up
+Jump a number of commits                      (number) then j/k | down/up
+"Quick Look" a commit's contents (toggle)     Space | Enter
+Exit **jack**                                 q | esc | ctrl-c
+Show/hide help dialog                         ?
 
-- Cherry-pick commit to current branch:            c
-- Interactive rebase from current commit:          i
-- Copy current commit message to the clipboard:    m
-- Open changed files in default editor:            o
-- Show paths changed between two commits:          p
-- Copy current commit's SHA to clipboard:          y
+Viewing Changes:
+* Show diff                                                  d
+* Show name-only diff (changed file paths)                   n
+* Generate a diff file and open it in the default editor     e
+* Open changed files in default editor                       o
+Mark/unmark a commit                                         x
 
-- Mark a commit for diffing                        x
-- Show diff (requires marked commit)               d
-- Open diff file in the default editor             e
-  If there is a marked commit, the diff file will
-  show the total diff between the two.
-- Show name-only diff (requires marked commit)     n
+Acting on the branch:
+Cherry-pick commit to current branch       shift-c
+Interactive rebase from current commit     shift-i
+Copying to clipboard:
+Copy commit message     m
+Copy commit SHA         y
 
-Navigation Key Commands:
+List View:
+Navigate between commits     j/k | down/up
+Jump a number of commits     (number) then j/k | down/up
+Page down/up                 f/b | Page Down/Page Up
 
-List view
-- Select next item:                          down | j
-- Select previous item:                      up | k
-- Move by intervals (like Vim)               (number) then (up | down | j | k)
-- Page down                                  f | Page Down
-- Page up                                    b | Page Up
-- Go to Commit View (git show the commit):   space | enter
-- Execute 'git show' in a searchable pager   s
+Commit View
 
-Commit view
-- View next commit:                          shift + down | shift + j | right
-- View previous commit:                      shift + up | shift + k | left
-- Return to List View:                       space | enter
-- Navigating commit content:
-    + Scroll up:                             up | k
-    + Scroll down:                           down | j
-    + Scroll up half screen:                 ctrl + u
-    + Scroll down half screen:               ctrl + d
-    + Scroll up full screen:                 ctrl + b
-    + Scroll down full screen:               ctrl + f
-    + Scroll to top:                         g
-    + Scroll to bottom:                      shift + g
+Moving between commits:
+View previous commit (in history)     shift-down | shift-j | right
+View next commit (in history)         shift-up | shift-k | left
+
+Navigating:
+Navigate down/up               j/k | down/up
+Scroll down/up half screen     ctrl-d/ctrl-u
+Scroll down/up full screen     ctrl-f/ctrl-b
+Scroll to top/bottom           g/shift-g
 `;
