@@ -10,7 +10,9 @@ export const gitCommitMessage = (SHA: string): Promise<string> =>
 	spawnPromise('git', ['show', SHA, '-s', '--pretty=format:%s']);
 
 export const gitDiff = (SHA1: string, SHA2: string): Promise<string> =>
-	spawnPromise('git', ['diff', `${SHA1}^..${SHA2}`]);
+	spawnPromise(
+		'git',
+		['diff', `${SHA1}^..${SHA2}`, '--patch', '--stat-width=1000']);
 
 export const gitDiffNameOnly = (SHA1: string, SHA2: string): Promise<string> =>
 	spawnPromise('git', ['diff', `${SHA1}^..${SHA2}`, '--name-only']);
