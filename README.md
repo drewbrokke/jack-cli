@@ -23,41 +23,53 @@ jack -n 100
 
 ### Key Commands
 
-Global Actions | Keys
--------------- | ----
-Exit **jack** | `q` / `esc` / `ctrl + c`
+#### The Essentials
+
+Action | Key
+------ | ---
+Navigate between commits | `j` / `k` or `down` / `up`
+Jump a number of commits | (`number`) then `j` / `k` or `down` / `up`
+"Quick Look" a commit's contents (toggle) | `Space` or `Enter`
+Exit **jack** | `q` or `esc` or `ctrl-c`
 Show/hide help dialog | `?`
-Cherry-pick commit to current branch | `c`
-Interactive rebase from current commit | `i`
-Copy current commit message to the clipboard | `m`
-Open changed files in default editor | `o`
-Copy current commit's SHA to clipboard | `y`
-**Mark** a commit for diffing | `x`
-Show diff (requires **marked** commit) | `d`
-Open diff file in the default editor. If there is a marked commit, the diff file will show the total diff between the two. | `e`
-Show name-only diff (requires **marked** commit) | `n`
 
-List Navigation | Keys
---------------- | ----
-Select next item | `down` / `j`
-Select previous item | `up` / `k`
-Move by intervals (like Vim) | `(number)`, then `up` / `down` / `j` / `k`
-Page down | `f` or `Page Down`
-Page up | `b` or `Page Up`
-Go to Commit View (git show the commit) | `space` / `enter`
-Execute `git show` in a searchable pager | `s`
+#### Global Actions
 
-Commit View Navigation | Keys
----------------------- | ----
-View next commit | `shift + down` / `shift + j` / `right`
-View previous commit | `shift + up` / `shift + k` / `left`
-Return to List View | `space` or `enter`
-Scroll up | `up` | `k`
-Scroll down | `down` | `j`
-Scroll up half screen | `ctrl + u`
-Scroll down half screen | `ctrl + d`
-Scroll up full screen | `ctrl + b`
-Scroll down full screen | `ctrl + f`
-Scroll to top | `g`
-Scroll to bottom | `shift + g`
+*Note:* The following commands marked with a **\*** can be performed on either a single commit or a range of commits.  If a commit is marked with the **x** key, then the subsequent diff command will be performed on the **commit range** between the current commit and the marked commit.
 
+Action | Key
+------ | ----
+**Viewing Changes** |
+**\*** Show diff | `d`
+**\*** Show name-only diff (changed file paths) | `n`
+**\*** Generate a diff file and open it in the default editor | `e`
+**\*** Open changed files in default editor | `o`
+Mark/unmark a commit | `x`
+**Acting on the branch** |
+Cherry-pick commit to current branch | `shift-c`
+Interactive rebase from current commit | `shift-i`
+**Copying to clipboard** |
+Copy commit message | `m`
+Copy commit SHA | `y`
+
+#### List View
+
+Action | Key
+------ | ----
+Navigate between commits | `j` / `k` or `down` / `up`
+Jump a number of commits | (`number`) then `j` / `k` or `down` / `up`
+Page down/up | `f` / `b` or `Page Down` / `Page Up`
+
+
+#### Commit View
+
+Action | Keys
+------ | ----
+**Moving between commits** |
+View previous commit (in history) | `shift-down` or `shift-j` or `right`
+View next commit (in history) | `shift-up` or `shift-k` or `left`
+**Navigating** |
+Navigate down/up | `j` / `k` or `down` / `up`
+Scroll down/up half screen | `ctrl-d` / `ctrl-u`
+Scroll down/up full screen | `ctrl-f` / `ctrl-b`
+Scroll to top/bottom | `g` / `shift-g`
