@@ -40,9 +40,15 @@ export const openCommitRangeDiffFile =
 					content));
 
 export const openFilesFromCommit = async (SHA: string): Promise<any> => {
+	return openFilesFromCommitRange(SHA, SHA);
+};
+
+export const openFilesFromCommitRange =
+	async (SHA1: string, SHA2: string): Promise<any> => {
+
 	const topLevel = await gitTopLevel();
 
-	const filesString = await gitDiffNameOnly(SHA, SHA);
+	const filesString = await gitDiffNameOnly(SHA1, SHA2);
 
 	const filesArray = filesString.split('\n')
 		.map((file) => path.join(topLevel, file));

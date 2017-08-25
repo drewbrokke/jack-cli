@@ -5,6 +5,7 @@ import {
 	copySHAToClipboard,
 	openCommitRangeDiffFile,
 	openFilesFromCommit,
+	openFilesFromCommitRange,
 	openSingleCommitDiffFile,
 } from '../util/external-commands';
 import {
@@ -135,10 +136,23 @@ ${errorMessage}`);
 	});
 
 	screen.key('o', async () => {
+		const SHA = getSHA();
+
 		try {
-			await openFilesFromCommit(getSHA());
+			if (stash.has(KEY_ANCHOR_COMMIT)) {
+				const [ancestorSHA, childSHA] =
+					await sortSHAs(stash.get(KEY_ANCHOR_COMMIT), SHA);
+
+				await openFilesFromCommitRange(ancestorSHA, childSHA);
+			} else {
+				await openFilesFromCommit(getSHA());
+			}
 		} catch (errorMessage) {
 			notifyError(`Could not open the files:\n\n${errorMessage}`);
+		}
+
+		if (stash.has(KEY_ANCHOR_COMMIT)) {
+			unmarkAnchorCommit();
 		}
 	});
 
