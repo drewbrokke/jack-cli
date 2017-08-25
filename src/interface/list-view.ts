@@ -68,11 +68,6 @@ export const getCommitListElement = (): IListElement => {
 		() => store.dispatch(incrementIndex(Number(commitListElement.height))));
 
 	commitListElement.key(
-		's',
-		() => commitListElement.screen.spawn(
-			'git', [ 'show', '--patch-with-stat', store.getState().SHA ], {}));
-
-	commitListElement.key(
 		['enter', 'space'],
 		() => store.dispatch(viewCommit()));
 
