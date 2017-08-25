@@ -30,14 +30,14 @@ const updateView = (commitElement, commitListElement) => () => {
 	const screen = commitListElement.screen;
 
 	if (state.view === 'LIST' && screen.focused !== commitListElement) {
-		commitElement.setBack();
+		commitListElement.setFront();
 		commitListElement.focus();
 
 		return screen.render();
 	}
 
 	if (state.view === 'COMMIT' && screen.focused !== commitElement) {
-		commitListElement.setBack();
+		commitElement.setFront();
 		commitElement.focus();
 
 		return screen.render();
