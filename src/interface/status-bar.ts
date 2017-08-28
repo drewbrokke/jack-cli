@@ -1,5 +1,6 @@
 import { BoxElement } from '../types/types';
 import { getBoxElement, getTextElement } from './interface-elements';
+import { getLogCompletedStatus } from './log-completed-status';
 import { getProgressIndicator } from './progress-indicator';
 
 let statusBar: BoxElement;
@@ -14,6 +15,7 @@ export const getStatusBar = (): BoxElement => {
 	});
 
 	statusBar.append(getProgressIndicator());
+	statusBar.append(getLogCompletedStatus());
 	statusBar.append(
 		getTextElement({ content: 'Press "?" to show/hide help.', right: 0 }));
 
