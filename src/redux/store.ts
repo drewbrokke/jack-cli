@@ -8,6 +8,7 @@ const initialState: IState = {
 	index: 0,
 	indexesWithSHAs: [0],
 	lines: [],
+	logCompleted: false,
 	split: false,
 	view: 'LIST',
 };

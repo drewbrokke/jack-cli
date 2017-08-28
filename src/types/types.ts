@@ -30,6 +30,7 @@ export type ActionType =
 	'ADD_COMMITS' |
 	'DECREMENT_INDEX' |
 	'INCREMENT_INDEX' |
+	'LOG_COMPLETED' |
 	'VIEW_COMMIT' |
 	'VIEW_LIST';
 
@@ -42,6 +43,7 @@ export interface IState {
 	index: number;
 	indexesWithSHAs: number[];
 	lines: string[];
+	logCompleted: boolean;
 	SHA: string;
 	split: boolean;
 	view: View;

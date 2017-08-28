@@ -9,6 +9,9 @@ export const decrementIndex = (payload: number = 1): IAction =>
 export const incrementIndex = (payload: number = 1): IAction =>
 	({ payload, type: 'INCREMENT_INDEX' });
 
+export const logCompleted = (): IAction =>
+	({ type: 'LOG_COMPLETED' });
+
 export const viewCommit = (): IAction =>
 	({ type: 'VIEW_COMMIT' });
 

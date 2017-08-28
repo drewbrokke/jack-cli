@@ -42,6 +42,12 @@ export const reducer = (state: IState, action: IAction): IState => {
 				lines,
 			};
 
+		case 'LOG_COMPLETED':
+			return {
+				...state,
+				logCompleted: true,
+			};
+
 		case 'DECREMENT_INDEX':
 			const previousIndex = Math.max(currentIndex - action.payload, 0);
 
