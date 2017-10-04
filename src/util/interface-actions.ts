@@ -118,9 +118,9 @@ const doCommandWithMaybeMarkedCommit =
 				const [ancestorSHA, childSHA] =
 					await sortSHAs(markedSHA, SHA);
 
-				command(ancestorSHA, childSHA);
+				await command(ancestorSHA, childSHA);
 			} else {
-				command(SHA, SHA);
+				await command(SHA, SHA);
 			}
 		} catch (errorMessage) {
 			notifyError(`${errorText}:\n\n${errorMessage}`);
