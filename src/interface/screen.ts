@@ -5,6 +5,7 @@ import {
 	doCopyCommitSHA,
 	doDiff,
 	doDiffNameOnly,
+	doDifftool,
 	doMarkCommit,
 	doOpenDiffInEditor,
 	doOpenFilesInEditor,
@@ -32,6 +33,7 @@ export const getScreen = (): IScreen => {
 	screen.key('m', doCopyCommitMessage);
 	screen.key('n', () => doDiffNameOnly(screen));
 	screen.key('o', doOpenFilesInEditor);
+	screen.key('t', doDifftool);
 	screen.key('x', doMarkCommit);
 	screen.key('y', doCopyCommitSHA);
 	screen.key(['C-c', 'q', 'escape'], () => process.exit(0));
