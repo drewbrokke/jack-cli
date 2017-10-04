@@ -3,6 +3,7 @@ import {
 	notifyInfo,
 	notifySuccess,
 } from '../interface/notification';
+import { markSHA, unmarkSHA } from '../redux/action-creators';
 import { store } from '../redux/store';
 import { IScreen } from '../types/types';
 import {
@@ -19,7 +20,6 @@ import {
 	gitDiffTool,
 	sortSHAs,
 } from './git-util';
-import { KEY_ANCHOR_COMMIT, stash } from './stash';
 
 export const doCherryPick = async () => {
 	const SHA = getSHA();
@@ -68,12 +68,13 @@ export const doCopyCommitSHA = async () => {
 };
 
 export const doDiff = async (screen: IScreen) => {
+	const markedSHA = getMarkedSHA();
 	const SHA = getSHA();
 
 	try {
-		if (stash.has(KEY_ANCHOR_COMMIT)) {
+		if (markedSHA) {
 			const [ancestorSHA, childSHA] =
-				await sortSHAs(stash.get(KEY_ANCHOR_COMMIT), SHA);
+				await sortSHAs(markedSHA, SHA);
 
 			spawnDiff(screen, ancestorSHA, childSHA);
 		} else {
@@ -83,18 +84,19 @@ export const doDiff = async (screen: IScreen) => {
 		notifyError(`Could not get diff:\n\n${errorMessage}`);
 	}
 
-	if (stash.has(KEY_ANCHOR_COMMIT)) {
+	if (markedSHA) {
 		unmarkAnchorCommit();
 	}
 };
 
 export const doDifftool = async () => {
+	const markedSHA = getMarkedSHA();
 	const SHA = getSHA();
 
 	try {
-		if (stash.has(KEY_ANCHOR_COMMIT)) {
+		if (markedSHA) {
 			const [ancestorSHA, childSHA] =
-				await sortSHAs(stash.get(KEY_ANCHOR_COMMIT), SHA);
+				await sortSHAs(markedSHA, SHA);
 
 			gitDiffTool(ancestorSHA, childSHA);
 		} else {
@@ -104,18 +106,19 @@ export const doDifftool = async () => {
 		notifyError(`Could not launch difftool:\n\n${errorMessage}`);
 	}
 
-	if (stash.has(KEY_ANCHOR_COMMIT)) {
+	if (markedSHA) {
 		unmarkAnchorCommit();
 	}
 };
 
 export const doDiffNameOnly = async (screen: IScreen) => {
+	const markedSHA = getMarkedSHA();
 	const SHA = getSHA();
 
 	try {
-		if (stash.has(KEY_ANCHOR_COMMIT)) {
+		if (markedSHA) {
 			const [ancestorSHA, childSHA] =
-				await sortSHAs(stash.get(KEY_ANCHOR_COMMIT), SHA);
+				await sortSHAs(markedSHA, SHA);
 
 			spawnDiffNameOnly(screen, ancestorSHA, childSHA);
 		} else {
@@ -125,30 +128,31 @@ export const doDiffNameOnly = async (screen: IScreen) => {
 		notifyError(`Could not get diff list:;\n\n${errorMessage}`);
 	}
 
-	if (stash.has(KEY_ANCHOR_COMMIT)) {
+	if (markedSHA) {
 		unmarkAnchorCommit();
 	}
 };
 
 export const doMarkCommit = () => {
+	const markedSHA = getMarkedSHA();
 	const commit = getSHA();
 
-	if (stash.has(KEY_ANCHOR_COMMIT) &&
-		stash.get(KEY_ANCHOR_COMMIT) === commit) {
-
+	if (markedSHA && markedSHA === commit) {
 		unmarkAnchorCommit();
 	} else {
-		stash.set(KEY_ANCHOR_COMMIT, commit);
+		store.dispatch(markSHA(commit));
 
 		notifyInfo(`Marked commit for diffing: ${commit}`);
 	}
 };
 
 export const doOpenDiffInEditor = async () => {
+	const markedSHA = getMarkedSHA();
+
 	try {
-		if (stash.has(KEY_ANCHOR_COMMIT)) {
+		if (markedSHA) {
 			const [ancestorSHA, childSHA] =
-				await sortSHAs(stash.get(KEY_ANCHOR_COMMIT), getSHA());
+				await sortSHAs(markedSHA, getSHA());
 
 			await openCommitRangeDiffFile(ancestorSHA, childSHA);
 		} else {
@@ -158,18 +162,19 @@ export const doOpenDiffInEditor = async () => {
 		notifyError(`Could not open diff:\n\n${errorMessage}`);
 	}
 
-	if (stash.has(KEY_ANCHOR_COMMIT)) {
+	if (markedSHA) {
 		unmarkAnchorCommit();
 	}
 };
 
 export const doOpenFilesInEditor = async () => {
+	const markedSHA = getMarkedSHA();
 	const SHA = getSHA();
 
 	try {
-		if (stash.has(KEY_ANCHOR_COMMIT)) {
+		if (markedSHA) {
 			const [ancestorSHA, childSHA] =
-				await sortSHAs(stash.get(KEY_ANCHOR_COMMIT), SHA);
+				await sortSHAs(markedSHA, SHA);
 
 			await openFilesFromCommitRange(ancestorSHA, childSHA);
 		} else {
@@ -179,7 +184,7 @@ export const doOpenFilesInEditor = async () => {
 		notifyError(`Could not open the files:\n\n${errorMessage}`);
 	}
 
-	if (stash.has(KEY_ANCHOR_COMMIT)) {
+	if (markedSHA) {
 		unmarkAnchorCommit();
 	}
 };
@@ -191,6 +196,7 @@ export const doStartInteractiveRebase = async (screen: IScreen) =>
 
 // Helpers
 
+const getMarkedSHA = () => store.getState().markedSHA;
 const getSHA = () => store.getState().SHA;
 
 const spawnDiff = (screen: IScreen, SHA1: string, SHA2: string) =>
@@ -202,7 +208,7 @@ const spawnDiffNameOnly = (screen: IScreen, SHA1: string, SHA2: string) =>
 	screen.spawn('git', ['diff', `${SHA1}^..${SHA2}`, '--name-only'], {});
 
 const unmarkAnchorCommit = () => {
-	stash.delete(KEY_ANCHOR_COMMIT);
+	store.dispatch(unmarkSHA());
 
 	notifyInfo(`Unmarked commit`);
 };
