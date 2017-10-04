@@ -14,6 +14,9 @@ export const gitDiff = (SHA1: string, SHA2: string): Promise<string> =>
 		'git',
 		['diff', `${SHA1}^..${SHA2}`, '--patch', '--stat-width=1000']);
 
+export const gitDiffTool = (SHA1: string, SHA2: string): Promise<string> =>
+	spawnPromise('git', ['difftool', `${SHA1}^..${SHA2}`]);
+
 export const gitDiffNameOnly = (SHA1: string, SHA2: string): Promise<string> =>
 	spawnPromise('git', ['diff', `${SHA1}^..${SHA2}`, '--name-only']);
 
@@ -21,7 +24,7 @@ export const gitMergeBase = (SHA1: string, SHA2: string): Promise<string> =>
 	spawnPromise('git', ['merge-base', '--is-ancestor', SHA1, SHA2]);
 
 export const gitShow = (SHA: string): Promise<string> =>
-	spawnPromise('git', [ 'show', '--patch-with-stat', SHA ]);
+	spawnPromise('git', ['show', '--patch-with-stat', SHA]);
 
 export const gitTopLevel = (): Promise<string> =>
 	spawnPromise('git', ['rev-parse', '--show-toplevel']);
