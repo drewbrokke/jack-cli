@@ -13,6 +13,7 @@ Show/hide help dialog                         ?
 * Show name-only diff (changed file paths)                   n
 * Generate a diff file and open it in the default editor     e
 * Open changed files in default editor                       o
+* Run 'git difftool' on the selected commit(s)               t
 Mark/unmark a commit                                         x
 
 {bold}Acting on the branch:{/bold}

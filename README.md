@@ -44,6 +44,7 @@ Action | Key
 **\*** Show name-only diff (changed file paths) | `n`
 **\*** Generate a diff file and open it in the default editor | `e`
 **\*** Open changed files in default editor | `o`
+**\*** Run 'git difftool' on the selected commit(s) | `t`
 Mark/unmark a commit | `x`
 **Acting on the branch** |
 Cherry-pick commit to current branch | `shift-c`
