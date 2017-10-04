@@ -13,7 +13,12 @@ import {
 	openFilesFromCommitRange,
 	openSingleCommitDiffFile,
 } from './external-commands';
-import { gitCherryPick, gitCherryPickAbort, sortSHAs } from './git-util';
+import {
+	gitCherryPick,
+	gitCherryPickAbort,
+	gitDiffTool,
+	sortSHAs,
+} from './git-util';
 import { KEY_ANCHOR_COMMIT, stash } from './stash';
 
 export const doCherryPick = async () => {
@@ -27,7 +32,7 @@ export const doCherryPick = async () => {
 		notifySuccess(`Successfully cherry-picked commit ${SHA}`);
 	} catch (errorMessage) {
 		notifyError(
-`Unable to cherry-pick commit ${SHA}:
+			`Unable to cherry-pick commit ${SHA}:
 
 ${errorMessage}
 
@@ -44,7 +49,7 @@ export const doCopyCommitMessage = async () => {
 		notifySuccess(`Copied commit message to the clipoard:\n\n"${message}"`);
 	} catch (errorMessage) {
 		notifyError(
-`Could not copy the commit message to the clipboard:
+			`Could not copy the commit message to the clipboard:
 
 ${errorMessage}`);
 	}
@@ -76,6 +81,27 @@ export const doDiff = async (screen: IScreen) => {
 		}
 	} catch (errorMessage) {
 		notifyError(`Could not get diff:\n\n${errorMessage}`);
+	}
+
+	if (stash.has(KEY_ANCHOR_COMMIT)) {
+		unmarkAnchorCommit();
+	}
+};
+
+export const doDifftool = async () => {
+	const SHA = getSHA();
+
+	try {
+		if (stash.has(KEY_ANCHOR_COMMIT)) {
+			const [ancestorSHA, childSHA] =
+				await sortSHAs(stash.get(KEY_ANCHOR_COMMIT), SHA);
+
+			gitDiffTool(ancestorSHA, childSHA);
+		} else {
+			gitDiffTool(SHA, SHA);
+		}
+	} catch (errorMessage) {
+		notifyError(`Could not launch difftool:\n\n${errorMessage}`);
 	}
 
 	if (stash.has(KEY_ANCHOR_COMMIT)) {
