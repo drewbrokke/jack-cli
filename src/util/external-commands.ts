@@ -36,7 +36,9 @@ export const openCommitRangeDiffFile =
 		gitDiff(ancestorSHA, childSHA)
 			.then((content: string) =>
 				openTempFile(
-					`temp-patch-${ancestorSHA}-${childSHA}-at-${new Date().getTime()}.diff`,
+					ancestorSHA === childSHA
+						? `temp-patch-${ancestorSHA}-at-${new Date().getTime()}.diff`
+						: `temp-patch-${ancestorSHA}-${childSHA}-at-${new Date().getTime()}.diff`,
 					content));
 
 export const openFilesFromCommit = async (SHA: string): Promise<any> => {
@@ -46,21 +48,21 @@ export const openFilesFromCommit = async (SHA: string): Promise<any> => {
 export const openFilesFromCommitRange =
 	async (SHA1: string, SHA2: string): Promise<any> => {
 
-	const topLevel = await gitTopLevel();
+		const topLevel = await gitTopLevel();
 
-	const filesString = await gitDiffNameOnly(SHA1, SHA2);
+		const filesString = await gitDiffNameOnly(SHA1, SHA2);
 
-	const filesArray = filesString.split('\n')
-		.map((file) => path.join(topLevel, file));
+		const filesArray = filesString.split('\n')
+			.map((file) => path.join(topLevel, file));
 
-	return Promise.all(filesArray.map(opn));
-};
+		return Promise.all(filesArray.map(opn));
+	};
 
 const openTempFile = (fileName: string, content: string): Promise<any> => {
 	const filePath = path.join(homedir(), fileName);
 
 	return new Promise((resolve, reject) => {
-		writeFile(filePath, content, {encoding: 'utf8'}, (writeFileError) => {
+		writeFile(filePath, content, { encoding: 'utf8' }, (writeFileError) => {
 			if (writeFileError) {
 				return reject(writeFileError);
 			}
@@ -73,7 +75,7 @@ const openTempFile = (fileName: string, content: string): Promise<any> => {
 				stash.set(KEY_TEMP_FILES, [filePath]);
 			}
 
-			opn(filePath, {wait: false})
+			opn(filePath, { wait: false })
 				.then((opnProcess) =>
 					opnProcess.on('close', () => resolve(filePath)))
 				.catch((opnError) => reject(opnError));

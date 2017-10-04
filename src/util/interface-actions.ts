@@ -10,9 +10,7 @@ import {
 	copyCommitMessageToClipboard,
 	copySHAToClipboard,
 	openCommitRangeDiffFile,
-	openFilesFromCommit,
 	openFilesFromCommitRange,
-	openSingleCommitDiffFile,
 } from './external-commands';
 import {
 	gitCherryPick,
@@ -68,70 +66,27 @@ export const doCopyCommitSHA = async () => {
 };
 
 export const doDiff = async (screen: IScreen) => {
-	const markedSHA = getMarkedSHA();
-	const SHA = getSHA();
-
-	try {
-		if (markedSHA) {
-			const [ancestorSHA, childSHA] =
-				await sortSHAs(markedSHA, SHA);
-
-			spawnDiff(screen, ancestorSHA, childSHA);
-		} else {
-			spawnDiff(screen, SHA, SHA);
-		}
-	} catch (errorMessage) {
-		notifyError(`Could not get diff:\n\n${errorMessage}`);
-	}
-
-	if (markedSHA) {
-		unmarkAnchorCommit();
-	}
-};
-
-export const doDifftool = async () => {
-	const markedSHA = getMarkedSHA();
-	const SHA = getSHA();
-
-	try {
-		if (markedSHA) {
-			const [ancestorSHA, childSHA] =
-				await sortSHAs(markedSHA, SHA);
-
-			gitDiffTool(ancestorSHA, childSHA);
-		} else {
-			gitDiffTool(SHA, SHA);
-		}
-	} catch (errorMessage) {
-		notifyError(`Could not launch difftool:\n\n${errorMessage}`);
-	}
-
-	if (markedSHA) {
-		unmarkAnchorCommit();
-	}
+	doCommandWithMaybeMarkedCommit(
+		(SHA1: string, SHA2: string) => spawnDiff(screen, SHA1, SHA2),
+		'Could not get diff');
 };
 
 export const doDiffNameOnly = async (screen: IScreen) => {
-	const markedSHA = getMarkedSHA();
-	const SHA = getSHA();
-
-	try {
-		if (markedSHA) {
-			const [ancestorSHA, childSHA] =
-				await sortSHAs(markedSHA, SHA);
-
-			spawnDiffNameOnly(screen, ancestorSHA, childSHA);
-		} else {
-			spawnDiffNameOnly(screen, SHA, SHA);
-		}
-	} catch (errorMessage) {
-		notifyError(`Could not get diff list:;\n\n${errorMessage}`);
-	}
-
-	if (markedSHA) {
-		unmarkAnchorCommit();
-	}
+	doCommandWithMaybeMarkedCommit(
+		(SHA1: string, SHA2: string) => spawnDiffNameOnly(screen, SHA1, SHA2),
+		'Could not get diff list');
 };
+
+export const doDifftool = async () =>
+	doCommandWithMaybeMarkedCommit(gitDiffTool, 'Could not launch difftool');
+
+export const doOpenDiffInEditor = async () =>
+	doCommandWithMaybeMarkedCommit(
+		openCommitRangeDiffFile, 'Could not open diff');
+
+export const doOpenFilesInEditor = async () =>
+	doCommandWithMaybeMarkedCommit(
+		openFilesFromCommitRange, 'Could not open the files');
 
 export const doMarkCommit = () => {
 	const markedSHA = getMarkedSHA();
@@ -146,55 +101,35 @@ export const doMarkCommit = () => {
 	}
 };
 
-export const doOpenDiffInEditor = async () => {
-	const markedSHA = getMarkedSHA();
-
-	try {
-		if (markedSHA) {
-			const [ancestorSHA, childSHA] =
-				await sortSHAs(markedSHA, getSHA());
-
-			await openCommitRangeDiffFile(ancestorSHA, childSHA);
-		} else {
-			await openSingleCommitDiffFile(getSHA());
-		}
-	} catch (errorMessage) {
-		notifyError(`Could not open diff:\n\n${errorMessage}`);
-	}
-
-	if (markedSHA) {
-		unmarkAnchorCommit();
-	}
-};
-
-export const doOpenFilesInEditor = async () => {
-	const markedSHA = getMarkedSHA();
-	const SHA = getSHA();
-
-	try {
-		if (markedSHA) {
-			const [ancestorSHA, childSHA] =
-				await sortSHAs(markedSHA, SHA);
-
-			await openFilesFromCommitRange(ancestorSHA, childSHA);
-		} else {
-			await openFilesFromCommit(getSHA());
-		}
-	} catch (errorMessage) {
-		notifyError(`Could not open the files:\n\n${errorMessage}`);
-	}
-
-	if (markedSHA) {
-		unmarkAnchorCommit();
-	}
-};
-
 export const doStartInteractiveRebase = async (screen: IScreen) =>
 	screen.exec(
 		'git', ['rebase', '-i', `${getSHA()}^`], {},
 		() => process.exit(0));
 
 // Helpers
+
+const doCommandWithMaybeMarkedCommit =
+	async (command: (SHA1: string, SHA2: string) => any, errorText: string) => {
+		const markedSHA = getMarkedSHA();
+		const SHA = getSHA();
+
+		try {
+			if (markedSHA) {
+				const [ancestorSHA, childSHA] =
+					await sortSHAs(markedSHA, SHA);
+
+				command(ancestorSHA, childSHA);
+			} else {
+				command(SHA, SHA);
+			}
+		} catch (errorMessage) {
+			notifyError(`${errorText}:\n\n${errorMessage}`);
+		}
+
+		if (markedSHA) {
+			unmarkAnchorCommit();
+		}
+	};
 
 const getMarkedSHA = () => store.getState().markedSHA;
 const getSHA = () => store.getState().SHA;
