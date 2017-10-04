@@ -8,7 +8,6 @@ import {
 	gitCommitMessage,
 	gitDiff,
 	gitDiffNameOnly,
-	gitShow,
 	gitTopLevel,
 } from './git-util';
 import { KEY_TEMP_FILES, stash } from './stash';
@@ -24,13 +23,6 @@ export const copyCommitMessageToClipboard = (SHA: string): Promise<any> =>
 export const copySHAToClipboard = (SHA: string): Promise<any> =>
 	clipboardy.write(SHA);
 
-export const openSingleCommitDiffFile = (SHA: string): Promise<any> =>
-	gitShow(SHA)
-		.then((content: string) =>
-			openTempFile(
-				`temp-patch-${SHA}-at-${new Date().getTime()}.diff`,
-				content));
-
 export const openCommitRangeDiffFile =
 	(ancestorSHA: string, childSHA: string): Promise<any> =>
 		gitDiff(ancestorSHA, childSHA)
@@ -40,10 +32,6 @@ export const openCommitRangeDiffFile =
 						? `temp-patch-${ancestorSHA}-at-${new Date().getTime()}.diff`
 						: `temp-patch-${ancestorSHA}-${childSHA}-at-${new Date().getTime()}.diff`,
 					content));
-
-export const openFilesFromCommit = async (SHA: string): Promise<any> => {
-	return openFilesFromCommitRange(SHA, SHA);
-};
 
 export const openFilesFromCommitRange =
 	async (SHA1: string, SHA2: string): Promise<any> => {
