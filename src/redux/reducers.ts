@@ -14,7 +14,7 @@ export const reducer = (state: IState, action: IAction): IState => {
 				? Array.of(action.payload)
 				: action.payload;
 
-			const lines = [ ...currentLines, ...newLines ];
+			const lines = [...currentLines, ...newLines];
 
 			const newIndexesWithSHAs: number[] = newLines
 				.map((line: string, index: number) => {
@@ -27,7 +27,7 @@ export const reducer = (state: IState, action: IAction): IState => {
 				.filter(Boolean);
 
 			const indexesWithSHAs: number[] =
-				[ ...currentIndexesWithSHAs, ...newIndexesWithSHAs ];
+				[...currentIndexesWithSHAs, ...newIndexesWithSHAs];
 
 			let SHA = currentSHA;
 
@@ -72,6 +72,18 @@ export const reducer = (state: IState, action: IAction): IState => {
 				index: nextIndex,
 			};
 
+		case 'MARK_SHA':
+			return {
+				...state,
+				markedSHA: action.payload,
+			};
+
+		case 'UNMARK_SHA':
+			return {
+				...state,
+				markedSHA: null,
+			};
+
 		case 'VIEW_COMMIT':
 			return { ...state, view: 'COMMIT' };
 
@@ -86,18 +98,18 @@ export const reducer = (state: IState, action: IAction): IState => {
 const getSHA =
 	(index: number, commits: string[], currentSHA: string): string => {
 
-	const matches: RegExpExecArray | null =
-		COMMIT_SHA_REGEX.exec(commits[index]);
+		const matches: RegExpExecArray | null =
+			COMMIT_SHA_REGEX.exec(commits[index]);
 
-	if (!matches) {
+		if (!matches) {
+			return currentSHA;
+		}
+
+		const sha: string | null = matches[0];
+
+		if (sha) {
+			return sha;
+		}
+
 		return currentSHA;
-	}
-
-	const sha: string | null = matches[0];
-
-	if (sha) {
-		return sha;
-	}
-
-	return currentSHA;
-};
+	};

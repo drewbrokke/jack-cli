@@ -9,6 +9,7 @@ const initialState: IState = {
 	indexesWithSHAs: [0],
 	lines: [],
 	logCompleted: false,
+	markedSHA: '',
 	split: false,
 	view: 'LIST',
 };

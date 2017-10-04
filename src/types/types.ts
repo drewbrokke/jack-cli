@@ -31,6 +31,8 @@ export type ActionType =
 	'DECREMENT_INDEX' |
 	'INCREMENT_INDEX' |
 	'LOG_COMPLETED' |
+	'MARK_SHA' |
+	'UNMARK_SHA' |
 	'VIEW_COMMIT' |
 	'VIEW_LIST';
 
@@ -44,6 +46,7 @@ export interface IState {
 	indexesWithSHAs: number[];
 	lines: string[];
 	logCompleted: boolean;
+	markedSHA: string | null;
 	SHA: string;
 	split: boolean;
 	view: View;
