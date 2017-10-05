@@ -35,9 +35,6 @@ export const reducer = (state: IState, action: IAction): IState => {
 
 			return { ...state, SHA, indexesWithSHAs, lines };
 
-		case 'LOG_COMPLETED':
-			return { ...state, logCompleted: true };
-
 		case 'MARK_SHA':
 			return { ...state, markedSHA: action.payload };
 
@@ -52,6 +49,9 @@ export const reducer = (state: IState, action: IAction): IState => {
 					currentIndexesWithSHAs[newIndex], currentLines, currentSHA),
 				index: newIndex,
 			};
+
+		case 'UPDATE_STATUS':
+			return { ...state, status: action.payload };
 
 		case 'UPDATE_VIEW':
 			return { ...state, view: action.payload };

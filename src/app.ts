@@ -2,7 +2,7 @@ import { ChildProcess, spawn } from 'child_process';
 import { unlinkSync } from 'fs';
 
 import { getScreen } from './interface/screen';
-import { addCommits, logCompleted } from './redux/action-creators';
+import { addCommits, updateStatus } from './redux/action-creators';
 import { store } from './redux/store';
 import { IScreen } from './types/types';
 import { KEY_TEMP_FILES, stash } from './util/stash';
@@ -31,7 +31,7 @@ export const run = (args: string[]): void => {
 
 			process.exit(code);
 		} else {
-			store.dispatch(logCompleted());
+			store.dispatch(updateStatus('LOG_COMPLETED'));
 		}
 	});
 

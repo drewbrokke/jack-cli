@@ -8,9 +8,9 @@ const initialState: IState = {
 	index: 0,
 	indexesWithSHAs: [0],
 	lines: [],
-	logCompleted: false,
 	markedSHA: '',
 	split: false,
+	status: 'RETRIEVING_LOG',
 	view: 'LIST',
 };
 

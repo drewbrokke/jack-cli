@@ -28,9 +28,9 @@ export interface IScreen extends Blessed.Widgets.Screen {
 
 export type ActionType =
 	'ADD_COMMITS' |
-	'UPDATE_INDEX' |
-	'LOG_COMPLETED' |
 	'MARK_SHA' |
+	'UPDATE_INDEX' |
+	'UPDATE_STATUS' |
 	'UPDATE_VIEW';
 
 export interface IAction {
@@ -42,7 +42,7 @@ export interface IState {
 	index: number;
 	indexesWithSHAs: number[];
 	lines: string[];
-	logCompleted: boolean;
+	status: Status;
 	markedSHA: string | null;
 	SHA: string;
 	split: boolean;
@@ -50,3 +50,5 @@ export interface IState {
 }
 
 export type View = 'COMMIT' | 'LIST';
+
+export type Status = 'RETRIEVING_LOG' | 'LOG_COMPLETED' | 'LOG_STALE';
