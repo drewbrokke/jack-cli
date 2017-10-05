@@ -23,6 +23,9 @@ export const gitDiffNameOnly = (SHA1: string, SHA2: string): Promise<string> =>
 export const gitMergeBase = (SHA1: string, SHA2: string): Promise<string> =>
 	spawnPromise('git', ['merge-base', '--is-ancestor', SHA1, SHA2]);
 
+export const gitRevParseHEAD = (): Promise<string> =>
+	spawnPromise('git', ['rev-parse', 'HEAD']);
+
 export const gitShow = (SHA: string): Promise<string> =>
 	spawnPromise('git', ['show', '--patch-with-stat', SHA]);
 
