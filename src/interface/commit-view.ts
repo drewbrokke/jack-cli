@@ -1,8 +1,4 @@
-import {
-	decrementIndex,
-	incrementIndex,
-	updateView,
-} from '../redux/action-creators';
+import { updateIndex, updateView } from '../redux/action-creators';
 import { store } from '../redux/store';
 import { ScrollableTextElement } from '../types/types';
 import { spawnPromise } from '../util/promisify-child-process';
@@ -23,11 +19,11 @@ export const getCommitElement = (): ScrollableTextElement => {
 
 	commitElement.key(
 		['right', 'S-down', 'S-j'],
-		() => store.dispatch(incrementIndex()));
+		() => store.dispatch(updateIndex(1)));
 
 	commitElement.key(
 		['left', 'S-k', 'S-up'],
-		() => store.dispatch(decrementIndex()));
+		() => store.dispatch(updateIndex(-1)));
 
 	commitElement.key(
 		['enter', 'space'],

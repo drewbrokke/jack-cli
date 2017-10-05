@@ -1,6 +1,5 @@
 import {
-	decrementIndex,
-	incrementIndex,
+	updateIndex,
 	updateView,
 } from '../redux/action-creators';
 import { store } from '../redux/store';
@@ -53,19 +52,19 @@ export const getCommitListElement = (): IListElement => {
 	});
 	commitListElement.key(
 		['down', 'j'],
-		() => doUpdateIndex(incrementIndex));
+		() => doUpdateIndex(updateIndex));
 
 	commitListElement.key(
 		['k', 'up'],
-		() => doUpdateIndex(decrementIndex));
+		() => doUpdateIndex((interval: number) => updateIndex(-(interval))));
 
 	commitListElement.key(
 		['b', 'pageup'],
-		() => store.dispatch(decrementIndex(Number(commitListElement.height))));
+		() => store.dispatch(updateIndex(Number(-(commitListElement.height)))));
 
 	commitListElement.key(
 		['f', 'pagedown'],
-		() => store.dispatch(incrementIndex(Number(commitListElement.height))));
+		() => store.dispatch(updateIndex(Number(commitListElement.height))));
 
 	commitListElement.key(
 		['enter', 'space'],

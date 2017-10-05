@@ -48,34 +48,22 @@ export const reducer = (state: IState, action: IAction): IState => {
 				logCompleted: true,
 			};
 
-		case 'DECREMENT_INDEX':
-			const previousIndex = Math.max(currentIndex - action.payload, 0);
-
-			return {
-				...state,
-				SHA: getSHA(
-					currentIndexesWithSHAs[previousIndex], currentLines,
-					currentSHA),
-				index: previousIndex,
-			};
-
-		case 'INCREMENT_INDEX':
-			const nextIndex = Math.min(
-				currentIndex + action.payload,
-				currentIndexesWithSHAs.length - 1);
-
-			return {
-				...state,
-				SHA: getSHA(
-					currentIndexesWithSHAs[nextIndex], currentLines,
-					currentSHA),
-				index: nextIndex,
-			};
-
 		case 'MARK_SHA':
 			return {
 				...state,
 				markedSHA: action.payload,
+			};
+
+		case 'UPDATE_INDEX':
+			const newIndex = Math.min(
+				Math.max(currentIndex + action.payload, 0),
+				(currentIndexesWithSHAs.length - 1));
+
+			return {
+				...state,
+				SHA: getSHA(
+					currentIndexesWithSHAs[newIndex], currentLines, currentSHA),
+				index: newIndex,
 			};
 
 		case 'UPDATE_VIEW':

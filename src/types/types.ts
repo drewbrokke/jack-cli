@@ -28,8 +28,7 @@ export interface IScreen extends Blessed.Widgets.Screen {
 
 export type ActionType =
 	'ADD_COMMITS' |
-	'DECREMENT_INDEX' |
-	'INCREMENT_INDEX' |
+	'UPDATE_INDEX' |
 	'LOG_COMPLETED' |
 	'MARK_SHA' |
 	'UPDATE_VIEW';

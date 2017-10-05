@@ -3,11 +3,8 @@ import { IAction, View } from '../types/types';
 export const addCommits = (payload: string[]): IAction =>
 	({ payload, type: 'ADD_COMMITS' });
 
-export const decrementIndex = (payload: number = 1): IAction =>
-	({ payload, type: 'DECREMENT_INDEX' });
-
-export const incrementIndex = (payload: number = 1): IAction =>
-	({ payload, type: 'INCREMENT_INDEX' });
+export const updateIndex = (payload: number): IAction =>
+	({ payload, type: 'UPDATE_INDEX' });
 
 export const logCompleted = (): IAction =>
 	({ type: 'LOG_COMPLETED' });
