@@ -29,30 +29,17 @@ export const reducer = (state: IState, action: IAction): IState => {
 			const indexesWithSHAs: number[] =
 				[...currentIndexesWithSHAs, ...newIndexesWithSHAs];
 
-			let SHA = currentSHA;
+			const SHA = currentSHA
+				? currentSHA
+				: getSHA(indexesWithSHAs[currentIndex], lines, currentSHA);
 
-			if (!SHA) {
-				SHA = getSHA(indexesWithSHAs[currentIndex], lines, SHA);
-			}
-
-			return {
-				...state,
-				SHA,
-				indexesWithSHAs,
-				lines,
-			};
+			return { ...state, SHA, indexesWithSHAs, lines };
 
 		case 'LOG_COMPLETED':
-			return {
-				...state,
-				logCompleted: true,
-			};
+			return { ...state, logCompleted: true };
 
 		case 'MARK_SHA':
-			return {
-				...state,
-				markedSHA: action.payload,
-			};
+			return { ...state, markedSHA: action.payload };
 
 		case 'UPDATE_INDEX':
 			const newIndex = Math.min(
