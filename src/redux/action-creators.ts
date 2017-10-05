@@ -12,11 +12,8 @@ export const incrementIndex = (payload: number = 1): IAction =>
 export const logCompleted = (): IAction =>
 	({ type: 'LOG_COMPLETED' });
 
-export const markSHA = (payload: string): IAction =>
+export const markSHA = (payload: string | null): IAction =>
 	({ payload, type: 'MARK_SHA' });
-
-export const unmarkSHA = (): IAction =>
-	({ type: 'UNMARK_SHA' });
 
 export const viewCommit = (): IAction =>
 	({ type: 'VIEW_COMMIT' });

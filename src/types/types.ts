@@ -32,7 +32,6 @@ export type ActionType =
 	'INCREMENT_INDEX' |
 	'LOG_COMPLETED' |
 	'MARK_SHA' |
-	'UNMARK_SHA' |
 	'VIEW_COMMIT' |
 	'VIEW_LIST';
 

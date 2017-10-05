@@ -3,7 +3,7 @@ import {
 	notifyInfo,
 	notifySuccess,
 } from '../interface/notification';
-import { markSHA, unmarkSHA } from '../redux/action-creators';
+import { markSHA } from '../redux/action-creators';
 import { store } from '../redux/store';
 import { IScreen } from '../types/types';
 import {
@@ -143,7 +143,7 @@ const spawnDiffNameOnly = (screen: IScreen, SHA1: string, SHA2: string) =>
 	screen.spawn('git', ['diff', `${SHA1}^..${SHA2}`, '--name-only'], {});
 
 const unmarkAnchorCommit = () => {
-	store.dispatch(unmarkSHA());
+	store.dispatch(markSHA(null));
 
 	notifyInfo(`Unmarked commit`);
 };
