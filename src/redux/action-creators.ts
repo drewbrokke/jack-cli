@@ -1,4 +1,4 @@
-import { IAction } from '../types/types';
+import { IAction, View } from '../types/types';
 
 export const addCommits = (payload: string[]): IAction =>
 	({ payload, type: 'ADD_COMMITS' });
@@ -15,8 +15,5 @@ export const logCompleted = (): IAction =>
 export const markSHA = (payload: string | null): IAction =>
 	({ payload, type: 'MARK_SHA' });
 
-export const viewCommit = (): IAction =>
-	({ type: 'VIEW_COMMIT' });
-
-export const viewList = (): IAction =>
-	({ type: 'VIEW_LIST' });
+export const updateView = (payload: View): IAction =>
+	({ payload, type: 'UPDATE_VIEW' });

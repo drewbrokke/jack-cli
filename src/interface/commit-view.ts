@@ -1,7 +1,7 @@
 import {
 	decrementIndex,
 	incrementIndex,
-	viewList,
+	updateView,
 } from '../redux/action-creators';
 import { store } from '../redux/store';
 import { ScrollableTextElement } from '../types/types';
@@ -31,7 +31,7 @@ export const getCommitElement = (): ScrollableTextElement => {
 
 	commitElement.key(
 		['enter', 'space'],
-		() => store.dispatch(viewList()));
+		() => store.dispatch(updateView('LIST')));
 
 	commitElement.focus();
 
@@ -56,7 +56,7 @@ const updateCommitElement = (commitElement) => {
 
 		lastState = state;
 
-		const {SHA} = state;
+		const { SHA } = state;
 
 		if (commitContentMap.get(SHA)) {
 			commitElement.setContent(commitContentMap.get(SHA));
@@ -80,7 +80,7 @@ const updateCommitElement = (commitElement) => {
 			})
 			.catch((errorMessage) =>
 				notifyWarning(
-`There was an issue getting the commit content for ${SHA}:
+					`There was an issue getting the commit content for ${SHA}:
 
 ${errorMessage}`));
 	};

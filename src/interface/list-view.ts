@@ -1,7 +1,7 @@
 import {
 	decrementIndex,
 	incrementIndex,
-	viewCommit,
+	updateView,
 } from '../redux/action-creators';
 import { store } from '../redux/store';
 import { IAction, IListElement } from '../types/types';
@@ -69,7 +69,7 @@ export const getCommitListElement = (): IListElement => {
 
 	commitListElement.key(
 		['enter', 'space'],
-		() => store.dispatch(viewCommit()));
+		() => store.dispatch(updateView('COMMIT')));
 
 	commitListElement.focus();
 
@@ -84,7 +84,7 @@ const updateCommitListElement = () => {
 	return () => {
 		const state = store.getState();
 
-		const {index, lines} = state;
+		const { index, lines } = state;
 
 		const listHeight: number = commitListElement.height as number;
 

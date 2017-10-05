@@ -78,11 +78,8 @@ export const reducer = (state: IState, action: IAction): IState => {
 				markedSHA: action.payload,
 			};
 
-		case 'VIEW_COMMIT':
-			return { ...state, view: 'COMMIT' };
-
-		case 'VIEW_LIST':
-			return { ...state, view: 'LIST' };
+		case 'UPDATE_VIEW':
+			return { ...state, view: action.payload };
 
 		default:
 			return state;

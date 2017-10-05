@@ -32,8 +32,7 @@ export type ActionType =
 	'INCREMENT_INDEX' |
 	'LOG_COMPLETED' |
 	'MARK_SHA' |
-	'VIEW_COMMIT' |
-	'VIEW_LIST';
+	'UPDATE_VIEW';
 
 export interface IAction {
 	type: ActionType;
