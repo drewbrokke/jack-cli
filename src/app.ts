@@ -4,7 +4,7 @@ import { unlinkSync } from 'fs';
 import { getScreen } from './interface/screen';
 import { addCommits, updateStatus } from './redux/action-creators';
 import { store } from './redux/store';
-import { IScreen } from './types/types';
+import { IScreen, Status } from './types/types';
 import { KEY_TEMP_FILES, stash } from './util/stash';
 
 export const run = (args: string[]): void => {
@@ -31,7 +31,7 @@ export const run = (args: string[]): void => {
 
 			process.exit(code);
 		} else {
-			store.dispatch(updateStatus('LOG_COMPLETED'));
+			store.dispatch(updateStatus(Status.LOG_COMPLETED));
 		}
 	});
 

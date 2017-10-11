@@ -1,6 +1,6 @@
 import * as Redux from 'redux';
 
-import { IState } from '../types/types';
+import { IState, Status, View } from '../types/types';
 import { reducer } from './reducers';
 
 const initialState: IState = {
@@ -10,8 +10,8 @@ const initialState: IState = {
 	lines: [],
 	markedSHA: '',
 	split: false,
-	status: 'RETRIEVING_LOG',
-	view: 'LIST',
+	status: Status.RETRIEVING_LOG,
+	view: View.LIST,
 };
 
 export const store = Redux.createStore(reducer, initialState);

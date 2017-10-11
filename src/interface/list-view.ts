@@ -3,7 +3,7 @@ import {
 	updateView,
 } from '../redux/action-creators';
 import { store } from '../redux/store';
-import { IAction, IListElement } from '../types/types';
+import { IAction, IListElement, View } from '../types/types';
 import { KEY_NAV_INTERVAL, stash } from '../util/stash';
 import { getListElement } from './interface-elements';
 import { notifyInfo } from './notification';
@@ -68,7 +68,7 @@ export const getCommitListElement = (): IListElement => {
 
 	commitListElement.key(
 		['enter', 'space'],
-		() => store.dispatch(updateView('COMMIT')));
+		() => store.dispatch(updateView(View.COMMIT)));
 
 	commitListElement.focus();
 

@@ -1,16 +1,16 @@
-import { IAction, Status, View } from '../types/types';
+import { ActionType, IAction, Status, View } from '../types/types';
 
 export const addCommits = (payload: string[]): IAction =>
-	({ payload, type: 'ADD_COMMITS' });
+	({ payload, type: ActionType.ADD_COMMITS });
 
 export const markSHA = (payload: string | null): IAction =>
-	({ payload, type: 'MARK_SHA' });
+	({ payload, type: ActionType.MARK_SHA });
 
 export const updateIndex = (payload: number): IAction =>
-	({ payload, type: 'UPDATE_INDEX' });
+	({ payload, type: ActionType.UPDATE_INDEX });
 
 export const updateStatus = (payload: Status): IAction =>
-	({ payload, type: 'UPDATE_STATUS' });
+	({ payload, type: ActionType.UPDATE_STATUS });
 
 export const updateView = (payload: View): IAction =>
-	({ payload, type: 'UPDATE_VIEW' });
+	({ payload, type: ActionType.UPDATE_VIEW });

@@ -26,12 +26,24 @@ export interface IScreen extends Blessed.Widgets.Screen {
 
 // Custom Types
 
-export type ActionType =
-	'ADD_COMMITS' |
-	'MARK_SHA' |
-	'UPDATE_INDEX' |
-	'UPDATE_STATUS' |
-	'UPDATE_VIEW';
+export enum ActionType {
+	ADD_COMMITS = 'ADD_COMMITS',
+	MARK_SHA = 'MARK_SHA',
+	UPDATE_INDEX = 'UPDATE_INDEX',
+	UPDATE_STATUS = 'UPDATE_STATUS',
+	UPDATE_VIEW = 'UPDATE_VIEW',
+}
+
+export enum Status {
+	RETRIEVING_LOG = 'RETRIEVING_LOG',
+	LOG_COMPLETED = 'LOG_COMPLETED',
+	LOG_STALE = 'LOG_STALE',
+}
+
+export enum View {
+	COMMIT = 'COMMIT',
+	LIST = 'LIST',
+}
 
 export interface IAction {
 	type: ActionType;
@@ -48,7 +60,3 @@ export interface IState {
 	split: boolean;
 	view: View;
 }
-
-export type View = 'COMMIT' | 'LIST';
-
-export type Status = 'RETRIEVING_LOG' | 'LOG_COMPLETED' | 'LOG_STALE';
