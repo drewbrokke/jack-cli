@@ -5,40 +5,13 @@ import {
 } from '../interface/notification';
 import { markSHA } from '../redux/action-creators';
 import { store } from '../redux/store';
-import { IScreen } from '../types/types';
 import {
 	copyCommitMessageToClipboard,
 	copySHAToClipboard,
 	openCommitRangeDiffFile,
 	openFilesFromCommitRange,
 } from './external-commands';
-import {
-	gitCherryPick,
-	gitCherryPickAbort,
-	gitDiffTool,
-	sortSHAs,
-} from './git-util';
-
-export const doCherryPick = async () => {
-	const SHA = getSHA();
-
-	notifyInfo(`Attempting to cherry-pick commit ${SHA}`);
-
-	try {
-		await gitCherryPick(SHA);
-
-		notifySuccess(`Successfully cherry-picked commit ${SHA}`);
-	} catch (errorMessage) {
-		notifyError(
-			`Unable to cherry-pick commit ${SHA}:
-
-${errorMessage}
-
-Aborting cherry-pick.`);
-
-		gitCherryPickAbort();
-	}
-};
+import { sortSHAs } from './git-util';
 
 export const doCopyCommitMessage = async () => {
 	try {
@@ -65,21 +38,6 @@ export const doCopyCommitSHA = async () => {
 	}
 };
 
-export const doDiff = async (screen: IScreen) => {
-	doCommandWithMaybeMarkedCommit(
-		(SHA1: string, SHA2: string) => spawnDiff(screen, SHA1, SHA2),
-		'Could not get diff');
-};
-
-export const doDiffNameOnly = async (screen: IScreen) => {
-	doCommandWithMaybeMarkedCommit(
-		(SHA1: string, SHA2: string) => spawnDiffNameOnly(screen, SHA1, SHA2),
-		'Could not get diff list');
-};
-
-export const doDifftool = async () =>
-	doCommandWithMaybeMarkedCommit(gitDiffTool, 'Could not launch difftool');
-
 export const doOpenDiffInEditor = async () =>
 	doCommandWithMaybeMarkedCommit(
 		openCommitRangeDiffFile, 'Could not open diff');
@@ -100,11 +58,6 @@ export const doMarkCommit = () => {
 		notifyInfo(`Marked commit for diffing: ${commit}`);
 	}
 };
-
-export const doStartInteractiveRebase = async (screen: IScreen) =>
-	screen.exec(
-		'git', ['rebase', '-i', `${getSHA()}^`], {},
-		() => process.exit(0));
 
 // Helpers
 
@@ -133,14 +86,6 @@ const doCommandWithMaybeMarkedCommit =
 
 const getMarkedSHA = () => store.getState().markedSHA;
 const getSHA = () => store.getState().SHA;
-
-const spawnDiff = (screen: IScreen, SHA1: string, SHA2: string) =>
-	screen.spawn(
-		'git',
-		['diff', `${SHA1}^..${SHA2}`, '--patch', '--stat-width=1000'], {});
-
-const spawnDiffNameOnly = (screen: IScreen, SHA1: string, SHA2: string) =>
-	screen.spawn('git', ['diff', `${SHA1}^..${SHA2}`, '--name-only'], {});
 
 const unmarkAnchorCommit = () => {
 	store.dispatch(markSHA(null));
