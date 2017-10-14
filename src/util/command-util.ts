@@ -18,6 +18,7 @@ enum ModifierKey {
 interface ICommand {
 	acceptsRange: boolean;
 	commandArray: string[];
+	forceRange?: boolean;
 	foreground: boolean;
 	key: string;
 	modifierKey: ModifierKey;
@@ -38,6 +39,7 @@ const commands: ICommand[] = [
 			'--patch',
 			'--stat-width=1000',
 		],
+		forceRange: true,
 		foreground: true,
 		key: 'd',
 		modifierKey: ModifierKey.NONE,
@@ -49,6 +51,7 @@ const commands: ICommand[] = [
 	{
 		acceptsRange: true,
 		commandArray: ['git', 'diff', SHA_PLACEHOLDER, '--name-only'],
+		forceRange: true,
 		foreground: true,
 		key: 'n',
 		modifierKey: ModifierKey.NONE,
@@ -60,6 +63,7 @@ const commands: ICommand[] = [
 	{
 		acceptsRange: true,
 		commandArray: ['git', 'difftool', SHA_PLACEHOLDER],
+		forceRange: true,
 		foreground: false,
 		key: 't',
 		modifierKey: ModifierKey.NONE,
@@ -105,8 +109,13 @@ export const registerCommands = (screen: IScreen): IScreen => {
 						commandArray = command.commandArray.map(
 							(item) => item.replace(SHA_PLACEHOLDER, `${ancestorSHA}^..${childSHA}`));
 					} else {
-						commandArray = command.commandArray.map(
-							(item) => item.replace(SHA_PLACEHOLDER, `${SHA}`));
+						if (command.forceRange) {
+							commandArray = command.commandArray.map(
+								(item) => item.replace(SHA_PLACEHOLDER, `${SHA}^..${SHA}`));
+						} else {
+							commandArray = command.commandArray.map(
+								(item) => item.replace(SHA_PLACEHOLDER, `${SHA}`));
+						}
 					}
 
 					notifyWarning(`Running command "${commandArray.join(' ')}"`);
