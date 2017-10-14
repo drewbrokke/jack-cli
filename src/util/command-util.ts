@@ -89,18 +89,47 @@ const commands: ICommand[] = [
 ];
 
 export const registerCommands = (screen: IScreen): IScreen => {
-	commands.forEach((command) => registerCommand(screen, command));
+	commands.forEach((command) => {
+		screen.key(
+			getKeyEventString(command.key, command.modifierKey),
+			async () => {
+				const { markedSHA, SHA } = store.getState();
+
+				try {
+					let commandArray;
+
+					if (markedSHA && command.acceptsRange) {
+						const [ancestorSHA, childSHA] =
+							await sortSHAs(markedSHA, SHA);
+
+						commandArray = command.commandArray.map(
+							(item) => item.replace(SHA_PLACEHOLDER, `${ancestorSHA}^..${childSHA}`));
+					} else {
+						commandArray = command.commandArray.map(
+							(item) => item.replace(SHA_PLACEHOLDER, `${SHA}`));
+					}
+
+					notifyWarning(`Running command "${commandArray.join(' ')}"`);
+
+					if (command.foreground) {
+						screen.spawn(commandArray[0], commandArray.slice(1), {});
+					} else {
+						await spawnPromise(commandArray[0], commandArray.slice(1));
+					}
+
+				} catch (errorMessage) {
+					notifyError(`${errorMessage}`);
+				}
+
+				if (markedSHA) {
+					store.dispatch(markSHA(null));
+
+					notifyInfo('Unmarked commit');
+				}
+			});
+	});
 
 	return screen;
-};
-
-const getMarkedSHA = () => store.getState().markedSHA;
-const getSHA = () => store.getState().SHA;
-
-const unmarkAnchorCommit = () => {
-	store.dispatch(markSHA(null));
-
-	notifyInfo('Unmarked commit');
 };
 
 const getKeyEventString = (key: string, modifierKey: ModifierKey): string => {
@@ -114,47 +143,4 @@ const getKeyEventString = (key: string, modifierKey: ModifierKey): string => {
 		case ModifierKey.NONE:
 			return key;
 	}
-};
-
-const registerCommand = (screen: IScreen, command: ICommand): IScreen => {
-	const keyEventString = getKeyEventString(
-		command.key, command.modifierKey);
-
-	screen.key(keyEventString, async () => {
-		const markedSHA = getMarkedSHA();
-
-		try {
-			const SHA = getSHA();
-
-			let commandArray;
-
-			if (markedSHA && command.acceptsRange) {
-				const [ancestorSHA, childSHA] =
-					await sortSHAs(markedSHA, SHA);
-
-				commandArray = command.commandArray.map(
-					(item) => item.replace(SHA_PLACEHOLDER, `${ancestorSHA}^..${childSHA}`));
-			} else {
-				commandArray = command.commandArray.map(
-					(item) => item.replace(SHA_PLACEHOLDER, `${SHA}`));
-			}
-
-			notifyWarning(`Running command "${commandArray.join(' ')}"`);
-
-			if (command.foreground) {
-				screen.spawn(commandArray[0], commandArray.slice(1), {});
-			} else {
-				await spawnPromise(commandArray[0], commandArray.slice(1));
-			}
-
-		} catch (errorMessage) {
-			notifyError(`${errorMessage}`);
-		}
-
-		if (markedSHA) {
-			unmarkAnchorCommit();
-		}
-	});
-
-	return screen;
 };
