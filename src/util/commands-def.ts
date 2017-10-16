@@ -83,12 +83,4 @@ export const COMMANDS: ICommand[] = [
 		modifierKey: ModifierKey.SHIFT,
 		onErrorCommand: ['git', 'rebase', '--abort'],
 	},
-
-	{
-		acceptsRange: false,
-		commandArray: ['echo', 'helloo world'],
-		foreground: true,
-		key: 'h',
-		modifierKey: ModifierKey.NONE,
-	},
 ];
