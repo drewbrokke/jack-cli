@@ -24,6 +24,7 @@ export const COMMANDS: ICommand[] = [
 		acceptsRange: true,
 		commandArray: [
 			'git',
+			'-p',
 			'diff',
 			SHA_PLACEHOLDER,
 			'--patch',
@@ -40,7 +41,7 @@ export const COMMANDS: ICommand[] = [
 	 */
 	{
 		acceptsRange: true,
-		commandArray: ['git', 'diff', SHA_PLACEHOLDER, '--name-only'],
+		commandArray: ['git', '-p', 'diff', SHA_PLACEHOLDER, '--name-only'],
 		forceRange: true,
 		foreground: true,
 		key: 'n',
