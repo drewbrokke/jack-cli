@@ -1,5 +1,6 @@
 import { IScreen } from '../types/types';
 import { registerCommands } from '../util/command-util';
+import { COMMANDS } from '../util/commands-def';
 import {
 	doCopyCommitMessage,
 	doCopyCommitSHA,
@@ -29,7 +30,7 @@ export const getScreen = (): IScreen => {
 	screen.key('y', doCopyCommitSHA);
 	screen.key(['C-c', 'q', 'escape'], () => process.exit(0));
 
-	registerCommands(screen);
+	registerCommands(screen, COMMANDS);
 
 	screen.append(getMainContentContainer());
 	screen.append(getStatusBar());
