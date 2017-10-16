@@ -22,6 +22,7 @@ interface ICommand {
 	foreground: boolean;
 	key: string;
 	modifierKey: ModifierKey;
+	onErrorCommand?: string[];
 }
 
 const SHA_PLACEHOLDER = '<%-- SHA --%>';
@@ -78,6 +79,7 @@ const commands: ICommand[] = [
 		foreground: false,
 		key: 'c',
 		modifierKey: ModifierKey.SHIFT,
+		onErrorCommand: ['git', 'cherry-pick', '--abort'],
 	},
 
 	/**
@@ -89,6 +91,7 @@ const commands: ICommand[] = [
 		foreground: true,
 		key: 'i',
 		modifierKey: ModifierKey.SHIFT,
+		onErrorCommand: ['git', 'rebase', '--abort'],
 	},
 ];
 
@@ -127,7 +130,19 @@ export const registerCommands = (screen: IScreen): IScreen => {
 					}
 
 				} catch (errorMessage) {
-					notifyError(`${errorMessage}`);
+					notifyError(errorMessage);
+
+					const { onErrorCommand } = command;
+
+					if (onErrorCommand) {
+						notifyInfo(`Performing clean-up command "${onErrorCommand.join(' ')}"`);
+
+						try {
+							await spawnPromise(onErrorCommand[0], onErrorCommand.slice(1));
+						} catch (cleanUpCommandErrorMessage) {
+							notifyError(cleanUpCommandErrorMessage);
+						}
+					}
 				}
 
 				if (markedSHA) {
