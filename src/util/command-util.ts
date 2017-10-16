@@ -12,7 +12,9 @@ import { spawnPromise } from './promisify-child-process';
 
 export const registerCommands =
 	(screen: IScreen, commands: ICommand[]): IScreen => {
-		commands.forEach((command) => {
+		commands.forEach((c) => {
+			const command = constructCommand(c);
+
 			screen.key(
 				getKeyEventString(command),
 				async () => {
@@ -71,6 +73,47 @@ export const registerCommands =
 		});
 
 		return screen;
+	};
+
+// tslint:disable-next-line:only-arrow-functions
+function constructCommand(command: ICommand): ICommand {
+	const { commandArray } = command;
+
+	if (!commandArray || !Array.isArray(commandArray) ||
+		commandArray.length === 0) {
+
+		crashCommandRegistrationError(
+			'There must be an array to declare a command and its arguments.\n\n',
+			command);
+	}
+
+	const { key } = command;
+
+	if (!key || typeof key !== 'string') {
+		crashCommandRegistrationError(
+			'There must be a "key" property given to trigger the command:', command);
+	}
+
+	return {
+		acceptsRange: true,
+		forceRange: false,
+		foreground: false,
+		...command,
+	};
+}
+
+const crashCommandRegistrationError =
+	(errorMessage: string, command?: ICommand) => {
+		process.stderr.write(
+			'There was a problem registering a custom command from your ' +
+			'.jack.json config file:\n\n');
+		process.stderr.write(errorMessage + '\n\n');
+
+		if (command) {
+			process.stderr.write(JSON.stringify(command, null, '    ') + '\n');
+		}
+
+		process.exit(1);
 	};
 
 const getKeyEventString = (command: ICommand): string => {
