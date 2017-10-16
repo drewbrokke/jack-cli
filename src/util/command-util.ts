@@ -11,7 +11,7 @@ import { sortSHAs } from './git-util';
 import { spawnPromise } from './promisify-child-process';
 
 export const registerCommands =
-	(screen: IScreen, commands: ICommand[]): IScreen => {
+	(screen: IScreen, commands: ICommand[] = []): IScreen => {
 		commands.forEach((c) => {
 			const command = constructCommand(c);
 
