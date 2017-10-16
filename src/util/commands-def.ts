@@ -1,18 +1,23 @@
 export enum ModifierKey {
 	CONTROL = 'CONTROL',
-	NONE = 'NONE',
 	SHIFT = 'SHIFT',
 }
 
 export interface ICommand {
-	acceptsRange: boolean;
+	acceptsRange?: boolean;
 	commandArray: string[];
 	forceRange?: boolean;
-	foreground: boolean;
+	foreground?: boolean;
 	key: string;
-	modifierKey: ModifierKey;
-	onErrorCommand?: string[];
+	modifierKey?: ModifierKey;
+	onErrorCommand?: string[] | null;
 }
+
+const defaultCommandOpts = {
+	acceptsRange: true,
+	forceRange: false,
+	foreground: false,
+};
 
 export const SHA_PLACEHOLDER = '<%-- SHA --%>';
 
@@ -20,8 +25,7 @@ export const COMMANDS: ICommand[] = [
 	/**
 	 * Open a diff
 	 */
-	{
-		acceptsRange: true,
+	constructCommand({
 		commandArray: [
 			'git',
 			'-p',
@@ -33,54 +37,81 @@ export const COMMANDS: ICommand[] = [
 		forceRange: true,
 		foreground: true,
 		key: 'd',
-		modifierKey: ModifierKey.NONE,
-	},
+	}),
 
 	/**
 	 * List changed files
 	 */
-	{
-		acceptsRange: true,
+	constructCommand({
 		commandArray: ['git', '-p', 'diff', SHA_PLACEHOLDER, '--name-only'],
 		forceRange: true,
 		foreground: true,
 		key: 'n',
-		modifierKey: ModifierKey.NONE,
-	},
+	}),
 
 	/**
 	 * Open changes in a difftool
 	 */
-	{
-		acceptsRange: true,
+	constructCommand({
 		commandArray: ['git', 'difftool', SHA_PLACEHOLDER],
 		forceRange: true,
-		foreground: false,
 		key: 't',
-		modifierKey: ModifierKey.NONE,
-	},
+	}),
 
 	/**
 	 * Attempt a cherry-pick
 	 */
-	{
-		acceptsRange: true,
+	constructCommand({
 		commandArray: ['git', 'cherry-pick', SHA_PLACEHOLDER],
-		foreground: false,
 		key: 'c',
 		modifierKey: ModifierKey.SHIFT,
 		onErrorCommand: ['git', 'cherry-pick', '--abort'],
-	},
+	}),
 
 	/**
 	 * Begin an interactive rebase
 	 */
-	{
+	constructCommand({
 		acceptsRange: false,
 		commandArray: ['git', 'rebase', '-i', SHA_PLACEHOLDER + '^'],
 		foreground: true,
 		key: 'i',
 		modifierKey: ModifierKey.SHIFT,
 		onErrorCommand: ['git', 'rebase', '--abort'],
-	},
+	}),
 ];
+
+// Helper Functions
+
+// tslint:disable-next-line:only-arrow-functions
+function constructCommand(command: ICommand): ICommand {
+	const { commandArray } = command;
+
+	if (!commandArray || !Array.isArray(commandArray) ||
+		commandArray.length === 0) {
+
+		crashError(
+			'There must be an array to declare a command and its arguments.\n\n');
+	}
+
+	const { key } = command;
+
+	if (!key || typeof key !== 'string') {
+		crashError('There must be key given to trigger the command');
+	}
+
+	return {
+		...defaultCommandOpts,
+		...command,
+	};
+}
+
+const crashError = (errorMessage: string, command?: ICommand) => {
+	process.stderr.write(errorMessage);
+
+	if (command) {
+		process.stderr.write(JSON.stringify(command));
+	}
+
+	process.exit(1);
+};

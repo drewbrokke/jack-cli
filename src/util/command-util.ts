@@ -14,7 +14,7 @@ export const registerCommands =
 	(screen: IScreen, commands: ICommand[]): IScreen => {
 		commands.forEach((command) => {
 			screen.key(
-				getKeyEventString(command.key, command.modifierKey),
+				getKeyEventString(command),
 				async () => {
 					const { markedSHA, SHA } = store.getState();
 
@@ -73,15 +73,17 @@ export const registerCommands =
 		return screen;
 	};
 
-const getKeyEventString = (key: string, modifierKey: ModifierKey): string => {
-	switch (modifierKey) {
+const getKeyEventString = (command: ICommand): string => {
+	const { key } = command;
+
+	switch (command.modifierKey) {
 		case ModifierKey.CONTROL:
 			return `C-${key}`;
 
 		case ModifierKey.SHIFT:
 			return `S-${key}`;
 
-		case ModifierKey.NONE:
+		default:
 			return key;
 	}
 };
