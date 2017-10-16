@@ -6,8 +6,13 @@ import {
 import { markSHA } from '../redux/action-creators';
 import { store } from '../redux/store';
 import { IScreen } from '../types/types';
-import { ICommand, ModifierKey, SHA_PLACEHOLDER } from './commands-def';
-import { sortSHAs } from './git-util';
+import {
+	COMMIT_MESSAGE_PLACEHOLDER,
+	ICommand,
+	ModifierKey,
+	SHA_PLACEHOLDER,
+} from './commands-def';
+import { gitCommitMessage, sortSHAs } from './git-util';
 import { spawnPromise } from './promisify-child-process';
 
 export const registerCommands =
@@ -30,18 +35,23 @@ const registerCommand = async (screen: IScreen, command: ICommand): Promise<any>
 	try {
 		let commandArray;
 
+		const commitMessage = await gitCommitMessage(SHA);
+
 		if (markedSHA && command.acceptsRange) {
 			const [ancestorSHA, childSHA] =
 				await sortSHAs(markedSHA, SHA);
 
 			commandArray = command.commandArray.map(
-				(item) => item.replace(SHA_PLACEHOLDER, `${ancestorSHA}^..${childSHA}`));
+				(item) => item.replace(SHA_PLACEHOLDER, `${ancestorSHA}^..${childSHA}`)
+					.replace(COMMIT_MESSAGE_PLACEHOLDER, commitMessage));
 		} else if (command.forceRange) {
 			commandArray = command.commandArray.map(
-				(item) => item.replace(SHA_PLACEHOLDER, `${SHA}^..${SHA}`));
+				(item) => item.replace(SHA_PLACEHOLDER, `${SHA}^..${SHA}`)
+					.replace(COMMIT_MESSAGE_PLACEHOLDER, commitMessage));
 		} else {
 			commandArray = command.commandArray.map(
-				(item) => item.replace(SHA_PLACEHOLDER, `${SHA}`));
+				(item) => item.replace(SHA_PLACEHOLDER, `${SHA}`)
+					.replace(COMMIT_MESSAGE_PLACEHOLDER, commitMessage));
 		}
 
 		notifyWarning(`Running command "${commandArray.join(' ')}"`);

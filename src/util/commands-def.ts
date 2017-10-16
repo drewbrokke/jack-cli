@@ -13,6 +13,7 @@ export interface ICommand {
 	onErrorCommand?: string[] | null;
 }
 
+export const COMMIT_MESSAGE_PLACEHOLDER = '[% COMMIT MESSAGE %]';
 export const SHA_PLACEHOLDER = '[% SHA %]';
 
 export const COMMANDS: ICommand[] = [
@@ -74,5 +75,3 @@ export const COMMANDS: ICommand[] = [
 		onErrorCommand: ['git', 'rebase', '--abort'],
 	},
 ];
-
-// Helper Functions
