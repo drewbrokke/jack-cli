@@ -1,7 +1,6 @@
 import {
 	notifyError,
 	notifyInfo,
-	notifyWarning,
 } from '../interface/notification';
 import { markSHA } from '../redux/action-creators';
 import { store } from '../redux/store';
@@ -69,7 +68,15 @@ const registerCommand = async (screen: IScreen, command: ICommand): Promise<any>
 					.replace(COMMIT_MESSAGE_PLACEHOLDER, commitMessage));
 		}
 
-		notifyWarning(`Running command "${commandArray.join(' ')}"`);
+		const messages: string[] = [];
+
+		if (command.description) {
+			messages.push(command.description);
+		}
+
+		messages.push(`Running command "${commandArray.join(' ')}"`);
+
+		notifyInfo(messages.join('\n'));
 
 		if (command.foreground) {
 			screen.spawn(commandArray[0], commandArray.slice(1), {});

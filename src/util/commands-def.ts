@@ -6,6 +6,7 @@ export enum ModifierKey {
 export interface ICommand {
 	acceptsRange?: boolean;
 	commandArray: string[];
+	description?: string;
 	forceRange?: boolean;
 	foreground?: boolean;
 	key: string;
@@ -29,6 +30,7 @@ export const COMMANDS: ICommand[] = [
 			'--patch',
 			'--stat-width=1000',
 		],
+		description: 'View total diff',
 		forceRange: true,
 		foreground: true,
 		key: 'd',
@@ -39,6 +41,7 @@ export const COMMANDS: ICommand[] = [
 	 */
 	{
 		commandArray: ['git', '-p', 'diff', SHA_PLACEHOLDER, '--name-only'],
+		description: 'View changed file names',
 		forceRange: true,
 		foreground: true,
 		key: 'n',
@@ -49,6 +52,7 @@ export const COMMANDS: ICommand[] = [
 	 */
 	{
 		commandArray: ['git', 'difftool', SHA_PLACEHOLDER],
+		description: 'Open total diff in difftool',
 		forceRange: true,
 		key: 't',
 	},
@@ -58,6 +62,7 @@ export const COMMANDS: ICommand[] = [
 	 */
 	{
 		commandArray: ['git', 'cherry-pick', SHA_PLACEHOLDER],
+		description: 'Cherry-pick commits',
 		key: 'c',
 		modifierKey: ModifierKey.SHIFT,
 		onErrorCommand: ['git', 'cherry-pick', '--abort'],
@@ -69,6 +74,7 @@ export const COMMANDS: ICommand[] = [
 	{
 		acceptsRange: false,
 		commandArray: ['git', 'rebase', '-i', SHA_PLACEHOLDER + '^'],
+		description: 'Perform interactive rebase',
 		foreground: true,
 		key: 'i',
 		modifierKey: ModifierKey.SHIFT,
