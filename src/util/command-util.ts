@@ -7,13 +7,28 @@ import { markSHA } from '../redux/action-creators';
 import { store } from '../redux/store';
 import { IScreen } from '../types/types';
 import {
+	COMMANDS,
 	COMMIT_MESSAGE_PLACEHOLDER,
 	ICommand,
 	ModifierKey,
 	SHA_PLACEHOLDER,
 } from './commands-def';
+import { readConfig } from './config-util';
 import { gitCommitMessage, sortSHAs } from './git-util';
 import { spawnPromise } from './promisify-child-process';
+
+let declaredCommands: ICommand[];
+
+export const getCommands = () => {
+	if (declaredCommands) return declaredCommands;
+
+	declaredCommands = [
+		...COMMANDS,
+		...(readConfig().commands),
+	];
+
+	return declaredCommands;
+};
 
 export const registerCommands =
 	(screen: IScreen, commands: ICommand[] = []): IScreen => {
