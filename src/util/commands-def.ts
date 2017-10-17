@@ -1,6 +1,6 @@
 export enum ModifierKey {
-	CONTROL = 'CONTROL',
-	SHIFT = 'SHIFT',
+	CONTROL = 'Control',
+	SHIFT = 'Shift',
 }
 
 export interface ICommand {

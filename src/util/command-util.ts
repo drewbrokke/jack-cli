@@ -29,6 +29,20 @@ export const getCommands = () => {
 	return declaredCommands;
 };
 
+export const documentCommands = (commands: ICommand[]) => {
+	return commands.map((command) => {
+		const description = command.description
+			? command.description
+			: `Run "${command.commandArray.join(' ')}"`;
+
+		const keyEventString = command.modifierKey
+			? command.modifierKey + '-' + command.key
+			: command.key;
+
+		return `${description}  ->  ${keyEventString}`;
+	}).join('\n');
+};
+
 export const registerCommands =
 	(screen: IScreen, commands: ICommand[] = []): IScreen => {
 		commands.forEach((c) => {
