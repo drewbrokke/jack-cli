@@ -4,18 +4,18 @@ export enum ModifierKey {
 }
 
 export interface ICommand {
-	acceptsRange?: boolean;
 	commandArray: string[];
 	description?: string;
-	forceRange?: boolean;
 	foreground?: boolean;
 	key: string;
 	modifierKey?: ModifierKey;
 	onErrorCommand?: string[] | null;
 }
 
-export const COMMIT_MESSAGE_PLACEHOLDER = '[% COMMIT MESSAGE %]';
-export const SHA_PLACEHOLDER = '[% SHA %]';
+export const SHA_SINGLE_PLACEHOLDER = '[% SHA_SINGLE %]';
+export const SHA_RANGE_PLACEHOLDER = '[% SHA_RANGE %]';
+export const SHA_SINGLE_OR_RANGE_PLACEHOLDER = '[% SHA_SINGLE_OR_RANGE %]';
+export const COMMIT_MESSAGE_PLACEHOLDER = '[% COMMIT_MESSAGE %]';
 
 export const COMMANDS: ICommand[] = [
 	/**
@@ -26,12 +26,11 @@ export const COMMANDS: ICommand[] = [
 			'git',
 			'-p',
 			'diff',
-			SHA_PLACEHOLDER,
+			SHA_RANGE_PLACEHOLDER,
 			'--patch',
 			'--stat-width=1000',
 		],
 		description: 'View total diff',
-		forceRange: true,
 		foreground: true,
 		key: 'd',
 	},
@@ -40,9 +39,8 @@ export const COMMANDS: ICommand[] = [
 	 * List changed files
 	 */
 	{
-		commandArray: ['git', '-p', 'diff', SHA_PLACEHOLDER, '--name-only'],
+		commandArray: ['git', '-p', 'diff', SHA_RANGE_PLACEHOLDER, '--name-only'],
 		description: 'View changed file names',
-		forceRange: true,
 		foreground: true,
 		key: 'n',
 	},
@@ -51,9 +49,8 @@ export const COMMANDS: ICommand[] = [
 	 * Open changes in a difftool
 	 */
 	{
-		commandArray: ['git', 'difftool', SHA_PLACEHOLDER],
+		commandArray: ['git', 'difftool', SHA_RANGE_PLACEHOLDER],
 		description: 'Open total diff in difftool',
-		forceRange: true,
 		key: 't',
 	},
 
@@ -61,7 +58,7 @@ export const COMMANDS: ICommand[] = [
 	 * Attempt a cherry-pick
 	 */
 	{
-		commandArray: ['git', 'cherry-pick', SHA_PLACEHOLDER],
+		commandArray: ['git', 'cherry-pick', SHA_SINGLE_OR_RANGE_PLACEHOLDER],
 		description: 'Cherry-pick commits',
 		key: 'c',
 		modifierKey: ModifierKey.SHIFT,
@@ -72,8 +69,7 @@ export const COMMANDS: ICommand[] = [
 	 * Begin an interactive rebase
 	 */
 	{
-		acceptsRange: false,
-		commandArray: ['git', 'rebase', '-i', SHA_PLACEHOLDER + '^'],
+		commandArray: ['git', 'rebase', '-i', SHA_SINGLE_PLACEHOLDER + '^'],
 		description: 'Perform interactive rebase',
 		foreground: true,
 		key: 'i',

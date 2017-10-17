@@ -10,7 +10,9 @@ import {
 	COMMIT_MESSAGE_PLACEHOLDER,
 	ICommand,
 	ModifierKey,
-	SHA_PLACEHOLDER,
+	SHA_RANGE_PLACEHOLDER,
+	SHA_SINGLE_OR_RANGE_PLACEHOLDER,
+	SHA_SINGLE_PLACEHOLDER,
 } from './commands-def';
 import { readConfig } from './config-util';
 import { gitCommitMessage, sortSHAs } from './git-util';
@@ -61,26 +63,15 @@ const registerCommand = async (screen: IScreen, command: ICommand): Promise<any>
 	const { markedSHA, SHA } = store.getState();
 
 	try {
-		let commandArray;
+		const sorted = markedSHA ? await sortSHAs(markedSHA, SHA) : [SHA, SHA];
 
-		const commitMessage = await gitCommitMessage(SHA);
-
-		if (markedSHA && command.acceptsRange) {
-			const [ancestorSHA, childSHA] =
-				await sortSHAs(markedSHA, SHA);
-
-			commandArray = command.commandArray.map(
-				(item) => item.replace(SHA_PLACEHOLDER, `${ancestorSHA}^..${childSHA}`)
-					.replace(COMMIT_MESSAGE_PLACEHOLDER, commitMessage));
-		} else if (command.forceRange) {
-			commandArray = command.commandArray.map(
-				(item) => item.replace(SHA_PLACEHOLDER, `${SHA}^..${SHA}`)
-					.replace(COMMIT_MESSAGE_PLACEHOLDER, commitMessage));
-		} else {
-			commandArray = command.commandArray.map(
-				(item) => item.replace(SHA_PLACEHOLDER, `${SHA}`)
-					.replace(COMMIT_MESSAGE_PLACEHOLDER, commitMessage));
-		}
+		const commandArray = command.commandArray
+			.map(replacer(SHA_SINGLE_PLACEHOLDER, SHA))
+			.map(replacer(SHA_RANGE_PLACEHOLDER, `${sorted[0]}^..${sorted[1]}`))
+			.map(replacer(
+				SHA_SINGLE_OR_RANGE_PLACEHOLDER,
+				markedSHA ? `${sorted[0]}^..${sorted[1]}` : SHA))
+			.map(replacer(COMMIT_MESSAGE_PLACEHOLDER, await gitCommitMessage(SHA)));
 
 		const messages: string[] = [];
 
@@ -97,7 +88,6 @@ const registerCommand = async (screen: IScreen, command: ICommand): Promise<any>
 		} else {
 			await spawnPromise(commandArray[0], commandArray.slice(1));
 		}
-
 	} catch (errorMessage) {
 		notifyError(errorMessage);
 
@@ -141,8 +131,6 @@ function constructCommand(command: ICommand): ICommand {
 	}
 
 	return {
-		acceptsRange: true,
-		forceRange: false,
 		foreground: false,
 		...command,
 	};
@@ -176,3 +164,6 @@ const getKeyEventString = (command: ICommand): string => {
 			return key;
 	}
 };
+
+const replacer =
+	(s: string, r: string) => (i: string): string => i.replace(s, r);
