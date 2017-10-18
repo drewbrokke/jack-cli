@@ -1,6 +1,7 @@
 import {
 	notifyError,
 	notifyInfo,
+	notifySuccess,
 } from '../interface/notification';
 import { markSHA } from '../redux/action-creators';
 import { store } from '../redux/store';
@@ -73,13 +74,14 @@ const registerCommand = async (screen: IScreen, command: ICommand): Promise<any>
 				markedSHA ? `${sorted[0]}^..${sorted[1]}` : SHA))
 			.map(replacer(COMMIT_MESSAGE_PLACEHOLDER, await gitCommitMessage(SHA)));
 
+		const commandString = commandArray.join(' ');
 		const messages: string[] = [];
 
 		if (command.description) {
 			messages.push(command.description);
 		}
 
-		messages.push(`Running command "${commandArray.join(' ')}"`);
+		messages.push(`Running command "${commandString}"`);
 
 		notifyInfo(messages.join('\n'));
 
@@ -87,6 +89,8 @@ const registerCommand = async (screen: IScreen, command: ICommand): Promise<any>
 			screen.spawn(commandArray[0], commandArray.slice(1), {});
 		} else {
 			await spawnPromise(commandArray[0], commandArray.slice(1));
+
+			notifySuccess(`Operation completed: "${commandString}"`);
 		}
 	} catch (errorMessage) {
 		notifyError(errorMessage);
