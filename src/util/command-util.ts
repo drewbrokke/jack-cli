@@ -86,12 +86,23 @@ const registerCommand = async (screen: IScreen, command: ICommand): Promise<any>
 		notifyInfo(messages.join('\n'));
 
 		if (command.foreground) {
-			screen.spawn(commandArray[0], commandArray.slice(1), {});
+			await new Promise((resolve, reject) => {
+				screen.exec(
+					commandArray[0], commandArray.slice(1), {}, (err, ok) => {
+						if (err) {
+							reject(err.message);
+						} else if (!ok) {
+							reject('The command exited with a error code.');
+						} else {
+							resolve();
+						}
+					});
+			});
 		} else {
 			await spawnPromise(commandArray[0], commandArray.slice(1));
-
-			notifySuccess(`Operation completed: "${commandString}"`);
 		}
+
+		notifySuccess(`Command finished: "${commandString}"`);
 	} catch (errorMessage) {
 		notifyError(errorMessage);
 
