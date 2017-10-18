@@ -4,11 +4,65 @@ export enum ModifierKey {
 }
 
 export interface ICommand {
+	/**
+	 * An array of strings containing the command to run and its arguments.
+	 * The placeholder variables are put into this array.
+	 *
+	 * REQUIRED.  If it is not given, jack will exit with an error.
+	 *
+	 * Example: ['git', 'checkout', '[% SHA_SINGLE %]']
+	 */
 	commandArray: string[];
+
+	/**
+	 * A description that will display whenever the command is invoked.
+	 *
+	 * OPTIONAL
+	 */
 	description?: string;
+
+	/**
+	 * Whether or not the process will spawn in the foreground.  By default,
+	 * commands will run in the background and notify you when they have
+	 * completed.  If this property is true, jack will try to spawn it as a
+	 * foreground process.
+	 *
+	 * Please note that if the command does not run in a pager or an editor like
+	 * less or vim, the process will complete and immediately return you to
+	 * jack.
+	 *
+	 * OPTIONAL.  Default is false.
+	 */
 	foreground?: boolean;
+
+	/**
+	 * The key used to invoke the command from jack.
+	 *
+	 * The value is case insensitive.
+	 *
+	 * REQUIRED. If it is not given, jack will exit with an error.
+	 */
 	key: string;
+
+	/**
+	 * The modifier key to use with the key.
+	 *
+	 * Valid values are 'Control' and 'Shift'. Any other values are ignored.
+	 *
+	 * OPTIONAL
+	 */
 	modifierKey?: ModifierKey;
+
+	/**
+	 * A command to run if there is an error with the main command.  This is not
+	 * usually necessary, but can be useful for cleaning up after a command that
+	 * leaves garbage if it fails, such as a 'git cherry-pick' or 'git rebase'.
+	 *
+	 * OPTIONAL
+	 *
+	 * Example: ['git', 'rebase', '--abort']
+	 * Example: ['git', 'cherry-pick', '--abort']
+	 */
 	onErrorCommand?: string[] | null;
 }
 
