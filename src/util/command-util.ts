@@ -166,7 +166,7 @@ const crashCommandRegistrationError =
 	};
 
 const getKeyEventString = (command: ICommand): string => {
-	const { key } = command;
+	const key = command.key.toLowerCase();
 
 	switch (command.modifierKey) {
 		case ModifierKey.CONTROL:
