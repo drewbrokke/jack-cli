@@ -157,7 +157,7 @@ export const constructCommand = (commandOptions: ICommandOptions): ICommand => {
 
 	const keyEventString = command.getKeyEventString();
 
-	if (RESERVED_KEYS.indexOf(keyEventString) !== -1) {
+	if (RESERVED_KEYS.includes(keyEventString)) {
 		crashCommandRegistrationError(
 			// tslint:disable-next-line:max-line-length
 			`The key combination "${keyEventString}" is reserved. Here is the list of reserved key combinations: ${RESERVED_KEYS.join(' ')}`,
