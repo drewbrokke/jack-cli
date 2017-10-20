@@ -175,6 +175,7 @@ const crashCommandRegistrationError =
 		process.stderr.write(errorMessage + '\n\n');
 
 		if (command) {
+			process.stderr.write('Fix this command object:\n');
 			process.stderr.write(JSON.stringify(command, null, '    ') + '\n');
 		}
 
