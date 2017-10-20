@@ -2,10 +2,10 @@ import * as fs from 'fs';
 import { homedir } from 'os';
 import { join } from 'path';
 
-import { ICommand } from './commands-def';
+import { ICommandOptions } from './commands-def';
 
 interface IConfig {
-	commands: ICommand[];
+	commands: ICommandOptions[];
 }
 
 const CONFIG_FILE_NAME = '.jack.json';

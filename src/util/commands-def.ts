@@ -3,7 +3,7 @@ export enum ModifierKey {
 	SHIFT = 'Shift',
 }
 
-export interface ICommand {
+export interface ICommandOptions {
 	/**
 	 * An array of strings containing the command to run and its arguments.
 	 * The placeholder variables are put into this array.
@@ -66,6 +66,10 @@ export interface ICommand {
 	onErrorCommand?: string[] | null;
 }
 
+export interface ICommand extends ICommandOptions {
+	getKeyEventString(): string;
+}
+
 /**
  * Will be replaced by the currently selected commit SHA.
  *
@@ -100,7 +104,84 @@ export const SHA_SINGLE_OR_RANGE_PLACEHOLDER = '[% SHA_SINGLE_OR_RANGE %]';
  */
 export const COMMIT_MESSAGE_PLACEHOLDER = '[% COMMIT_MESSAGE %]';
 
-export const COMMANDS: ICommand[] = [
+const RESERVED_KEYS = [
+	...('befgjkmqxy1234567890?'.split('')),
+	'escape', 'C-c', 'S-j', 'S-k',
+];
+
+const validKeysRegex = new RegExp(/[A-Za-z]/);
+
+// tslint:disable-next-line:only-arrow-functions
+export const constructCommand = (commandOptions: ICommandOptions): ICommand => {
+	const { commandArray } = commandOptions;
+
+	if (!commandArray || !Array.isArray(commandArray) ||
+		commandArray.length === 0) {
+
+		crashCommandRegistrationError(
+			'There must be an array to declare a command and its arguments.\n\n',
+			commandOptions);
+	}
+
+	const { key } = commandOptions;
+
+	if (!key || typeof key !== 'string') {
+		crashCommandRegistrationError(
+			'There must be a "key" property given to trigger the command:',
+			commandOptions);
+	}
+
+	if (!validKeysRegex.test(key)) {
+		crashCommandRegistrationError(
+			`The key parameter must be a letter`, commandOptions);
+	}
+
+	const command = {
+		foreground: false,
+		...commandOptions,
+		getKeyEventString() {
+			const keyString = this.key.toLowerCase();
+
+			switch (this.modifierKey) {
+				case ModifierKey.CONTROL:
+					return `C-${keyString}`;
+
+				case ModifierKey.SHIFT:
+					return `S-${keyString}`;
+
+				default:
+					return keyString;
+			}
+		},
+	};
+
+	const keyEventString = command.getKeyEventString();
+
+	if (RESERVED_KEYS.indexOf(keyEventString) !== -1) {
+		crashCommandRegistrationError(
+			// tslint:disable-next-line:max-line-length
+			`The key combination "${keyEventString}" is reserved. Here is the list of reserved key combinations: ${RESERVED_KEYS.join(' ')}`,
+			commandOptions);
+	}
+
+	return command;
+};
+
+const crashCommandRegistrationError =
+	(errorMessage: string, command?: ICommandOptions) => {
+		process.stderr.write(
+			'There was a problem registering a custom command from your ' +
+			'.jack.json config file:\n\n');
+		process.stderr.write(errorMessage + '\n\n');
+
+		if (command) {
+			process.stderr.write(JSON.stringify(command, null, '    ') + '\n');
+		}
+
+		process.exit(1);
+	};
+
+export const COMMANDS: ICommandOptions[] = [
 	/**
 	 * Open a diff
 	 */

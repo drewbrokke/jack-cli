@@ -9,8 +9,8 @@ import { IScreen } from '../types/types';
 import {
 	COMMANDS,
 	COMMIT_MESSAGE_PLACEHOLDER,
+	constructCommand,
 	ICommand,
-	ModifierKey,
 	SHA_RANGE_PLACEHOLDER,
 	SHA_SINGLE_OR_RANGE_PLACEHOLDER,
 	SHA_SINGLE_PLACEHOLDER,
@@ -27,7 +27,7 @@ export const getCommands = () => {
 	declaredCommands = [
 		...COMMANDS,
 		...(readConfig().commands),
-	];
+	].map(constructCommand);
 
 	return declaredCommands;
 };
@@ -48,11 +48,9 @@ export const documentCommands = (commands: ICommand[]) => {
 
 export const registerCommands =
 	(screen: IScreen, commands: ICommand[] = []): IScreen => {
-		commands.forEach((c) => {
-			const command = constructCommand(c);
-
+		commands.forEach((command) => {
 			screen.key(
-				getKeyEventString(command),
+				command.getKeyEventString(),
 				async () => registerCommand(screen, command));
 		});
 
@@ -123,60 +121,6 @@ const registerCommand = async (screen: IScreen, command: ICommand): Promise<any>
 		store.dispatch(markSHA(null));
 
 		notifyInfo('Unmarked commit');
-	}
-};
-
-// tslint:disable-next-line:only-arrow-functions
-function constructCommand(command: ICommand): ICommand {
-	const { commandArray } = command;
-
-	if (!commandArray || !Array.isArray(commandArray) ||
-		commandArray.length === 0) {
-
-		crashCommandRegistrationError(
-			'There must be an array to declare a command and its arguments.\n\n',
-			command);
-	}
-
-	const { key } = command;
-
-	if (!key || typeof key !== 'string') {
-		crashCommandRegistrationError(
-			'There must be a "key" property given to trigger the command:', command);
-	}
-
-	return {
-		foreground: false,
-		...command,
-	};
-}
-
-const crashCommandRegistrationError =
-	(errorMessage: string, command?: ICommand) => {
-		process.stderr.write(
-			'There was a problem registering a custom command from your ' +
-			'.jack.json config file:\n\n');
-		process.stderr.write(errorMessage + '\n\n');
-
-		if (command) {
-			process.stderr.write(JSON.stringify(command, null, '    ') + '\n');
-		}
-
-		process.exit(1);
-	};
-
-const getKeyEventString = (command: ICommand): string => {
-	const key = command.key.toLowerCase();
-
-	switch (command.modifierKey) {
-		case ModifierKey.CONTROL:
-			return `C-${key}`;
-
-		case ModifierKey.SHIFT:
-			return `S-${key}`;
-
-		default:
-			return key;
 	}
 };
 
