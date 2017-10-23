@@ -119,7 +119,8 @@ export const constructCommand = (commandOptions: ICommandOptions): ICommand => {
 		commandArray.length === 0) {
 
 		crashCommandRegistrationError(
-			'There must be an array to declare a command and its arguments.\n\n',
+			'The "command" property must be declared as an array of ' +
+			'strings defining a command and its arguments',
 			commandOptions);
 	}
 
