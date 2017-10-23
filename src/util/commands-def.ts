@@ -109,7 +109,7 @@ const RESERVED_KEYS = [
 	'escape', 'C-c', 'S-j', 'S-k',
 ];
 
-const validKeysRegex = new RegExp(/[A-Za-z]/);
+const validKeysRegex = new RegExp(/^[A-Za-z]$/);
 
 // tslint:disable-next-line:only-arrow-functions
 export const constructCommand = (commandOptions: ICommandOptions): ICommand => {
@@ -133,7 +133,7 @@ export const constructCommand = (commandOptions: ICommandOptions): ICommand => {
 
 	if (!validKeysRegex.test(key)) {
 		crashCommandRegistrationError(
-			`The key parameter must be a letter`, commandOptions);
+			'The "key" property must be a single letter', commandOptions);
 	}
 
 	const command = {
