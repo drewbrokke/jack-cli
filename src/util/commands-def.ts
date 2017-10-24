@@ -104,6 +104,8 @@ export const SHA_SINGLE_OR_RANGE_PLACEHOLDER = '[% SHA_SINGLE_OR_RANGE %]';
  */
 export const COMMIT_MESSAGE_PLACEHOLDER = '[% COMMIT_MESSAGE %]';
 
+export const FILES_PLACEHOLDER = '[% FILES %]';
+
 const RESERVED_KEYS = [
 	...('befgjkmqxy1234567890?'.split('')),
 	'escape', 'C-c', 'S-j', 'S-k',

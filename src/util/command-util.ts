@@ -10,13 +10,14 @@ import {
 	COMMANDS,
 	COMMIT_MESSAGE_PLACEHOLDER,
 	constructCommand,
+	FILES_PLACEHOLDER,
 	ICommand,
 	SHA_RANGE_PLACEHOLDER,
 	SHA_SINGLE_OR_RANGE_PLACEHOLDER,
 	SHA_SINGLE_PLACEHOLDER,
 } from './commands-def';
 import { readConfig } from './config-util';
-import { gitCommitMessage, sortSHAs } from './git-util';
+import { gitCommitMessage, gitDiffNameOnly, sortSHAs } from './git-util';
 import { spawnPromise } from './promisify-child-process';
 
 let declaredCommands: ICommand[];
@@ -70,7 +71,10 @@ const registerCommand = async (screen: IScreen, command: ICommand): Promise<any>
 			.map(replacer(
 				SHA_SINGLE_OR_RANGE_PLACEHOLDER,
 				markedSHA ? `${sorted[0]}^..${sorted[1]}` : SHA))
-			.map(replacer(COMMIT_MESSAGE_PLACEHOLDER, await gitCommitMessage(SHA)));
+			.map(replacer(COMMIT_MESSAGE_PLACEHOLDER, await gitCommitMessage(SHA)))
+			.map(replacer(
+				FILES_PLACEHOLDER,
+				await gitDiffNameOnly(sorted[0], sorted[1])));
 
 		const commandString = commandArray.join(' ');
 		const messages: string[] = [];
