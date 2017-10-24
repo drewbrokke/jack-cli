@@ -70,41 +70,48 @@ export interface ICommand extends ICommandOptions {
 	getKeyEventString(): string;
 }
 
-/**
- * Will be replaced by the currently selected commit SHA.
- *
- * Single Commit Example:      4a22d67
- * With Marked Commit Example: 4a22d67
- */
-export const SHA_SINGLE_PLACEHOLDER = '[% SHA_SINGLE %]';
+export enum Placeholder {
 
-/**
- * Will always be replaced by a revision range, even if there is no marked
- * commit. Commands such as 'git diff' require this to show the changes for just
- * a single commit.
- *
- * Single Commit Example:      4a22d67^..4a22d67
- * With Marked Commit Example: 9103ae0^..4a22d67
- */
-export const SHA_RANGE_PLACEHOLDER = '[% SHA_RANGE %]';
+	/**
+	 * Will be replaced by the commit message of the currently selected commit
+	 *
+	 * Example: "offers commit message variable for custom commands"
+	 */
+	COMMIT_MESSAGE = '[% COMMIT_MESSAGE %]',
 
-/**
- * Will be replaced by either a single commit SHA or a revision range if there
- * is a marked commit.
- *
- * Single Commit Example:      4a22d67
- * With Marked Commit Example: 9103ae0^..4a22d67
- */
-export const SHA_SINGLE_OR_RANGE_PLACEHOLDER = '[% SHA_SINGLE_OR_RANGE %]';
+	/**
+	 * Will be replaced by the list of files changed by the commit or revision
+	 * range, separated by a newline
+	 */
+	FILES = '[% FILES %]',
 
-/**
- * Will be replaced by the commit message of the currently selected commit
- *
- * Example: "offers commit message variable for custom commands"
- */
-export const COMMIT_MESSAGE_PLACEHOLDER = '[% COMMIT_MESSAGE %]';
+	/**
+	 * Will always be replaced by a revision range, even if there is no marked
+	 * commit. Commands such as 'git diff' require this to show the changes for
+	 * just a single commit.
+	 *
+	 * Single Commit Example:      4a22d67^..4a22d67
+	 * With Marked Commit Example: 9103ae0^..4a22d67
+	 */
+	SHA_RANGE = '[% SHA_RANGE %]',
 
-export const FILES_PLACEHOLDER = '[% FILES %]';
+	/**
+	 * Will be replaced by either a single commit SHA or a revision range if there
+	 * is a marked commit.
+	 *
+	 * Single Commit Example:      4a22d67
+	 * With Marked Commit Example: 9103ae0^..4a22d67
+	 */
+	SHA_SINGLE_OR_RANGE = '[% SHA_SINGLE_OR_RANGE %]',
+
+	/**
+	 * Will be replaced by the currently selected commit SHA.
+	 *
+	 * Single Commit Example:      4a22d67
+	 * With Marked Commit Example: 4a22d67
+	 */
+	SHA_SINGLE = '[% SHA_SINGLE %]',
+}
 
 const RESERVED_KEYS = [
 	...('befgjkmqxy1234567890?'.split('')),
@@ -194,7 +201,7 @@ export const COMMANDS: ICommandOptions[] = [
 			'git',
 			'-p',
 			'diff',
-			SHA_RANGE_PLACEHOLDER,
+			Placeholder.SHA_RANGE,
 			'--patch',
 			'--stat-width=1000',
 		],
@@ -207,7 +214,7 @@ export const COMMANDS: ICommandOptions[] = [
 	 * List changed files
 	 */
 	{
-		commandArray: ['git', '-p', 'diff', SHA_RANGE_PLACEHOLDER, '--name-only'],
+		commandArray: ['git', '-p', 'diff', Placeholder.SHA_RANGE, '--name-only'],
 		description: 'View changed file names',
 		foreground: true,
 		key: 'n',
@@ -217,7 +224,7 @@ export const COMMANDS: ICommandOptions[] = [
 	 * Open changes in a difftool
 	 */
 	{
-		commandArray: ['git', 'difftool', SHA_RANGE_PLACEHOLDER],
+		commandArray: ['git', 'difftool', Placeholder.SHA_RANGE],
 		description: 'Open total diff in difftool',
 		key: 't',
 	},
@@ -226,7 +233,7 @@ export const COMMANDS: ICommandOptions[] = [
 	 * Attempt a cherry-pick
 	 */
 	{
-		commandArray: ['git', 'cherry-pick', SHA_SINGLE_OR_RANGE_PLACEHOLDER],
+		commandArray: ['git', 'cherry-pick', Placeholder.SHA_SINGLE_OR_RANGE],
 		description: 'Cherry-pick commits',
 		key: 'c',
 		modifierKey: ModifierKey.SHIFT,
@@ -237,7 +244,7 @@ export const COMMANDS: ICommandOptions[] = [
 	 * Begin an interactive rebase
 	 */
 	{
-		commandArray: ['git', 'rebase', '-i', SHA_SINGLE_PLACEHOLDER + '^'],
+		commandArray: ['git', 'rebase', '-i', Placeholder.SHA_SINGLE + '^'],
 		description: 'Perform interactive rebase',
 		foreground: true,
 		key: 'i',

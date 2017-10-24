@@ -8,13 +8,9 @@ import { store } from '../redux/store';
 import { IScreen } from '../types/types';
 import {
 	COMMANDS,
-	COMMIT_MESSAGE_PLACEHOLDER,
 	constructCommand,
-	FILES_PLACEHOLDER,
 	ICommand,
-	SHA_RANGE_PLACEHOLDER,
-	SHA_SINGLE_OR_RANGE_PLACEHOLDER,
-	SHA_SINGLE_PLACEHOLDER,
+	Placeholder,
 } from './commands-def';
 import { readConfig } from './config-util';
 import { gitCommitMessage, gitDiffNameOnly, sortSHAs } from './git-util';
@@ -66,14 +62,14 @@ const registerCommand = async (screen: IScreen, command: ICommand): Promise<any>
 		const sorted = markedSHA ? await sortSHAs(markedSHA, SHA) : [SHA, SHA];
 
 		const commandArray = command.commandArray
-			.map(replacer(SHA_SINGLE_PLACEHOLDER, SHA))
-			.map(replacer(SHA_RANGE_PLACEHOLDER, `${sorted[0]}^..${sorted[1]}`))
+			.map(replacer(Placeholder.SHA_SINGLE, SHA))
+			.map(replacer(Placeholder.SHA_RANGE, `${sorted[0]}^..${sorted[1]}`))
 			.map(replacer(
-				SHA_SINGLE_OR_RANGE_PLACEHOLDER,
+				Placeholder.SHA_SINGLE_OR_RANGE,
 				markedSHA ? `${sorted[0]}^..${sorted[1]}` : SHA))
-			.map(replacer(COMMIT_MESSAGE_PLACEHOLDER, await gitCommitMessage(SHA)))
+			.map(replacer(Placeholder.COMMIT_MESSAGE, await gitCommitMessage(SHA)))
 			.map(replacer(
-				FILES_PLACEHOLDER,
+				Placeholder.FILES,
 				await gitDiffNameOnly(sorted[0], sorted[1])));
 
 		const commandString = commandArray.join(' ');
