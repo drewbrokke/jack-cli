@@ -45,10 +45,22 @@ export const documentCommands = (commands: ICommand[]) => {
 
 export const registerCommands =
 	(screen: IScreen, commands: ICommand[] = []): IScreen => {
+		const commandsMap: Map<string, () => Promise<any>> = new Map();
+
 		commands.forEach((command) => {
-			screen.key(
-				command.getKeyEventString(),
-				async () => registerCommand(screen, command));
+			const keyEventString: string = command.getKeyEventString();
+
+			if (commandsMap.has(keyEventString)) {
+				screen.unkey(
+					keyEventString,
+					commandsMap.get(keyEventString) as () => Promise<any>);
+			}
+
+			const fn = async () => registerCommand(screen, command);
+
+			screen.key(keyEventString, fn);
+
+			commandsMap.set(keyEventString, fn);
 		});
 
 		return screen;
