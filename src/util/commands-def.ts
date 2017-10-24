@@ -1,4 +1,4 @@
-export enum ModifierKey {
+export enum Modifier {
 	CONTROL = 'Control',
 	SHIFT = 'Shift',
 }
@@ -51,7 +51,7 @@ export interface ICommandOptions {
 	 *
 	 * OPTIONAL
 	 */
-	modifierKey?: ModifierKey;
+	modifier?: Modifier;
 
 	/**
 	 * A command to run if there is an error with the main command.  This is not
@@ -152,11 +152,11 @@ export const constructCommand = (commandOptions: ICommandOptions): ICommand => {
 		getKeyEventString() {
 			const keyString = this.key.toLowerCase();
 
-			switch (this.modifierKey) {
-				case ModifierKey.CONTROL:
+			switch (this.modifier) {
+				case Modifier.CONTROL:
 					return `C-${keyString}`;
 
-				case ModifierKey.SHIFT:
+				case Modifier.SHIFT:
 					return `S-${keyString}`;
 
 				default:
@@ -236,7 +236,7 @@ export const COMMANDS: ICommandOptions[] = [
 		commandArray: ['git', 'cherry-pick', Placeholder.SHA_SINGLE_OR_RANGE],
 		description: 'Cherry-pick commits',
 		key: 'c',
-		modifierKey: ModifierKey.SHIFT,
+		modifier: Modifier.SHIFT,
 		onErrorCommand: ['git', 'cherry-pick', '--abort'],
 	},
 
@@ -248,7 +248,7 @@ export const COMMANDS: ICommandOptions[] = [
 		description: 'Perform interactive rebase',
 		foreground: true,
 		key: 'i',
-		modifierKey: ModifierKey.SHIFT,
+		modifier: Modifier.SHIFT,
 		onErrorCommand: ['git', 'rebase', '--abort'],
 	},
 ];

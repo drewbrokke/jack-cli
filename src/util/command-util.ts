@@ -35,8 +35,8 @@ export const documentCommands = (commands: ICommand[]) => {
 			? command.description
 			: `Run "${command.commandArray.join(' ')}"`;
 
-		const keyEventString = command.modifierKey
-			? command.modifierKey + '-' + command.key
+		const keyEventString = command.modifier
+			? command.modifier + '-' + command.key
 			: command.key;
 
 		return `${description}  ->  ${keyEventString}`;
