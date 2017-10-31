@@ -120,8 +120,30 @@ const RESERVED_KEYS = [
 
 const validKeysRegex = new RegExp(/^[A-Za-z]$/);
 
+const DUMMY_COMMAND_OPTIONS: ICommandOptions = {
+	commandArray: [],
+	description: '',
+	foreground: false,
+	key: '',
+	modifier: undefined,
+	onErrorCommand: null,
+};
+
+const COMMAND_OPTION_KEYS = Object.keys(DUMMY_COMMAND_OPTIONS);
+
 // tslint:disable-next-line:only-arrow-functions
 export const constructCommand = (commandOptions: ICommandOptions): ICommand => {
+	const invalidKeys = Object.keys(commandOptions)
+		.filter((keyName) => !COMMAND_OPTION_KEYS.includes(keyName));
+
+	if (invalidKeys.length) {
+		crashCommandRegistrationError(
+			`The following keys are invalid: "${invalidKeys.join(', ')}"
+
+Possible valid keys: ${COMMAND_OPTION_KEYS.join(', ')}`,
+			commandOptions);
+	}
+
 	const { commandArray } = commandOptions;
 
 	if (!commandArray || !Array.isArray(commandArray) ||
