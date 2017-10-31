@@ -118,7 +118,7 @@ const RESERVED_KEYS = [
 	'escape', 'C-c', 'S-j', 'S-k',
 ];
 
-const validKeysRegex = new RegExp(/^[A-Za-z]$/);
+const VALID_KEYS_REGEX = new RegExp(/^[A-Za-z]$/);
 
 const DUMMY_COMMAND_OPTIONS: ICommandOptions = {
 	commandArray: [],
@@ -163,7 +163,7 @@ Possible valid keys: ${COMMAND_OPTION_KEYS.join(', ')}`,
 			commandOptions);
 	}
 
-	if (!validKeysRegex.test(key)) {
+	if (!VALID_KEYS_REGEX.test(key)) {
 		crashCommandRegistrationError(
 			'The "key" property must be a single letter', commandOptions);
 	}
