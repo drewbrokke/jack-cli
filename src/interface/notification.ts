@@ -1,3 +1,4 @@
+// @ts-ignore: This function exists but is not in the definition file
 import { generateTags } from 'blessed';
 
 import { BoxElement } from '../types/types';
