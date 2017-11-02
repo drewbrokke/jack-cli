@@ -1,6 +1,6 @@
 export enum Modifier {
-	CONTROL = 'Control',
-	SHIFT = 'Shift',
+	CONTROL = 'control',
+	SHIFT = 'shift',
 }
 
 export interface ICommandOptions {
@@ -144,7 +144,7 @@ Possible valid keys: ${COMMAND_OPTION_KEYS.join(', ')}`,
 			commandOptions);
 	}
 
-	const { commandArray } = commandOptions;
+	const { commandArray, key, modifier } = commandOptions;
 
 	if (!commandArray || !Array.isArray(commandArray) ||
 		commandArray.length === 0) {
@@ -155,8 +155,6 @@ Possible valid keys: ${COMMAND_OPTION_KEYS.join(', ')}`,
 			commandOptions);
 	}
 
-	const { key } = commandOptions;
-
 	if (!key || typeof key !== 'string') {
 		crashCommandRegistrationError(
 			'There must be a "key" property given to trigger the command:',
@@ -166,6 +164,25 @@ Possible valid keys: ${COMMAND_OPTION_KEYS.join(', ')}`,
 	if (!VALID_KEYS_REGEX.test(key)) {
 		crashCommandRegistrationError(
 			'The "key" property must be a single letter', commandOptions);
+	}
+
+	if (modifier) {
+		switch (modifier) {
+			case Modifier.CONTROL:
+			case Modifier.SHIFT:
+				break;
+
+			default:
+				const properties = Object.keys(Modifier).map(
+					(i) => `"${Modifier[i]}"`).join(' ');
+
+				crashCommandRegistrationError(
+					'The "modifier" property must have one of the following values: ' +
+					properties,
+					commandOptions);
+				break;
+		}
+
 	}
 
 	const command = {
