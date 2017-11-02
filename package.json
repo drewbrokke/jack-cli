@@ -45,13 +45,13 @@
     "show"
   ],
   "devDependencies": {
-    "@types/blessed": "^0.1.6",
+    "@types/blessed": "^0.1.7",
     "@types/clipboardy": "^1.1.0",
-    "@types/node": "^7.0.42",
+    "@types/node": "^8.0.47",
     "gulp": "^3.9.1",
     "gulp-tslint": "^8.1.2",
-    "gulp-typescript": "^3.2.1",
-    "tslint": "^5.6.0",
-    "typescript": "^2.4.2"
+    "gulp-typescript": "^3.2.3",
+    "tslint": "^5.8.0",
+    "typescript": "^2.6.1"
   }
 }
