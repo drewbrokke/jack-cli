@@ -57,6 +57,5 @@ export interface IState {
 	status: Status;
 	markedSHA: string | null;
 	SHA: string;
-	split: boolean;
 	view: View;
 }
