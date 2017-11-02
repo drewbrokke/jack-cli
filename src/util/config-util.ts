@@ -6,13 +6,14 @@ import { ICommandOptions } from './commands-def';
 
 interface IConfig {
 	commands: ICommandOptions[];
+	notificationTimeout?: number;
 }
 
 const CONFIG_FILE_NAME = '.jack.json';
 const CONFIG_FILE_PATH = join(homedir(), CONFIG_FILE_NAME);
 
 export const readConfig = (): IConfig => {
-	const defaultConfig: IConfig = { commands: [] };
+	const defaultConfig: IConfig = { commands: [], notificationTimeout: 5000 };
 
 	if (!fs.existsSync(CONFIG_FILE_PATH)) {
 		fs.writeFileSync(CONFIG_FILE_PATH, JSON.stringify(defaultConfig));
@@ -28,6 +29,6 @@ export const readConfig = (): IConfig => {
 
 		process.exit(1);
 
-		return { commands: [] };
+		return defaultConfig;
 	}
 };
