@@ -5,3 +5,6 @@ dist/
 # Logs
 logs/
 *.log
+
+# Workspace
+.vscode/
