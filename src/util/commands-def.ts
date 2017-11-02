@@ -137,8 +137,7 @@ export const constructCommand = (commandOptions: ICommandOptions): ICommand => {
 		.filter((keyName) => !COMMAND_OPTION_KEYS.includes(keyName));
 
 	if (invalidKeys.length) {
-		crashCommandRegistrationError(
-			`The following keys are invalid: "${invalidKeys.join(', ')}"
+		crash(`The following keys are invalid: "${invalidKeys.join(', ')}"
 
 Possible valid keys: ${COMMAND_OPTION_KEYS.join(', ')}`,
 			commandOptions);
@@ -149,21 +148,20 @@ Possible valid keys: ${COMMAND_OPTION_KEYS.join(', ')}`,
 	if (!commandArray || !Array.isArray(commandArray) ||
 		commandArray.length === 0) {
 
-		crashCommandRegistrationError(
+		crash(
 			'The "commandArray" property must be declared as an array of ' +
 			'strings defining a command and its arguments',
 			commandOptions);
 	}
 
 	if (!key || typeof key !== 'string') {
-		crashCommandRegistrationError(
+		crash(
 			'There must be a "key" property given to trigger the command:',
 			commandOptions);
 	}
 
 	if (!VALID_KEYS_REGEX.test(key)) {
-		crashCommandRegistrationError(
-			'The "key" property must be a single letter', commandOptions);
+		crash('The "key" property must be a single letter', commandOptions);
 	}
 
 	if (modifier) {
@@ -176,7 +174,7 @@ Possible valid keys: ${COMMAND_OPTION_KEYS.join(', ')}`,
 				const properties = Object.keys(Modifier).map(
 					(i) => `"${Modifier[i]}"`).join(' ');
 
-				crashCommandRegistrationError(
+				crash(
 					'The "modifier" property must have one of the following values: ' +
 					properties,
 					commandOptions);
@@ -207,7 +205,7 @@ Possible valid keys: ${COMMAND_OPTION_KEYS.join(', ')}`,
 	const keyEventString = command.getKeyEventString();
 
 	if (RESERVED_KEYS.includes(keyEventString)) {
-		crashCommandRegistrationError(
+		crash(
 			// tslint:disable-next-line:max-line-length
 			`The key combination "${keyEventString}" is reserved. Here is the list of reserved key combinations: ${RESERVED_KEYS.join(' ')}`,
 			commandOptions);
@@ -216,7 +214,7 @@ Possible valid keys: ${COMMAND_OPTION_KEYS.join(', ')}`,
 	return command;
 };
 
-const crashCommandRegistrationError =
+const crash =
 	(errorMessage: string, command?: ICommandOptions) => {
 		process.stderr.write(
 			'There was a problem registering a custom command from your ' +
