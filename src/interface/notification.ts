@@ -53,7 +53,7 @@ const appendNotification = (content: string, color: string | null = null) => {
 	}
 
 	notificationContainer.pushLine(
-		color ? generateTags({bold: true, fg: color}, content) : content);
+		color ? generateTags({ bold: true, fg: color }, content) : content);
 
 	setTimeout(() => {
 		notificationContainer.shiftLine(content.split('\n').length + 1);
