@@ -84,6 +84,8 @@ const registerCommand = async (screen: IScreen, command: ICommand): Promise<any>
 				Placeholder.FILES,
 				await gitDiffNameOnly(sorted[0], sorted[1])));
 
+		const spawnOpts = { shell: commandArray.includes('|') };
+
 		const commandString = commandArray.join(' ');
 		const messages: string[] = [];
 
@@ -98,7 +100,9 @@ const registerCommand = async (screen: IScreen, command: ICommand): Promise<any>
 		if (command.foreground) {
 			await new Promise((resolve, reject) => {
 				screen.exec(
-					commandArray[0], commandArray.slice(1), {}, (err, ok) => {
+					// @ts-ignore since 'spawnOpts' is passed to spawn and not
+					// exec, it will still function
+					commandArray[0], commandArray.slice(1), spawnOpts, (err, ok) => {
 						if (err) {
 							reject(err.message);
 						} else if (!ok) {
@@ -109,7 +113,7 @@ const registerCommand = async (screen: IScreen, command: ICommand): Promise<any>
 					});
 			});
 		} else {
-			await spawnPromise(commandArray[0], commandArray.slice(1));
+			await spawnPromise(commandArray[0], commandArray.slice(1), spawnOpts);
 		}
 
 		notifySuccess(`Command finished: "${commandString}"`);

@@ -17,7 +17,8 @@ export enum Modifier {
 export interface ICommandOptions {
 	/**
 	 * An array of strings containing the command to run and its arguments.
-	 * The placeholder variables are put into this array.
+	 * The placeholder variables are put into this array. This array supports
+	 * pipes.
 	 *
 	 * REQUIRED.  If it is not given, jack will exit with an error.
 	 *
@@ -40,7 +41,8 @@ export interface ICommandOptions {
 	 *
 	 * Please note that if the command does not run in a pager or an editor like
 	 * less or vim, the process will complete and immediately return you to
-	 * jack.
+	 * jack. You can work around this by piping to less or another pager in
+	 * the command array.
 	 *
 	 * OPTIONAL.  Default is false.
 	 */
