@@ -1,4 +1,5 @@
 import * as Ajv from 'ajv';
+import { ErrorObject } from 'ajv';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -130,10 +131,12 @@ const RESERVED_KEYS = [
 
 // tslint:disable-next-line:only-arrow-functions
 export const constructCommand = (commandOptions: ICommandOptions): ICommand => {
-	const valid = ajv.validate(commandSchema, commandOptions);
+	ajv.validate(commandSchema, commandOptions);
 
-	if (!valid) {
-		crash(ajv.errorsText(), commandOptions);
+	if (ajv.errors) {
+		const message = ajv.errors.map(constructErrorMessage).join('\n');
+
+		crash(message, commandOptions);
 	}
 
 	const command = {
@@ -167,20 +170,41 @@ export const constructCommand = (commandOptions: ICommandOptions): ICommand => {
 	return command;
 };
 
-const crash =
-	(errorMessage: string, command?: ICommandOptions) => {
-		process.stderr.write(
-			'There was a problem registering a custom command from your ' +
-			'.jack.json config file:\n\n');
-		process.stderr.write(errorMessage + '\n\n');
+const constructErrorMessage = (errorObject: ErrorObject) => {
+	let errorMessage = '';
 
-		if (command) {
-			process.stderr.write('Fix this command object:\n');
-			process.stderr.write(JSON.stringify(command, null, '    ') + '\n');
-		}
+	const { dataPath, message, params } = errorObject;
 
-		process.exit(1);
-	};
+	errorMessage +=
+		`The parameter "${dataPath}" did not validate: ${message}`;
+
+	// @ts-ignore: each of these values are checked before use
+	const { allowedValues, pattern } = params;
+
+	if (allowedValues) {
+		errorMessage += `\nAllowed values: ${allowedValues.join(', ')}`;
+	}
+
+	if (pattern) {
+		errorMessage += `\nUse a single lower-case letter.`;
+	}
+
+	return errorMessage;
+};
+
+const crash = (errorMessage: string, command?: ICommandOptions) => {
+	process.stderr.write(
+		'There was a problem registering a custom command from your ' +
+		'.jack.json config file:\n\n');
+	process.stderr.write(errorMessage + '\n\n');
+
+	if (command) {
+		process.stderr.write('Fix this command object:\n');
+		process.stderr.write(JSON.stringify(command, null, '    ') + '\n');
+	}
+
+	process.exit(1);
+};
 
 export const COMMANDS: ICommandOptions[] = [
 	/**
