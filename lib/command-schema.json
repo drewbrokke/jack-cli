@@ -1,0 +1,44 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"additionalProperties": false,
+	"properties": {
+		"commandArray": {
+			"items": {
+				"type": "string"
+			},
+			"type": "array"
+		},
+		"description": {
+			"type": "string"
+		},
+		"foreground": {
+			"default": false,
+			"description": "Whether or not to spawn the process in the foreground",
+			"type": "boolean"
+		},
+		"key": {
+			"description": "The key to press to trigger the command",
+			"pattern": "^[a-z]$",
+			"type": "string"
+		},
+		"modifier": {
+			"description": "The modifier key to use with the key.",
+			"enum": [
+				"control",
+				"shift"
+			],
+			"type": "string"
+		},
+		"onErrorCommand": {
+			"items": {
+				"type": "string"
+			},
+			"type": "array"
+		}
+	},
+	"required": [
+		"commandArray",
+		"key"
+	],
+	"type": "object"
+}

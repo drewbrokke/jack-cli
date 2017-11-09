@@ -1,3 +1,13 @@
+import * as Ajv from 'ajv';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
+const ajv = new Ajv();
+
+const commandSchema = JSON.parse(
+	readFileSync(
+		join(__dirname, '../../lib/command-schema.json'), { encoding: 'utf8' }));
+
 export enum Modifier {
 	CONTROL = 'control',
 	SHIFT = 'shift',
@@ -63,7 +73,7 @@ export interface ICommandOptions {
 	 * Example: ['git', 'rebase', '--abort']
 	 * Example: ['git', 'cherry-pick', '--abort']
 	 */
-	onErrorCommand?: string[] | null;
+	onErrorCommand?: string[];
 }
 
 export interface ICommand extends ICommandOptions {
@@ -118,69 +128,12 @@ const RESERVED_KEYS = [
 	'escape', 'C-c', 'S-j', 'S-k',
 ];
 
-const VALID_KEYS_REGEX = new RegExp(/^[A-Za-z]$/);
-
-const DUMMY_COMMAND_OPTIONS: ICommandOptions = {
-	commandArray: [],
-	description: '',
-	foreground: false,
-	key: '',
-	modifier: undefined,
-	onErrorCommand: null,
-};
-
-const COMMAND_OPTION_KEYS = Object.keys(DUMMY_COMMAND_OPTIONS);
-
 // tslint:disable-next-line:only-arrow-functions
 export const constructCommand = (commandOptions: ICommandOptions): ICommand => {
-	const invalidKeys = Object.keys(commandOptions)
-		.filter((keyName) => !COMMAND_OPTION_KEYS.includes(keyName));
+	const valid = ajv.validate(commandSchema, commandOptions);
 
-	if (invalidKeys.length) {
-		crash(`The following keys are invalid: "${invalidKeys.join(', ')}"
-
-Possible valid keys: ${COMMAND_OPTION_KEYS.join(', ')}`,
-			commandOptions);
-	}
-
-	const { commandArray, key, modifier } = commandOptions;
-
-	if (!commandArray || !Array.isArray(commandArray) ||
-		commandArray.length === 0) {
-
-		crash(
-			'The "commandArray" property must be declared as an array of ' +
-			'strings defining a command and its arguments',
-			commandOptions);
-	}
-
-	if (!key || typeof key !== 'string') {
-		crash(
-			'There must be a "key" property given to trigger the command:',
-			commandOptions);
-	}
-
-	if (!VALID_KEYS_REGEX.test(key)) {
-		crash('The "key" property must be a single letter', commandOptions);
-	}
-
-	if (modifier) {
-		switch (modifier) {
-			case Modifier.CONTROL:
-			case Modifier.SHIFT:
-				break;
-
-			default:
-				const properties = Object.keys(Modifier).map(
-					(i) => `"${Modifier[i]}"`).join(' ');
-
-				crash(
-					'The "modifier" property must have one of the following values: ' +
-					properties,
-					commandOptions);
-				break;
-		}
-
+	if (!valid) {
+		crash(ajv.errorsText(), commandOptions);
 	}
 
 	const command = {
