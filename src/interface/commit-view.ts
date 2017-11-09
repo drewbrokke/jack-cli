@@ -74,10 +74,6 @@ const updateCommitElement = (commitElement) => {
 
 				return commitElement.screen.render();
 			})
-			.catch((errorMessage) =>
-				notifyWarning(
-					`There was an issue getting the commit content for ${SHA}:
-
-${errorMessage}`));
+			.catch(() => notifyWarning(`Couldn't retrieve commit content for ${SHA}`));
 	};
 };
