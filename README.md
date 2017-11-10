@@ -42,3 +42,34 @@ Key | Description
 **y**               |  Copy commit SHA to clipboard
 **q, esc, C-c**     |  Exit **jack**
 **?**               |  Show/hide help dialog
+
+## Custom key commands
+
+`jack` can register custom key commands, meaning you can call any executable from `jack`.  When `jack` starts up, it will create a `.jack.json` file in your home directory, where you can define command objects in this shape:
+```
+{
+	commandArray: [
+		'git',
+		'-p',
+		'diff',
+		'[% SHA_RANGE %]',
+		'--patch',
+		'--stat-width=1000',
+	],
+	description: 'View total diff',
+	foreground: true,
+	key: 'd',
+}
+```
+A full explanation of each property can be found in the comments of [commands-def.ts#L12-L68](https://github.com/drewbrokke/jack-cli/blob/master/src/util/commands-def.ts#L12-L68).
+
+`jack` actually registers several key commands this way internally!  See [commands-def.ts#L165-L222](https://github.com/drewbrokke/jack-cli/blob/master/src/util/commands-def.ts#L165-L222) for some examples.
+
+### Placeholder variables
+`jack` defines several placeholder variables to be used in your custom scripts:
+- "[% COMMIT_MESSAGE %]"
+- "[% SHA_RANGE %]"
+- "[% SHA\_SINGLE\_OR_RANGE %]"
+- "[% SHA_SINGLE %]"
+
+A full explanation of each variable is provided in the comments of [commands-def.ts#L70-L105](https://github.com/drewbrokke/jack-cli/blob/master/src/util/commands-def.ts#L70-L105).
