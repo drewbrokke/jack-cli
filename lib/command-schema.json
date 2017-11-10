@@ -18,15 +18,7 @@
 		},
 		"key": {
 			"description": "The key to press to trigger the command",
-			"pattern": "^[a-z]$",
-			"type": "string"
-		},
-		"modifier": {
-			"description": "The modifier key to use with the key.",
-			"enum": [
-				"control",
-				"shift"
-			],
+			"pattern": "^([CS]-)?[a-z]$",
 			"type": "string"
 		},
 		"onErrorCommand": {
