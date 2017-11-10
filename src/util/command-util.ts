@@ -37,7 +37,7 @@ export const documentCommands = (commands: ICommand[]) => {
 			? command.description
 			: `Run "${command.commandArray.join(' ')}"`;
 
-		return `${description}  ->  ${command.key}`;
+		return `${pad(command.key)}  ->  ${description}`;
 	}).join('\n');
 };
 
@@ -135,6 +135,16 @@ const registerCommand = async (screen: IScreen, command: ICommand): Promise<any>
 
 		notifyInfo('Unmarked commit');
 	}
+};
+
+const pad = (s: string) => {
+	const delta = 3 - s.length;
+
+	if (delta > 0) {
+		s = ' '.repeat(delta) + s;
+	}
+
+	return s;
 };
 
 const replacer =
