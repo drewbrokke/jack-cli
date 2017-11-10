@@ -34,13 +34,19 @@ export const getCommands = () => {
 };
 
 export const documentCommands = (commands: ICommand[]) => {
-	return commands.map((command) => {
-		const description = command.description
-			? command.description
-			: `Run "${command.commandArray.join(' ')}"`;
+	const title = 'Registered Key Commands\n\n';
+	const modifierExplanation = 'C = Control key\nS = Shift key\n\n';
+	const header = 'Key:        Description/Command:\n\n';
+	const commandDocs = commands.map((command) => {
+		const { commandArray, description } = command;
+		const commandText = commandArray.join(' ');
 
-		return `${pad(command.key)}  ->  ${description}`;
+		return `{bold}${pad(command.key)} ->   ${description}{/bold}
+            ${commandText}
+`;
 	}).join('\n');
+
+	return title + modifierExplanation + header + commandDocs;
 };
 
 export const registerCommands =
@@ -128,10 +134,10 @@ const registerCommand = async (screen: IScreen, command: ICommand): Promise<any>
 };
 
 const pad = (s: string) => {
-	const delta = 3 - s.length;
+	const delta = 6 - s.length;
 
 	if (delta > 0) {
-		s = ' '.repeat(delta) + s;
+		s += ' '.repeat(delta);
 	}
 
 	return s;
