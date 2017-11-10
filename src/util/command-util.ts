@@ -23,10 +23,12 @@ let declaredCommands: ICommand[];
 export const getCommands = () => {
 	if (declaredCommands) return declaredCommands;
 
-	declaredCommands = uniqBy(
-		[...COMMANDS, ...(readConfig().commands)].reverse(), 'key').reverse();
+	declaredCommands = [...COMMANDS, ...(readConfig().commands)];
 
 	declaredCommands.forEach(validateCommand);
+
+	declaredCommands = uniqBy(
+		[...COMMANDS, ...(readConfig().commands)].reverse(), 'key').reverse();
 
 	return declaredCommands;
 };
