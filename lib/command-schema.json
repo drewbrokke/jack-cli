@@ -30,6 +30,7 @@
 	},
 	"required": [
 		"commandArray",
+		"description",
 		"key"
 	],
 	"type": "object"
