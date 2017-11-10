@@ -1,3 +1,5 @@
+import * as uniqBy from 'lodash.uniqby';
+
 import {
 	notifyError,
 	notifyInfo,
@@ -21,10 +23,8 @@ let declaredCommands: ICommand[];
 export const getCommands = () => {
 	if (declaredCommands) return declaredCommands;
 
-	declaredCommands = [
-		...COMMANDS,
-		...(readConfig().commands),
-	];
+	declaredCommands = uniqBy(
+		[...COMMANDS, ...(readConfig().commands)].reverse(), 'key').reverse();
 
 	declaredCommands.forEach(validateCommand);
 
@@ -43,22 +43,10 @@ export const documentCommands = (commands: ICommand[]) => {
 
 export const registerCommands =
 	(screen: IScreen, commands: ICommand[] = []): IScreen => {
-		const commandsMap: Map<string, () => Promise<any>> = new Map();
-
-		commands.forEach((command) => {
-			const { key } = command;
-
-			if (commandsMap.has(key)) {
-				screen.unkey(
-					key, commandsMap.get(key) as () => Promise<any>);
-			}
-
-			const fn = async () => registerCommand(screen, command);
-
-			screen.key(key, fn);
-
-			commandsMap.set(key, fn);
-		});
+		commands.forEach(
+			(command) => screen.key(
+				command.key,
+				async () => registerCommand(screen, command)));
 
 		return screen;
 	};
