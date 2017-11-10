@@ -1,3 +1,21 @@
+import { ICommand } from './commands-def';
+
+export const documentCommands = (commands: ICommand[]) => {
+	const title = 'Registered Key Commands\n\n';
+	const modifierExplanation = 'C = Control key\nS = Shift key\n\n';
+	const header = 'Key:        Description/Command:\n\n';
+	const commandDocs = commands.map((command) => {
+		const { commandArray, description } = command;
+		const commandText = commandArray.join(' ');
+
+		return `{bold}${pad(command.key)} ->   ${description}{/bold}
+            ${commandText}
+`;
+	}).join('\n');
+
+	return title + modifierExplanation + header + commandDocs;
+};
+
 export const helpText = `
 {center}{bold}----- General -----{/bold}{/center}
 
@@ -43,3 +61,13 @@ Scroll down/up half screen     ctrl-d/ctrl-u
 Scroll down/up full screen     ctrl-f/ctrl-b
 Scroll to top/bottom           g/shift-g
 `;
+
+const pad = (s: string) => {
+	const delta = 6 - s.length;
+
+	if (delta > 0) {
+		s += ' '.repeat(delta);
+	}
+
+	return s;
+};

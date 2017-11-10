@@ -33,22 +33,6 @@ export const getCommands = () => {
 	return declaredCommands;
 };
 
-export const documentCommands = (commands: ICommand[]) => {
-	const title = 'Registered Key Commands\n\n';
-	const modifierExplanation = 'C = Control key\nS = Shift key\n\n';
-	const header = 'Key:        Description/Command:\n\n';
-	const commandDocs = commands.map((command) => {
-		const { commandArray, description } = command;
-		const commandText = commandArray.join(' ');
-
-		return `{bold}${pad(command.key)} ->   ${description}{/bold}
-            ${commandText}
-`;
-	}).join('\n');
-
-	return title + modifierExplanation + header + commandDocs;
-};
-
 export const registerCommands =
 	(screen: IScreen, commands: ICommand[] = []): IScreen => {
 		commands.forEach(
@@ -131,16 +115,6 @@ const registerCommand = async (screen: IScreen, command: ICommand): Promise<any>
 
 		notifyInfo('Unmarked commit');
 	}
-};
-
-const pad = (s: string) => {
-	const delta = 6 - s.length;
-
-	if (delta > 0) {
-		s += ' '.repeat(delta);
-	}
-
-	return s;
 };
 
 const replacer =
