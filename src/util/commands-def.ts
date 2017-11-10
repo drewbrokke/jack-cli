@@ -131,8 +131,12 @@ const constructErrorMessage = (errorObject: ErrorObject) => {
 
 	const { dataPath, message, params } = errorObject;
 
-	errorMessage +=
-		`The parameter "${dataPath}" did not validate: ${message}`;
+	if (dataPath) {
+		errorMessage +=
+			`The parameter "${dataPath}" did not validate: `;
+	}
+
+	errorMessage += message;
 
 	// @ts-ignore: each of these values are checked before use
 	const { allowedValues, pattern } = params;
