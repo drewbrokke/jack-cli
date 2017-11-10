@@ -77,12 +77,6 @@ export enum Placeholder {
 	COMMIT_MESSAGE = '[% COMMIT_MESSAGE %]',
 
 	/**
-	 * Will be replaced by the list of files changed by the commit or revision
-	 * range, separated by a newline
-	 */
-	FILES = '[% FILES %]',
-
-	/**
 	 * Will always be replaced by a revision range, even if there is no marked
 	 * commit. Commands such as 'git diff' require this to show the changes for
 	 * just a single commit.

@@ -15,7 +15,7 @@ import {
 	validateCommand,
 } from './commands-def';
 import { readConfig } from './config-util';
-import { gitCommitMessage, gitDiffNameOnly, sortSHAs } from './git-util';
+import { gitCommitMessage, sortSHAs } from './git-util';
 import { spawnPromise } from './promisify-child-process';
 
 let declaredCommands: ICommand[];
@@ -56,10 +56,7 @@ const registerCommand = async (screen: IScreen, command: ICommand): Promise<any>
 			.map(replacer(
 				Placeholder.SHA_SINGLE_OR_RANGE,
 				markedSHA ? `${sorted[0]}^..${sorted[1]}` : SHA))
-			.map(replacer(Placeholder.COMMIT_MESSAGE, await gitCommitMessage(SHA)))
-			.map(replacer(
-				Placeholder.FILES,
-				await gitDiffNameOnly(sorted[0], sorted[1])));
+			.map(replacer(Placeholder.COMMIT_MESSAGE, await gitCommitMessage(SHA)));
 
 		const spawnOpts = { shell: commandArray.includes('|') };
 
