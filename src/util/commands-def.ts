@@ -9,12 +9,7 @@ const commandSchema = JSON.parse(
 	readFileSync(
 		join(__dirname, '../../lib/command-schema.json'), { encoding: 'utf8' }));
 
-export enum Modifier {
-	CONTROL = 'control',
-	SHIFT = 'shift',
-}
-
-export interface ICommandOptions {
+export interface ICommand {
 	/**
 	 * An array of strings containing the command to run and its arguments.
 	 * The placeholder variables are put into this array. This array supports
@@ -49,22 +44,15 @@ export interface ICommandOptions {
 	foreground?: boolean;
 
 	/**
-	 * The key used to invoke the command from jack.
-	 *
-	 * The value is case insensitive.
+	 * The key used to invoke the command from jack. This can either be a single
+	 * lowercase letter, or prefixed with "C-" for a "control" modifer key, or
+	 * "S-" for a "shift" modifier key
 	 *
 	 * REQUIRED. If it is not given, jack will exit with an error.
+	 *
+	 * Example: 's', 'S-x', 'C-v'
 	 */
 	key: string;
-
-	/**
-	 * The modifier key to use with the key.
-	 *
-	 * Valid values are 'Control' and 'Shift'. Any other values are ignored.
-	 *
-	 * OPTIONAL
-	 */
-	modifier?: Modifier;
 
 	/**
 	 * A command to run if there is an error with the main command.  This is not
@@ -77,10 +65,6 @@ export interface ICommandOptions {
 	 * Example: ['git', 'cherry-pick', '--abort']
 	 */
 	onErrorCommand?: string[];
-}
-
-export interface ICommand extends ICommandOptions {
-	getKeyEventString(): string;
 }
 
 export enum Placeholder {
@@ -126,13 +110,10 @@ export enum Placeholder {
 	SHA_SINGLE = '[% SHA_SINGLE %]',
 }
 
-const RESERVED_KEYS = [
-	...('befgjkmqxy1234567890?'.split('')),
-	'escape', 'C-c', 'S-j', 'S-k',
-];
+const RESERVED_KEYS = [...('befgjkmqxy?'.split('')), 'C-c', 'S-j', 'S-k'];
 
 // tslint:disable-next-line:only-arrow-functions
-export const constructCommand = (commandOptions: ICommandOptions): ICommand => {
+export const validateCommand = (commandOptions: ICommand): void => {
 	ajv.validate(commandSchema, commandOptions);
 
 	if (ajv.errors) {
@@ -141,35 +122,14 @@ export const constructCommand = (commandOptions: ICommandOptions): ICommand => {
 		crash(message, commandOptions);
 	}
 
-	const command = {
-		foreground: false,
-		...commandOptions,
-		getKeyEventString() {
-			const keyString = this.key.toLowerCase();
+	const { key } = commandOptions;
 
-			switch (this.modifier) {
-				case Modifier.CONTROL:
-					return `C-${keyString}`;
-
-				case Modifier.SHIFT:
-					return `S-${keyString}`;
-
-				default:
-					return keyString;
-			}
-		},
-	};
-
-	const keyEventString = command.getKeyEventString();
-
-	if (RESERVED_KEYS.includes(keyEventString)) {
+	if (RESERVED_KEYS.includes(key)) {
 		crash(
 			// tslint:disable-next-line:max-line-length
-			`The key combination "${keyEventString}" is reserved. Here is the list of reserved key combinations: ${RESERVED_KEYS.join(' ')}`,
+			`The key combination "${key}" is reserved. Here is the list of reserved key combinations: ${RESERVED_KEYS.join(' ')}`,
 			commandOptions);
 	}
-
-	return command;
 };
 
 const constructErrorMessage = (errorObject: ErrorObject) => {
@@ -194,7 +154,7 @@ const constructErrorMessage = (errorObject: ErrorObject) => {
 	return errorMessage;
 };
 
-const crash = (errorMessage: string, command?: ICommandOptions) => {
+const crash = (errorMessage: string, command?: ICommand) => {
 	process.stderr.write(
 		'There was a problem registering a custom command from your ' +
 		'.jack.json config file:\n\n');
@@ -208,7 +168,7 @@ const crash = (errorMessage: string, command?: ICommandOptions) => {
 	process.exit(1);
 };
 
-export const COMMANDS: ICommandOptions[] = [
+export const COMMANDS: ICommand[] = [
 	/**
 	 * Open a diff
 	 */
@@ -251,8 +211,7 @@ export const COMMANDS: ICommandOptions[] = [
 	{
 		commandArray: ['git', 'cherry-pick', Placeholder.SHA_SINGLE_OR_RANGE],
 		description: 'Cherry-pick commits',
-		key: 'c',
-		modifier: Modifier.SHIFT,
+		key: 'S-c',
 		onErrorCommand: ['git', 'cherry-pick', '--abort'],
 	},
 
@@ -263,8 +222,7 @@ export const COMMANDS: ICommandOptions[] = [
 		commandArray: ['git', 'rebase', '-i', Placeholder.SHA_SINGLE + '^'],
 		description: 'Perform interactive rebase',
 		foreground: true,
-		key: 'i',
-		modifier: Modifier.SHIFT,
+		key: 'S-i',
 		onErrorCommand: ['git', 'rebase', '--abort'],
 	},
 ];

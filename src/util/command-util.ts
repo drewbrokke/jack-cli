@@ -8,9 +8,9 @@ import { store } from '../redux/store';
 import { IScreen } from '../types/types';
 import {
 	COMMANDS,
-	constructCommand,
 	ICommand,
 	Placeholder,
+	validateCommand,
 } from './commands-def';
 import { readConfig } from './config-util';
 import { gitCommitMessage, gitDiffNameOnly, sortSHAs } from './git-util';
@@ -24,7 +24,9 @@ export const getCommands = () => {
 	declaredCommands = [
 		...COMMANDS,
 		...(readConfig().commands),
-	].map(constructCommand);
+	];
+
+	declaredCommands.forEach(validateCommand);
 
 	return declaredCommands;
 };
@@ -35,11 +37,7 @@ export const documentCommands = (commands: ICommand[]) => {
 			? command.description
 			: `Run "${command.commandArray.join(' ')}"`;
 
-		const keyEventString = command.modifier
-			? command.modifier + '-' + command.key
-			: command.key;
-
-		return `${description}  ->  ${keyEventString}`;
+		return `${description}  ->  ${command.key}`;
 	}).join('\n');
 };
 
@@ -48,19 +46,18 @@ export const registerCommands =
 		const commandsMap: Map<string, () => Promise<any>> = new Map();
 
 		commands.forEach((command) => {
-			const keyEventString: string = command.getKeyEventString();
+			const { key } = command;
 
-			if (commandsMap.has(keyEventString)) {
+			if (commandsMap.has(key)) {
 				screen.unkey(
-					keyEventString,
-					commandsMap.get(keyEventString) as () => Promise<any>);
+					key, commandsMap.get(key) as () => Promise<any>);
 			}
 
 			const fn = async () => registerCommand(screen, command);
 
-			screen.key(keyEventString, fn);
+			screen.key(key, fn);
 
-			commandsMap.set(keyEventString, fn);
+			commandsMap.set(key, fn);
 		});
 
 		return screen;

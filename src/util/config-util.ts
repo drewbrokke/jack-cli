@@ -2,10 +2,10 @@ import * as fs from 'fs';
 import { homedir } from 'os';
 import { join } from 'path';
 
-import { ICommandOptions } from './commands-def';
+import { ICommand } from './commands-def';
 
 interface IConfig {
-	commands: ICommandOptions[];
+	commands: ICommand[];
 	notificationTimeout?: number;
 }
 
