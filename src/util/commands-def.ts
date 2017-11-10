@@ -24,9 +24,9 @@ export interface ICommand {
 	/**
 	 * A description that will display whenever the command is invoked.
 	 *
-	 * OPTIONAL
+	 * REQUIRED. If it is not given, jack will exit with an error.
 	 */
-	description?: string;
+	description: string;
 
 	/**
 	 * Whether or not the process will spawn in the foreground.  By default,
