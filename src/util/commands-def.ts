@@ -110,7 +110,7 @@ export enum Placeholder {
 	SHA_SINGLE = '[% SHA_SINGLE %]',
 }
 
-const RESERVED_KEYS = [...('befgjkmqxy?'.split('')), 'C-c', 'S-j', 'S-k'];
+const RESERVED_KEYS = [...('befgjkmoqxy?'.split('')), 'C-c', 'S-j', 'S-k'];
 
 // tslint:disable-next-line:only-arrow-functions
 export const validateCommand = (commandOptions: ICommand): void => {
