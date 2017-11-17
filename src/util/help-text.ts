@@ -8,17 +8,13 @@ export const getHelpText = () => {
 };
 
 const documentCommands = (commands: ICommand[]) => {
-	const title = '{bold}Registered Keys{/bold}\n\n';
-	const commandDocs = commands.map((command) => {
-		const { commandArray, description } = command;
-		const commandText = commandArray.join(' ');
-
-		return `{bold}${pad(command.key)} ->   ${description}{/bold}
-            ${commandText}
-`;
-	}).join('\n');
-
-	return title + commandDocs;
+	return commands.reduce(
+		(accumulator, command) => (
+			`${accumulator}
+{bold}${pad(command.key)} ->   ${command.description}{/bold}
+			${command.commandArray.join(' ')}`
+		),
+		'{bold}Registered Keys{/bold}\n');
 };
 
 const helpText = `
