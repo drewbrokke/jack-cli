@@ -28,6 +28,8 @@
     "clipboardy": "^1.1.2",
     "lodash.uniqby": "^4.7.0",
     "opn": "^5.0.0",
+    "os-homedir": "^1.0.2",
+    "os-tmpdir": "^1.0.2",
     "redux": "^3.6.0"
   },
   "keywords": [
