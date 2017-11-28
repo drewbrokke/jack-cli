@@ -1,6 +1,3 @@
-// @ts-ignore: This function exists but is not in the definition file
-import { generateTags } from 'blessed';
-
 import { BoxElement } from '../types/types';
 import { readConfig } from '../util/config-util';
 import { getBoxElement } from './interface-elements';
@@ -69,7 +66,7 @@ const appendNotification = (content: string, color: string | null = null) => {
 	}
 
 	notificationContainer.pushLine(
-		color ? generateTags({ bold: true, fg: color }, content) : content);
+		color ? `{${color}-fg}{bold}${content}{/bold}{/${color}-fg}` : content);
 
 	setTimeout(() => {
 		notificationContainer.shiftLine(content.split('\n').length + 1);
