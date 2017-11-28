@@ -1,7 +1,7 @@
 import * as clipboardy from 'clipboardy';
 import { writeFile } from 'fs';
 import * as opn from 'opn';
-import { homedir } from 'os';
+import * as osTmpdir from 'os-tmpdir';
 import * as path from 'path';
 
 import {
@@ -47,7 +47,7 @@ export const openFilesFromCommitRange =
 	};
 
 const openTempFile = (fileName: string, content: string): Promise<any> => {
-	const filePath = path.join(homedir(), fileName);
+	const filePath = path.join(osTmpdir(), fileName);
 
 	return new Promise((resolve, reject) => {
 		writeFile(filePath, content, { encoding: 'utf8' }, (writeFileError) => {

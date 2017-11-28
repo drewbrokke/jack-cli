@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { homedir } from 'os';
+import * as osHomedir from 'os-homedir';
 import { join } from 'path';
 
 import { ICommand } from './commands-def';
@@ -10,7 +10,7 @@ interface IConfig {
 }
 
 const CONFIG_FILE_NAME = '.jack.json';
-const CONFIG_FILE_PATH = join(homedir(), CONFIG_FILE_NAME);
+const CONFIG_FILE_PATH = join(osHomedir(), CONFIG_FILE_NAME);
 
 export const readConfig = (): IConfig => {
 	const defaultConfig: IConfig = { commands: [], notificationTimeout: 5000 };
