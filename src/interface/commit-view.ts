@@ -1,7 +1,7 @@
 import { updateIndex, updateView } from '../redux/action-creators';
 import { store } from '../redux/store';
 import { ScrollableTextElement, View } from '../types/types';
-import { spawnPromise } from '../util/promisify-child-process';
+import { gitShow } from '../util/git-util';
 import { getScrollableTextElement } from './interface-elements';
 import { notifyWarning } from './notification';
 
@@ -39,41 +39,32 @@ export const getCommitElement = (): ScrollableTextElement => {
 const updateCommitElement = (commitElement) => {
 	let lastState = store.getState();
 
-	const commitContentMap: Map<string, string> = new Map();
-
-	return () => {
+	return async () => {
 		const state = store.getState();
 
-		if (state.SHA === lastState.SHA &&
-			commitElement.content) {
-
-			return lastState = state;
-		}
+		const { SHA, view } = state;
+		const { SHA: lastSHA, view: lastView } = lastState;
 
 		lastState = state;
 
-		const { SHA } = state;
+		try {
+			if (view !== View.COMMIT) {
+				commitElement.content = '';
 
-		if (commitContentMap.get(SHA)) {
-			commitElement.setContent(commitContentMap.get(SHA));
+				return;
+			}
 
-			commitElement.scrollTo(0);
+			if (SHA !== lastSHA || view !== lastView) {
+				const commitContent = await gitShow(SHA);
 
-			return commitElement.screen.render();
-		}
-
-		return spawnPromise(
-			'git',
-			['show', '--patch-with-stat', '--stat-width', '1000', '--color', SHA])
-			.then((commitContentResult: string) => {
-				commitContentMap.set(SHA, commitContentResult);
-
-				commitElement.setContent(commitContentResult);
+				commitElement.setContent(commitContent);
 
 				commitElement.scrollTo(0);
 
-				return commitElement.screen.render();
-			})
-			.catch(() => notifyWarning(`Couldn't retrieve commit content for ${SHA}`));
+				commitElement.screen.render();
+			}
+		} catch (error) {
+			notifyWarning(`Couldn't retrieve commit content for ${SHA}`);
+		}
 	};
 };
