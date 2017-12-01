@@ -97,7 +97,9 @@ const updateCommitListElement = () => {
 				lines.slice(lineIndex, lineIndex + listHeight));
 		}
 
-		if (index !== lastState.index &&
+		if (!lines.length) {
+			commitListElement.setItems(lines);
+		} else if (index !== lastState.index &&
 			commitListElement.getItemIndex(nextLine) !== -1) {
 
 			commitListElement.select(commitListElement.getItemIndex(nextLine));
