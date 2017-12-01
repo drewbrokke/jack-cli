@@ -65,6 +65,15 @@ export interface ICommand {
 	 * Example: ['git', 'cherry-pick', '--abort']
 	 */
 	onErrorCommand?: string[];
+
+	/**
+	 * Whether or not to refresh the log after the command has completed.
+	 * This is useful for operations that change the log like `git rebase` or
+	 * `git cherry-pick`.
+	 *
+	 * OPTIONAL. Default is false.
+	 */
+	refreshOnComplete?: boolean;
 }
 
 export enum Placeholder {
@@ -222,5 +231,6 @@ export const COMMANDS: ICommand[] = [
 		foreground: true,
 		key: 'S-i',
 		onErrorCommand: ['git', 'rebase', '--abort'],
+		refreshOnComplete: true,
 	},
 ];

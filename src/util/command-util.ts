@@ -16,6 +16,7 @@ import {
 } from './commands-def';
 import { readConfig } from './config-util';
 import { gitCommitMessage, sortSHAs } from './git-util';
+import { generateLog } from './log-util';
 import { spawnPromise } from './promisify-child-process';
 
 let declaredCommands: ICommand[];
@@ -88,6 +89,10 @@ const registerCommand = async (screen: IScreen, command: ICommand): Promise<any>
 			});
 		} else {
 			await spawnPromise(commandArray[0], commandArray.slice(1), spawnOpts);
+		}
+
+		if (command.refreshOnComplete) {
+			generateLog(screen);
 		}
 
 		notifySuccess(`Command finished: "${commandString}"`);

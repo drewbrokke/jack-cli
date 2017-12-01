@@ -26,6 +26,11 @@
 				"type": "string"
 			},
 			"type": "array"
+		},
+		"refreshOnComplete": {
+			"default": false,
+			"description": "Whether or not to refresh the log after the command completes successfully",
+			"type": "boolean"
 		}
 	},
 	"required": [
