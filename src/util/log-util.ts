@@ -8,7 +8,10 @@ let gitLogProcess: ChildProcess;
 
 export const generateLog = (screen: IScreen) => {
 	if (gitLogProcess) {
+		gitLogProcess.stdout.removeAllListeners();
+		gitLogProcess.stderr.removeAllListeners();
 		gitLogProcess.removeAllListeners();
+
 		gitLogProcess.kill();
 	}
 
