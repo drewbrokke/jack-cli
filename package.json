@@ -6,7 +6,7 @@
   "preferGlobal": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/drewbrokke/jack"
+    "url": "https://github.com/drewbrokke/jack-cli"
   },
   "bin": {
     "jack": "index.js"
