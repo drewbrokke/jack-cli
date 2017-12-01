@@ -62,9 +62,9 @@ Key | Description
 	key: 'd',
 }
 ```
-A full explanation of each property can be found in the comments of [commands-def.ts#L12-L68](https://github.com/drewbrokke/jack-cli/blob/master/src/util/commands-def.ts#L12-L68).
+A full explanation of each property can be found in the comments of [commands-def.ts#L12-L77](https://github.com/drewbrokke/jack-cli/blob/master/src/util/commands-def.ts#L12-L77).
 
-`jack` actually registers several key commands this way internally!  See [commands-def.ts#L165-L222](https://github.com/drewbrokke/jack-cli/blob/master/src/util/commands-def.ts#L165-L222) for some examples.
+`jack` actually registers several key commands this way internally!  See [commands-def.ts#L178-L236](https://github.com/drewbrokke/jack-cli/blob/master/src/util/commands-def.ts#L178-L236) for some examples.
 
 ### Placeholder variables
 `jack` defines several placeholder variables to be used in your custom scripts:
@@ -73,4 +73,4 @@ A full explanation of each property can be found in the comments of [commands-de
 - "[% SHA\_SINGLE\_OR_RANGE %]"
 - "[% SHA_SINGLE %]"
 
-A full explanation of each variable is provided in the comments of [commands-def.ts#L70-L105](https://github.com/drewbrokke/jack-cli/blob/master/src/util/commands-def.ts#L70-L105).
+A full explanation of each variable is provided in the comments of [commands-def.ts#L79-L114](https://github.com/drewbrokke/jack-cli/blob/master/src/util/commands-def.ts#L79-L114).
