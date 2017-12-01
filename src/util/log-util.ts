@@ -15,7 +15,7 @@ export const generateLog = (screen: IScreen) => {
 	store.dispatch(clearLog());
 
 	gitLogProcess = spawn(
-		'git', ['log', '--color=always', ...stash.get(GIT_LOG_ARGS)]);
+		'git', ['log', '--color=always', ...(stash.get(GIT_LOG_ARGS))]);
 
 	let errorString = '';
 
