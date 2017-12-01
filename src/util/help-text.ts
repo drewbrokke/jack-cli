@@ -35,6 +35,7 @@ S = Shift key
 {bold}m{/bold}               ->  Copy commit message to clipboard
 {bold}y{/bold}               ->  Copy commit SHA to clipboard
 
+{bold}r{/bold}               ->  Refresh the list
 {bold}q, esc, C-c{/bold}     ->  Exit {bold}jack{/bold}
 {bold}?{/bold}               ->  Show/hide help dialog
 

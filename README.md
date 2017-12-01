@@ -40,6 +40,7 @@ Key | Description
 **o**               |  Open changed files in default editor
 **m**               |  Copy commit message to clipboard
 **y**               |  Copy commit SHA to clipboard
+**r**               |  Refresh the list
 **q, esc, C-c**     |  Exit **jack**
 **?**               |  Show/hide help dialog
 
