@@ -1,4 +1,5 @@
 import { IAction, IState } from '../types/types';
+import { initialState } from './store';
 
 export const COMMIT_SHA_REGEX: RegExp = new RegExp(/[0-9a-f]{7,40}\b/);
 
@@ -34,6 +35,9 @@ export const reducer = (state: IState, action: IAction): IState => {
 				: getSHA(indexesWithSHAs[currentIndex], lines, currentSHA);
 
 			return { ...state, SHA, indexesWithSHAs, lines };
+
+		case 'CLEAR_LOG':
+			return initialState;
 
 		case 'MARK_SHA':
 			return { ...state, markedSHA: action.payload };

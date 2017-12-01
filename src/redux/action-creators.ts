@@ -3,6 +3,8 @@ import { ActionType, IAction, Status, View } from '../types/types';
 export const addCommits = (payload: string[]): IAction =>
 	({ payload, type: ActionType.ADD_COMMITS });
 
+export const clearLog = (): IAction => ({ type: ActionType.CLEAR_LOG });
+
 export const markSHA = (payload: string | null): IAction =>
 	({ payload, type: ActionType.MARK_SHA });
 

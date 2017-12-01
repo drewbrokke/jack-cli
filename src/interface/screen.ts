@@ -7,6 +7,7 @@ import {
 	doOpenDiffInEditor,
 	doOpenFilesInEditor,
 } from '../util/interface-actions';
+import { generateLog } from '../util/log-util';
 import { getHelpDialog, toggleHelp } from './help-dialog';
 import { getScreenElement } from './interface-elements';
 import { getMainContentContainer } from './main-content-container';
@@ -25,6 +26,7 @@ export const getScreen = (): IScreen => {
 	screen.key('e', doOpenDiffInEditor);
 	screen.key('m', doCopyCommitMessage);
 	screen.key('o', doOpenFilesInEditor);
+	screen.key('r', () => generateLog(screen));
 	screen.key('x', doMarkCommit);
 	screen.key('y', doCopyCommitSHA);
 	screen.key(['C-c', 'q', 'escape'], () => process.exit(0));

@@ -29,6 +29,7 @@ export interface IScreen extends Blessed.Widgets.Screen {
 export enum ActionType {
 	ADD_COMMITS = 'ADD_COMMITS',
 	MARK_SHA = 'MARK_SHA',
+	CLEAR_LOG = 'CLEAR_LOG',
 	UPDATE_INDEX = 'UPDATE_INDEX',
 	UPDATE_STATUS = 'UPDATE_STATUS',
 	UPDATE_VIEW = 'UPDATE_VIEW',
