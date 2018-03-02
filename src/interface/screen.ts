@@ -17,6 +17,7 @@ import { getStatusBar } from './status-bar';
 export const getScreen = (): IScreen => {
 	const screen: IScreen = getScreenElement({
 		autoPadding: true,
+		fullUnicode: true,
 		smartCSR: true,
 	});
 
