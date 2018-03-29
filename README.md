@@ -1,16 +1,23 @@
 # jack
-Chop through that Git log wicked fast
+**jack** is `git log` with actions.
 
-**jack** is an interactive drop-in replacement for `git log`.  It allows you to view a list of commits and "quick-look" their changes and act on them right from the command line.  `git log`'s filtering and logging flexibility is so much better than almost all GUI apps, so in most cases, this will be a much faster way to review a series of commits/changes.
+It allows you call `git log` like normal, then act on that log in virtually any way you'd like. There are a lot of built-in commands (like pressing `space` to call `git show` on the current commit), but you can assign a **custom command** to almost any key, and **jack** will call it and pass along the info you need.
+
+## Why?
+`git log` is much faster and more flexible than most Git GUI apps, but I got tired of always calling `git log`, then copying the commit hash, then calling `git show` on that hash.  I wanted an experience like "Quick Look" on macOS - one key press to see what you need, another to go back.
+
+After I built that, I wanted to be able to *do more*, so I added custom commands.
 
 ## Installation
 ```
 npm i -g jack-cli
 ```
 
+**jack** currently requires node version 4+.
+
 ## Usage
 ### Viewing a Git log
-Use normal `git log` syntax.  **jack** just calls `git log` and passes all arguments.
+Just use `jack` instead of `git log`! Since **jack** calls `git log` and passes in all the arguments, you don't have to learn a new syntax.
 ```
 jack
 
@@ -21,7 +28,9 @@ jack 00ca1d8efd20^..head
 jack -n 100
 ```
 
-### Key Commands
+You can then perform actions on the log using the keys below.
+
+### Built-in Key Commands
 
 **Preset Keys**
 
@@ -30,7 +39,7 @@ jack -n 100
 
 Key | Description
 ------ | -----
-**Space, Enter**    |  "Quick Look" a commit's contents (toggle)
+**Space, Enter**    |  View a commit's contents (toggle)
 **j/k, down/up**    |  (list view) Navgate between commits
 **0-9**             |  (list view) Set a movement interval (like Vim)
 **j/k, down/up**    |  (commit view) scroll down or up
