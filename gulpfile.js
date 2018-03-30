@@ -1,3 +1,4 @@
+// @ts-nocheck
 var gulp = require('gulp');
 var ts = require('gulp-typescript');
 var tslint = require('gulp-tslint');
