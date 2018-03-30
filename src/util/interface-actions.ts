@@ -8,7 +8,6 @@ import { store } from '../redux/store';
 import {
 	copyCommitMessageToClipboard,
 	copySHAToClipboard,
-	openCommitRangeDiffFile,
 	openFilesFromCommitRange,
 } from './external-commands';
 import { sortSHAs } from './git-util';
@@ -35,10 +34,6 @@ export const doCopyCommitSHA = async () => {
 		notifyError(`Could not copy the SHA to the clipboard:\n\n${errorMessage}`);
 	}
 };
-
-export const doOpenDiffInEditor = async () =>
-	doCommandWithMaybeMarkedCommit(
-		openCommitRangeDiffFile, 'Could not open diff');
 
 export const doOpenFilesInEditor = async () =>
 	doCommandWithMaybeMarkedCommit(

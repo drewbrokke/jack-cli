@@ -4,7 +4,6 @@ import {
 	doCopyCommitMessage,
 	doCopyCommitSHA,
 	doMarkCommit,
-	doOpenDiffInEditor,
 	doOpenFilesInEditor,
 } from '../util/interface-actions';
 import { generateLog } from '../util/log-util';
@@ -24,7 +23,6 @@ export const getScreen = (): IScreen => {
 	screen._listenedMouse = true;
 
 	screen.key('?', toggleHelp);
-	screen.key('e', doOpenDiffInEditor);
 	screen.key('m', doCopyCommitMessage);
 	screen.key('o', doOpenFilesInEditor);
 	screen.key('r', () => generateLog(screen));

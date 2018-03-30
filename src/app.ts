@@ -1,21 +1,11 @@
-import { unlinkSync } from 'fs';
-
 import { getScreen } from './interface/screen';
 import { generateLog } from './util/log-util';
-import { GIT_LOG_ARGS, KEY_TEMP_FILES, stash } from './util/stash';
+import { GIT_LOG_ARGS, stash } from './util/stash';
 
 export const run = (args: string[]): void => {
 	stash.set(GIT_LOG_ARGS, args);
 
 	generateLog(getScreen());
-
-	process.on('exit', () => {
-		if (stash.has(KEY_TEMP_FILES)) {
-			const tempFilesArray: string[] = stash.get(KEY_TEMP_FILES);
-
-			tempFilesArray.forEach((file) => unlinkSync(file));
-		}
-	});
 };
 
 export const runFromPipedData = (): void => {
