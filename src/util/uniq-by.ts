@@ -1,16 +1,16 @@
-export const uniqBy = <T>(array: T[], propertyName: string): T[] => {
-	const names: any[] = [];
+export const uniqBy = <T>(arr: T[], keyPropertyName: string): T[] => {
+	const keyProperties: any[] = [];
 
-	return array.filter((object: T) => {
-		if (names.includes(object[propertyName])) {
+	return arr.filter((object: T) => {
+		if (keyProperties.includes(object[keyPropertyName])) {
 			return false;
 		}
 
-		names.push(object[propertyName]);
+		keyProperties.push(object[keyPropertyName]);
 
 		return true;
 	});
 };
 
-export const uniqByLast = <T>(array: T[], propertyName: string): T[] =>
-	uniqBy([...array].reverse(), propertyName).reverse();
+export const uniqByLast = <T>(arr: T[], keyPropertyName: string): T[] =>
+	uniqBy([...arr].reverse(), keyPropertyName).reverse();
