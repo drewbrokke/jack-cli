@@ -17,7 +17,8 @@
   "scripts": {
     "build": "gulp build",
     "dev": "gulp watch",
-    "tslint": "gulp tslint"
+    "tslint": "gulp tslint",
+    "test": "ava"
   },
   "prepublishOnly": "npm run build",
   "author": "Drew Brokke <drew.brokke@liferay.com> (https://github.com/drewbrokke)",
@@ -51,6 +52,7 @@
     "@types/clipboardy": "^1.1.0",
     "@types/node": "^9.6.1",
     "@types/redux": "^3.6.0",
+    "ava": "1.0.0-beta.4",
     "gulp": "^3.9.1",
     "gulp-tslint": "^8.1.3",
     "gulp-typescript": "^4.0.2",
