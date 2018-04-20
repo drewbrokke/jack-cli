@@ -1,69 +1,81 @@
-import { IAction, IState } from '../types/types';
-import { initialState } from './store';
+import { IAction, IState, Status, View } from '../types/types';
 
-export const COMMIT_SHA_REGEX: RegExp = new RegExp(/[0-9a-f]{7,40}\b/);
-
-export const reducer = (state: IState, action: IAction): IState => {
-	const currentIndex = state.index;
-	const currentIndexesWithSHAs = state.indexesWithSHAs;
-	const currentLines = state.lines;
-	const currentSHA = state.SHA;
-
-	switch (action.type) {
-		case 'ADD_COMMITS':
-			const newLines = typeof action.payload === 'string'
-				? Array.of(action.payload)
-				: action.payload;
-
-			const lines = [...currentLines, ...newLines];
-
-			const newIndexesWithSHAs: number[] = newLines
-				.map((line: string, index: number) => {
-					if (COMMIT_SHA_REGEX.test(line)) {
-						return index + currentLines.length;
-					}
-
-					return 0;
-				})
-				.filter(Boolean);
-
-			const indexesWithSHAs: number[] =
-				[...currentIndexesWithSHAs, ...newIndexesWithSHAs];
-
-			const SHA = currentSHA
-				? currentSHA
-				: getSHA(indexesWithSHAs[currentIndex], lines, currentSHA);
-
-			return { ...state, SHA, indexesWithSHAs, lines };
-
-		case 'CLEAR_LOG':
-			return initialState;
-
-		case 'MARK_SHA':
-			return { ...state, markedSHA: action.payload };
-
-		case 'UPDATE_INDEX':
-			const newIndex = Math.min(
-				Math.max(currentIndex + action.payload, 0),
-				(currentIndexesWithSHAs.length - 1));
-
-			return {
-				...state,
-				SHA: getSHA(
-					currentIndexesWithSHAs[newIndex], currentLines, currentSHA),
-				index: newIndex,
-			};
-
-		case 'UPDATE_STATUS':
-			return { ...state, status: action.payload };
-
-		case 'UPDATE_VIEW':
-			return { ...state, view: action.payload };
-
-		default:
-			return state;
-	}
+const COMMIT_SHA_REGEX: RegExp = new RegExp(/[0-9a-f]{7,40}\b/);
+const INITIAL_STATE: IState = {
+	SHA: '',
+	index: 0,
+	indexesWithSHAs: [0],
+	lines: [],
+	markedSHA: '',
+	status: Status.RETRIEVING_LOG,
+	view: View.LIST,
 };
+
+export const reducer =
+	(state: IState = INITIAL_STATE, action: IAction): IState => {
+
+		const {
+			index: currentIndex,
+			indexesWithSHAs: currentIndexesWithSHAs,
+			lines: currentLines,
+			SHA: currentSHA,
+		} = state;
+
+		switch (action.type) {
+			case 'ADD_COMMITS':
+				const newLines = typeof action.payload === 'string'
+					? Array.of(action.payload)
+					: action.payload;
+
+				const lines = [...currentLines, ...newLines];
+
+				const newIndexesWithSHAs: number[] = newLines
+					.map((line: string, index: number) => {
+						if (COMMIT_SHA_REGEX.test(line)) {
+							return index + currentLines.length;
+						}
+
+						return 0;
+					})
+					.filter(Boolean);
+
+				const indexesWithSHAs: number[] =
+					[...currentIndexesWithSHAs, ...newIndexesWithSHAs];
+
+				const SHA = currentSHA
+					? currentSHA
+					: getSHA(indexesWithSHAs[currentIndex], lines, currentSHA);
+
+				return { ...state, SHA, indexesWithSHAs, lines };
+
+			case 'CLEAR_LOG':
+				return INITIAL_STATE;
+
+			case 'MARK_SHA':
+				return { ...state, markedSHA: action.payload };
+
+			case 'UPDATE_INDEX':
+				const newIndex = Math.min(
+					Math.max(currentIndex + action.payload, 0),
+					(currentIndexesWithSHAs.length - 1));
+
+				return {
+					...state,
+					SHA: getSHA(
+						currentIndexesWithSHAs[newIndex], currentLines, currentSHA),
+					index: newIndex,
+				};
+
+			case 'UPDATE_STATUS':
+				return { ...state, status: action.payload };
+
+			case 'UPDATE_VIEW':
+				return { ...state, view: action.payload };
+
+			default:
+				return state;
+		}
+	};
 
 const getSHA =
 	(index: number, commits: string[], currentSHA: string): string => {
