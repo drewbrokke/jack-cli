@@ -1,4 +1,4 @@
-import { IAction, IState, Status, View } from '../types/types';
+import { ActionType, IAction, IState, Status, View } from '../types/types';
 
 const COMMIT_SHA_REGEX: RegExp = new RegExp(/[0-9a-f]{7,40}\b/);
 const INITIAL_STATE: IState = {
@@ -22,7 +22,7 @@ export const reducer =
 		} = state;
 
 		switch (action.type) {
-			case 'ADD_COMMITS':
+			case ActionType.ADD_COMMITS:
 				const newLines = typeof action.payload === 'string'
 					? Array.of(action.payload)
 					: action.payload;
@@ -48,13 +48,13 @@ export const reducer =
 
 				return { ...state, SHA, indexesWithSHAs, lines };
 
-			case 'CLEAR_LOG':
+			case ActionType.CLEAR_LOG:
 				return INITIAL_STATE;
 
-			case 'MARK_SHA':
+			case ActionType.MARK_SHA:
 				return { ...state, markedSHA: action.payload };
 
-			case 'UPDATE_INDEX':
+			case ActionType.UPDATE_INDEX:
 				const newIndex = Math.min(
 					Math.max(currentIndex + action.payload, 0),
 					(currentIndexesWithSHAs.length - 1));
@@ -66,10 +66,10 @@ export const reducer =
 					index: newIndex,
 				};
 
-			case 'UPDATE_STATUS':
+			case ActionType.UPDATE_STATUS:
 				return { ...state, status: action.payload };
 
-			case 'UPDATE_VIEW':
+			case ActionType.UPDATE_VIEW:
 				return { ...state, view: action.payload };
 
 			default:
