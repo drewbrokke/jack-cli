@@ -1,5 +1,5 @@
 export const uniqBy = <T>(array: T[], propertyName: string): T[] => {
-	const names: string[] = [];
+	const names: any[] = [];
 
 	return array.filter((object: T) => {
 		if (names.includes(object[propertyName])) {
