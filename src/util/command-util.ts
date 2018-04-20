@@ -1,5 +1,3 @@
-import * as uniqBy from 'lodash.uniqby';
-
 import {
 	notifyError,
 	notifyInfo,
@@ -18,6 +16,7 @@ import { readConfig } from './config-util';
 import { gitCommitMessage, sortSHAs } from './git-util';
 import { generateLog } from './log-util';
 import { spawnPromise } from './promisify-child-process';
+import { uniqByLast } from './uniq-by';
 
 let declaredCommands: ICommand[];
 
@@ -28,8 +27,8 @@ export const getCommands = () => {
 
 	declaredCommands.forEach(validateCommand);
 
-	declaredCommands = uniqBy(
-		[...COMMANDS, ...(readConfig().commands)].reverse(), 'key').reverse();
+	declaredCommands = uniqByLast(
+		[...COMMANDS, ...(readConfig().commands)], 'key');
 
 	return declaredCommands;
 };
