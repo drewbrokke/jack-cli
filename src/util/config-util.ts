@@ -12,8 +12,30 @@ interface IConfig {
 const CONFIG_FILE_NAME = '.jack.json';
 const CONFIG_FILE_PATH = join(osHomedir(), CONFIG_FILE_NAME);
 
+const DEFAULT_NOTIFICATION_TIMEOUT = 5000;
+
+let config: IConfig;
+
+export const getCommands = (): ICommand[] => {
+	return getConfig().commands || [];
+};
+
+export const getNotificationTimeout = (): number => {
+	return getConfig().notificationTimeout || DEFAULT_NOTIFICATION_TIMEOUT;
+};
+
+const getConfig = (): IConfig => {
+	if (!config) {
+		config = readConfig();
+	}
+
+	return config;
+};
+
 export const readConfig = (): IConfig => {
-	const defaultConfig: IConfig = { commands: [], notificationTimeout: 5000 };
+	const defaultConfig: IConfig = {
+		commands: [], notificationTimeout: DEFAULT_NOTIFICATION_TIMEOUT,
+	};
 
 	if (!fs.existsSync(CONFIG_FILE_PATH)) {
 		fs.writeFileSync(CONFIG_FILE_PATH, JSON.stringify(defaultConfig));
