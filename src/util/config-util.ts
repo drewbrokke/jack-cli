@@ -32,7 +32,7 @@ const getConfig = (): IConfig => {
 	return config;
 };
 
-export const readConfig = (): IConfig => {
+const readConfig = (): IConfig => {
 	const defaultConfig: IConfig = {
 		commands: [], notificationTimeout: DEFAULT_NOTIFICATION_TIMEOUT,
 	};
