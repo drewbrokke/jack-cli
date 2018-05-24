@@ -1,22 +1,8 @@
 import { BoxElement } from '../types/types';
-import { readConfig } from '../util/config-util';
+import { getNotificationTimeout } from '../util/config-util';
 import { getBoxElement } from './interface-elements';
 
 let notificationContainer: BoxElement;
-let notificationTimeout: number;
-const defaultNotificationTimeout = 5000;
-
-const getNotificationTimeout = () => {
-	if (notificationTimeout) return notificationTimeout;
-
-	const { notificationTimeout: configNotificationTimeout } = readConfig();
-
-	notificationTimeout = configNotificationTimeout
-		? configNotificationTimeout
-		: defaultNotificationTimeout;
-
-	return notificationTimeout;
-};
 
 export const getNotificationContainer = (): BoxElement => {
 	if (notificationContainer) {
