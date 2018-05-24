@@ -12,7 +12,7 @@ import {
 	Placeholder,
 	validateCommand,
 } from './commands-def';
-import { readConfig } from './config-util';
+import { getCommands as getConfigurationCommands } from './config-util';
 import { gitCommitMessage, sortSHAs } from './git-util';
 import { generateLog } from './log-util';
 import { spawnPromise } from './promisify-child-process';
@@ -23,12 +23,11 @@ let declaredCommands: ICommand[];
 export const getCommands = () => {
 	if (declaredCommands) return declaredCommands;
 
-	declaredCommands = [...COMMANDS, ...(readConfig().commands)];
+	declaredCommands = [...COMMANDS, ...(getConfigurationCommands())];
 
 	declaredCommands.forEach(validateCommand);
 
-	declaredCommands = uniqByLast(
-		[...COMMANDS, ...(readConfig().commands)], 'key');
+	declaredCommands = uniqByLast(declaredCommands, 'key');
 
 	return declaredCommands;
 };
