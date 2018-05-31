@@ -43,14 +43,5 @@ const readConfig = (): IConfig => {
 		return defaultConfig;
 	}
 
-	try {
-		return JSON.parse(fs.readFileSync(CONFIG_FILE_PATH, { encoding: 'utf8' }));
-	} catch (error) {
-		process.stderr.write('There was an issue reading your config file:\n\n');
-		process.stderr.write(error.message + '\n');
-
-		process.exit(1);
-
-		return defaultConfig;
-	}
+	return require(CONFIG_FILE_PATH);
 };
