@@ -23,9 +23,7 @@ export const reducer =
 
 		switch (action.type) {
 			case ActionType.ADD_COMMITS:
-				const newLines = typeof action.payload === 'string'
-					? Array.of(action.payload)
-					: action.payload;
+				const newLines = action.payload;
 
 				const lines = [...currentLines, ...newLines];
 
