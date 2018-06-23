@@ -6,6 +6,7 @@ import {
 import { markSHA } from '../redux/action-creators';
 import { store } from '../redux/store';
 import { IScreen } from '../types/types';
+import { stringToCommandArray } from './command-string-util';
 import {
 	COMMANDS,
 	ICommand,
@@ -49,7 +50,7 @@ const registerCommand = async (screen: IScreen, command: ICommand): Promise<any>
 	try {
 		const sorted = markedSHA ? await sortSHAs(markedSHA, SHA) : [SHA, SHA];
 
-		const commandArray = command.commandArray
+		const commandArray = stringToCommandArray(command.command)
 			.map(replacer(Placeholder.SHA_SINGLE, SHA))
 			.map(replacer(Placeholder.SHA_RANGE, `${sorted[0]}^..${sorted[1]}`))
 			.map(replacer(
