@@ -12,7 +12,7 @@ const documentCommands = (commands: ICommand[]) => {
 		(accumulator, command) => (
 			`${accumulator}
 {bold}${pad(command.key)} ->   ${command.description}{/bold}
-			${command.commandArray.join(' ')}`
+			${command.command}`
 		),
 		'{bold}Registered Keys{/bold}\n');
 };
