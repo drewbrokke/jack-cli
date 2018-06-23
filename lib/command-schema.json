@@ -8,6 +8,9 @@
 			},
 			"type": "array"
 		},
+		"command": {
+			"type": "string"
+		},
 		"description": {
 			"type": "string"
 		},
@@ -34,7 +37,7 @@
 		}
 	},
 	"required": [
-		"commandArray",
+		"command",
 		"description",
 		"key"
 	],
