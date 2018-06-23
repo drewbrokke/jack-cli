@@ -11,15 +11,26 @@ const commandSchema = JSON.parse(
 
 export interface ICommand {
 	/**
-	 * An array of strings containing the command to run and its arguments.
-	 * The placeholder variables are put into this array. This array supports
+	 * A string containing the command to run and its arguments.
+	 * The placeholder variables are put into this string. This string supports
 	 * pipes.
 	 *
 	 * REQUIRED.  If it is not given, jack will exit with an error.
 	 *
-	 * Example: ['git', 'checkout', '[% SHA_SINGLE %]']
+	 * Example: 'git checkout [%SHA_SINGLE%]'
 	 */
-	commandArray: string[];
+	command: string;
+
+	/**
+	 * An array of strings containing the command to run and its arguments.
+	 * The placeholder variables are put into this array. This array supports
+	 * pipes.
+	 *
+	 * DEPRECATED.
+	 *
+	 * Example: ['git', 'checkout', '[%SHA_SINGLE%]']
+	 */
+	commandArray?: string[];
 
 	/**
 	 * A description that will display whenever the command is invoked.
@@ -83,7 +94,7 @@ export enum Placeholder {
 	 *
 	 * Example: "offers commit message variable for custom commands"
 	 */
-	COMMIT_MESSAGE = '[% COMMIT_MESSAGE %]',
+	COMMIT_MESSAGE = '[%COMMIT_MESSAGE%]',
 
 	/**
 	 * Will always be replaced by a revision range, even if there is no marked
@@ -93,7 +104,7 @@ export enum Placeholder {
 	 * Single Commit Example:      4a22d67^..4a22d67
 	 * With Marked Commit Example: 9103ae0^..4a22d67
 	 */
-	SHA_RANGE = '[% SHA_RANGE %]',
+	SHA_RANGE = '[%SHA_RANGE%]',
 
 	/**
 	 * Will be replaced by either a single commit SHA or a revision range if there
@@ -102,7 +113,7 @@ export enum Placeholder {
 	 * Single Commit Example:      4a22d67
 	 * With Marked Commit Example: 9103ae0^..4a22d67
 	 */
-	SHA_SINGLE_OR_RANGE = '[% SHA_SINGLE_OR_RANGE %]',
+	SHA_SINGLE_OR_RANGE = '[%SHA_SINGLE_OR_RANGE%]',
 
 	/**
 	 * Will be replaced by the currently selected commit SHA.
@@ -110,7 +121,7 @@ export enum Placeholder {
 	 * Single Commit Example:      4a22d67
 	 * With Marked Commit Example: 4a22d67
 	 */
-	SHA_SINGLE = '[% SHA_SINGLE %]',
+	SHA_SINGLE = '[%SHA_SINGLE%]',
 }
 
 const RESERVED_KEYS = [...('bfgjkmoqrxy?'.split('')), 'C-c', 'S-j', 'S-k'];
@@ -180,14 +191,7 @@ export const COMMANDS: ICommand[] = [
 	 * Open a diff
 	 */
 	{
-		commandArray: [
-			'git',
-			'-p',
-			'diff',
-			Placeholder.SHA_RANGE,
-			'--patch',
-			'--stat-width=1000',
-		],
+		command: `git -p diff ${Placeholder.SHA_RANGE} --patch --stat-width=1000`,
 		description: 'View total diff',
 		foreground: true,
 		key: 'd',
@@ -197,7 +201,7 @@ export const COMMANDS: ICommand[] = [
 	 * List changed files
 	 */
 	{
-		commandArray: ['git', '-p', 'diff', Placeholder.SHA_RANGE, '--name-only'],
+		command: `git -p diff ${Placeholder.SHA_RANGE} --name-only`,
 		description: 'View changed file names',
 		foreground: true,
 		key: 'n',
@@ -207,7 +211,7 @@ export const COMMANDS: ICommand[] = [
 	 * Open changes in a difftool
 	 */
 	{
-		commandArray: ['git', 'difftool', Placeholder.SHA_RANGE],
+		command: `git difftool ${Placeholder.SHA_RANGE}`,
 		description: 'Open total diff in difftool',
 		key: 't',
 	},
@@ -216,7 +220,7 @@ export const COMMANDS: ICommand[] = [
 	 * Attempt a cherry-pick
 	 */
 	{
-		commandArray: ['git', 'cherry-pick', Placeholder.SHA_SINGLE_OR_RANGE],
+		command: `git cherry-pick ${Placeholder.SHA_SINGLE_OR_RANGE}`,
 		description: 'Cherry-pick commits',
 		key: 'S-c',
 		onErrorCommand: ['git', 'cherry-pick', '--abort'],
@@ -226,7 +230,7 @@ export const COMMANDS: ICommand[] = [
 	 * Begin an interactive rebase
 	 */
 	{
-		commandArray: ['git', 'rebase', '-i', Placeholder.SHA_SINGLE + '^'],
+		command: `git rebase -i ${Placeholder.SHA_SINGLE}^`,
 		description: 'Perform interactive rebase',
 		foreground: true,
 		key: 'S-i',
