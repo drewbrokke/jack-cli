@@ -62,7 +62,7 @@ Key | Description
 		'git',
 		'-p',
 		'diff',
-		'[% SHA_RANGE %]',
+		'[%SHA_RANGE%]',
 		'--patch',
 		'--stat-width=1000',
 	],
@@ -77,9 +77,9 @@ A full explanation of each property can be found in the comments of [commands-de
 
 ### Placeholder variables
 `jack` defines several placeholder variables to be used in your custom scripts:
-- "[% COMMIT_MESSAGE %]"
-- "[% SHA_RANGE %]"
-- "[% SHA\_SINGLE\_OR_RANGE %]"
-- "[% SHA_SINGLE %]"
+- "[%COMMIT_MESSAGE%]"
+- "[%SHA_RANGE%]"
+- "[%SHA\_SINGLE\_OR_RANGE%]"
+- "[%SHA_SINGLE%]"
 
 A full explanation of each variable is provided in the comments of [commands-def.ts#L79-L114](https://github.com/drewbrokke/jack-cli/blob/master/src/util/commands-def.ts#L79-L114).
