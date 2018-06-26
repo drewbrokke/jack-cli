@@ -10,7 +10,6 @@ import {
 	COMMANDS,
 	ICommand,
 	Placeholder,
-	validateCommand,
 } from './commands-def';
 import { getCommands as getConfigurationCommands } from './config-util';
 import { gitCommitMessage, sortSHAs } from './git-util';
@@ -21,12 +20,115 @@ import { uniqByLast } from './util-functions';
 
 let declaredCommands: ICommand[];
 
+const KEY_REGEX = /^([CS]-)?[a-z]$/;
+const RESERVED_KEYS = [...('bfgjkmoqrxy?'.split('')), 'C-c', 'S-j', 'S-k'];
+
+class ValidatorError extends Error {
+	public commandOptions: ICommand;
+
+	constructor(message: string, commandOptions: ICommand) {
+		super(message);
+
+		this.commandOptions = commandOptions;
+	}
+
+}
+
+const crash = (validatorError: ValidatorError) => {
+	process.stderr.write(
+		'There was a problem registering a custom command from your ' +
+		'.jack.json config file:\n\n');
+	process.stderr.write(validatorError.message + '\n\n');
+
+	if (validatorError.commandOptions) {
+		process.stderr.write('Fix this command object:\n');
+		process.stderr.write(
+			JSON.stringify(validatorError.commandOptions, null, '    ') + '\n');
+	}
+
+	process.exit(1);
+};
+
+const validateCommand = (commandOptions: ICommand): void => {
+	if (!commandOptions.command) {
+		throw new ValidatorError(
+			'Command object is missing the required property "command".',
+			commandOptions);
+	}
+
+	if (typeof commandOptions.command !== 'string') {
+		throw new ValidatorError(
+			'The property "command" must be a string.', commandOptions);
+	}
+
+	if (!commandOptions.description) {
+		throw new ValidatorError(
+			'Command object is missing the required property "description".',
+			commandOptions);
+	}
+
+	if (typeof commandOptions.description !== 'string') {
+		throw new ValidatorError(
+			'The property "description" must be a string.', commandOptions);
+	}
+
+	const { key } = commandOptions;
+
+	if (!key) {
+		throw new ValidatorError(
+			'Command object is missing the required property "key".', commandOptions);
+	}
+
+	if (typeof key !== 'string') {
+		throw new ValidatorError(
+			'The property "key" must be a string.', commandOptions);
+	}
+
+	if (!KEY_REGEX.test(key)) {
+		throw new ValidatorError(
+			`The property "key" must match against the regex "${KEY_REGEX}"`,
+			commandOptions);
+	}
+
+	if (RESERVED_KEYS.includes(key)) {
+		throw new ValidatorError(
+			// tslint:disable-next-line:max-line-length
+			`The key combination "${key}" is reserved. Here is the list of reserved key combinations: ${RESERVED_KEYS.join(' ')}`,
+			commandOptions);
+	}
+
+	if (commandOptions.foreground &&
+		(typeof commandOptions.foreground !== 'boolean')) {
+
+		throw new ValidatorError(
+			'The property "foreground" must be a boolean.', commandOptions);
+	}
+
+	if (commandOptions.onErrorCommand &&
+		(commandOptions.onErrorCommand.constructor !== Array)) {
+
+		throw new ValidatorError(
+			'The property "onErrorCommand" must be an array of strings', commandOptions);
+	}
+
+	if (commandOptions.refreshOnComplete &&
+		(typeof commandOptions.refreshOnComplete !== 'boolean')) {
+
+		throw new ValidatorError(
+			'The property "refreshOnComplete" must be a boolean.', commandOptions);
+	}
+};
+
 export const getCommands = () => {
 	if (declaredCommands) return declaredCommands;
 
 	declaredCommands = [...COMMANDS, ...(getConfigurationCommands())];
 
-	declaredCommands.forEach(validateCommand);
+	try {
+		declaredCommands.forEach(validateCommand);
+	} catch (error) {
+		crash(error);
+	}
 
 	declaredCommands = uniqByLast(declaredCommands, 'key');
 

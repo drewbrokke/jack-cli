@@ -1,14 +1,3 @@
-import * as Ajv from 'ajv';
-import { ErrorObject } from 'ajv';
-import { readFileSync } from 'fs';
-import { join } from 'path';
-
-const ajv = new Ajv();
-
-const commandSchema = JSON.parse(
-	readFileSync(
-		join(__dirname, '../../lib/command-schema.json'), { encoding: 'utf8' }));
-
 export interface ICommand {
 	/**
 	 * A string containing the command to run and its arguments.
@@ -123,68 +112,6 @@ export enum Placeholder {
 	 */
 	SHA_SINGLE = '[%SHA_SINGLE%]',
 }
-
-const RESERVED_KEYS = [...('bfgjkmoqrxy?'.split('')), 'C-c', 'S-j', 'S-k'];
-
-// tslint:disable-next-line:only-arrow-functions
-export const validateCommand = (commandOptions: ICommand): void => {
-	ajv.validate(commandSchema, commandOptions);
-
-	if (ajv.errors) {
-		const message = ajv.errors.map(constructErrorMessage).join('\n');
-
-		crash(message, commandOptions);
-	}
-
-	const { key } = commandOptions;
-
-	if (RESERVED_KEYS.includes(key)) {
-		crash(
-			// tslint:disable-next-line:max-line-length
-			`The key combination "${key}" is reserved. Here is the list of reserved key combinations: ${RESERVED_KEYS.join(' ')}`,
-			commandOptions);
-	}
-};
-
-const constructErrorMessage = (errorObject: ErrorObject) => {
-	let errorMessage = '';
-
-	const { dataPath, message, params } = errorObject;
-
-	if (dataPath) {
-		errorMessage +=
-			`The parameter "${dataPath}" did not validate: `;
-	}
-
-	errorMessage += message;
-
-	// @ts-ignore: each of these values are checked before use
-	const { allowedValues, pattern } = params;
-
-	if (allowedValues) {
-		errorMessage += `\nAllowed values: ${allowedValues.join(', ')}`;
-	}
-
-	if (pattern) {
-		errorMessage += `\nUse a single lower-case letter.`;
-	}
-
-	return errorMessage;
-};
-
-const crash = (errorMessage: string, command?: ICommand) => {
-	process.stderr.write(
-		'There was a problem registering a custom command from your ' +
-		'.jack.json config file:\n\n');
-	process.stderr.write(errorMessage + '\n\n');
-
-	if (command) {
-		process.stderr.write('Fix this command object:\n');
-		process.stderr.write(JSON.stringify(command, null, '    ') + '\n');
-	}
-
-	process.exit(1);
-};
 
 export const COMMANDS: ICommand[] = [
 	/**
