@@ -61,10 +61,10 @@ export interface ICommand {
 	 *
 	 * OPTIONAL
 	 *
-	 * Example: ['git', 'rebase', '--abort']
-	 * Example: ['git', 'cherry-pick', '--abort']
+	 * Example: 'git rebase --abort'
+	 * Example: 'git cherry-pick --abort'
 	 */
-	onErrorCommand?: string[];
+	onErrorCommand?: string;
 
 	/**
 	 * Whether or not to refresh the log after the command has completed.
@@ -150,7 +150,7 @@ export const COMMANDS: ICommand[] = [
 		command: `git cherry-pick ${Placeholder.SHA_SINGLE_OR_RANGE}`,
 		description: 'Cherry-pick commits',
 		key: 'S-c',
-		onErrorCommand: ['git', 'cherry-pick', '--abort'],
+		onErrorCommand: 'git cherry-pick --abort',
 	},
 
 	/**
@@ -161,7 +161,7 @@ export const COMMANDS: ICommand[] = [
 		description: 'Perform interactive rebase',
 		foreground: true,
 		key: 'S-i',
-		onErrorCommand: ['git', 'rebase', '--abort'],
+		onErrorCommand: 'git rebase --abort',
 		refreshOnComplete: true,
 	},
 ];

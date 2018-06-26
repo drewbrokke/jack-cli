@@ -105,10 +105,10 @@ const validateCommand = (commandOptions: ICommand): void => {
 	}
 
 	if (commandOptions.onErrorCommand &&
-		(commandOptions.onErrorCommand.constructor !== Array)) {
+		(typeof commandOptions.onErrorCommand !== 'string')) {
 
 		throw new ValidatorError(
-			'The property "onErrorCommand" must be an array of strings', commandOptions);
+			'The property "onErrorCommand" must be a string', commandOptions);
 	}
 
 	if (commandOptions.refreshOnComplete &&
@@ -203,10 +203,13 @@ const registerCommand = async (screen: IScreen, command: ICommand): Promise<any>
 		const { onErrorCommand } = command;
 
 		if (onErrorCommand) {
-			notifyInfo(`Performing clean-up command "${onErrorCommand.join(' ')}"`);
+			notifyInfo(`Performing clean-up command "${onErrorCommand}"`);
 
 			try {
-				await spawnPromise(onErrorCommand[0], onErrorCommand.slice(1));
+				const onErrorCommandArray = stringToCommandArray(onErrorCommand);
+
+				await spawnPromise(
+					onErrorCommandArray[0], onErrorCommandArray.slice(1));
 			} catch (cleanUpCommandErrorMessage) {
 				notifyError(cleanUpCommandErrorMessage);
 			}
