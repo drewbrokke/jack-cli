@@ -6,7 +6,6 @@ import {
 import { markSHA } from '../redux/action-creators';
 import { store } from '../redux/store';
 import { IScreen } from '../types/types';
-import { stringToCommandArray } from './command-string-util';
 import {
 	COMMANDS,
 	ICommand,
@@ -17,7 +16,8 @@ import { getCommands as getConfigurationCommands } from './config-util';
 import { gitCommitMessage, sortSHAs } from './git-util';
 import { generateLog } from './log-util';
 import { spawnPromise } from './promisify-child-process';
-import { uniqByLast } from './uniq-by';
+import { stringToCommandArray } from './util-functions';
+import { uniqByLast } from './util-functions';
 
 let declaredCommands: ICommand[];
 

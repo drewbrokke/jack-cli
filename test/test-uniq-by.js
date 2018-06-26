@@ -1,6 +1,6 @@
 import test from 'ava';
 
-import { uniqBy, uniqByLast } from '../dist/util/uniq-by';
+import { uniqBy, uniqByLast } from '../dist/util/util-functions';
 
 const objects = [
 	{ name: 'a', id: 1 },

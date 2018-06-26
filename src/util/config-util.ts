@@ -2,8 +2,8 @@ import * as fs from 'fs';
 import * as osHomedir from 'os-homedir';
 import { join } from 'path';
 
-import { stringToCommandArray } from './command-string-util';
 import { ICommand } from './commands-def';
+import { stringToCommandArray } from './util-functions';
 
 interface IConfig {
 	commands: ICommand[];

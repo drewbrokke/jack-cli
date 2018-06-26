@@ -1,6 +1,6 @@
 import test from 'ava';
 
-import { stringToCommandArray } from '../dist/util/command-string-util';
+import { stringToCommandArray } from '../dist/util/util-functions';
 
 test('stringToCommandArray', t => {
 	t.plan(2);
