@@ -44,6 +44,10 @@ export const stringToCommandArray = (s: string): string[] => {
 		}
 	}
 
+	if (!!tempString) {
+		retVal.push(tempString);
+	}
+
 	return retVal;
 };
 
