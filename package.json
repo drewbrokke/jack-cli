@@ -55,6 +55,7 @@
     "ava": "^1.0.0-beta.6",
     "prettier": "1.14.0",
     "tslint": "^5.9.1",
+    "tslint-config-prettier": "^1.14.0",
     "typescript": "^2.8.1"
   }
 }
