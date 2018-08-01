@@ -9,12 +9,12 @@ export const getHelpText = () => {
 
 const documentCommands = (commands: ICommand[]) => {
 	return commands.reduce(
-		(accumulator, command) => (
+		(accumulator, command) =>
 			`${accumulator}
 {bold}${pad(command.key)} ->   ${command.description}{/bold}
-			${command.command}`
-		),
-		'{bold}Registered Keys{/bold}\n');
+			${command.command}`,
+		'{bold}Registered Keys{/bold}\n',
+	);
 };
 
 const helpText = `

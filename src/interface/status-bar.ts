@@ -17,7 +17,8 @@ export const getStatusBar = (): BoxElement => {
 	statusBar.append(getProgressIndicator());
 	statusBar.append(getLogCompletedStatus());
 	statusBar.append(
-		getTextElement({ content: 'Press "?" to show/hide help.', right: 0 }));
+		getTextElement({ content: 'Press "?" to show/hide help.', right: 0 }),
+	);
 
 	return statusBar;
 };

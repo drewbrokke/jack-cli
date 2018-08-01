@@ -1,11 +1,9 @@
 import { store } from '../redux/store';
-import {
-	TextElement,
- } from '../types/types';
+import { TextElement } from '../types/types';
 import { getTextElement } from './interface-elements';
 
 export const getProgressIndicator = (): TextElement => {
-	const progressIndicator: TextElement =  getTextElement({
+	const progressIndicator: TextElement = getTextElement({
 		left: 0,
 	});
 
@@ -20,12 +18,13 @@ const updateProgressIndicator = (progressIndicator) => {
 	return () => {
 		const state = store.getState();
 
-		const {index} = state;
-		const {length} = state.indexesWithSHAs;
+		const { index } = state;
+		const { length } = state.indexesWithSHAs;
 
-		if (length !== lastState.indexesWithSHAs.length ||
-			index !== lastState.index) {
-
+		if (
+			length !== lastState.indexesWithSHAs.length ||
+			index !== lastState.index
+		) {
 			progressIndicator.setText(constructProgressText(index, length));
 		}
 

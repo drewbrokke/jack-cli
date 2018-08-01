@@ -1,7 +1,4 @@
-import {
-	updateIndex,
-	updateView,
-} from '../redux/action-creators';
+import { updateIndex, updateView } from '../redux/action-creators';
 import { store } from '../redux/store';
 import { IAction, IListElement, View } from '../types/types';
 import { KEY_NAV_INTERVAL, stash } from '../util/stash';
@@ -50,25 +47,23 @@ export const getCommitListElement = (): IListElement => {
 
 		notifyInfo(`Movement interval: ${newInterval}`);
 	});
-	commitListElement.key(
-		['down', 'j'],
-		() => doUpdateIndex(updateIndex));
+	commitListElement.key(['down', 'j'], () => doUpdateIndex(updateIndex));
 
-	commitListElement.key(
-		['k', 'up'],
-		() => doUpdateIndex((interval: number) => updateIndex(-(interval))));
+	commitListElement.key(['k', 'up'], () =>
+		doUpdateIndex((interval: number) => updateIndex(-interval)),
+	);
 
-	commitListElement.key(
-		['b', 'pageup'],
-		() => store.dispatch(updateIndex(Number(-(commitListElement.height)))));
+	commitListElement.key(['b', 'pageup'], () =>
+		store.dispatch(updateIndex(Number(-commitListElement.height))),
+	);
 
-	commitListElement.key(
-		['f', 'pagedown'],
-		() => store.dispatch(updateIndex(Number(commitListElement.height))));
+	commitListElement.key(['f', 'pagedown'], () =>
+		store.dispatch(updateIndex(Number(commitListElement.height))),
+	);
 
-	commitListElement.key(
-		['enter', 'space'],
-		() => store.dispatch(updateView(View.COMMIT)));
+	commitListElement.key(['enter', 'space'], () =>
+		store.dispatch(updateView(View.COMMIT)),
+	);
 
 	commitListElement.focus();
 
@@ -90,18 +85,21 @@ const updateCommitListElement = () => {
 		const lineIndex = state.indexesWithSHAs[index];
 		const nextLine = state.lines[lineIndex];
 
-		if (lines !== lastState.lines &&
-			commitListElement.children.length < listHeight) {
-
+		if (
+			lines !== lastState.lines &&
+			commitListElement.children.length < listHeight
+		) {
 			commitListElement.setItems(
-				lines.slice(lineIndex, lineIndex + listHeight));
+				lines.slice(lineIndex, lineIndex + listHeight),
+			);
 		}
 
 		if (!lines.length) {
 			commitListElement.setItems(lines);
-		} else if (index !== lastState.index &&
-			commitListElement.getItemIndex(nextLine) !== -1) {
-
+		} else if (
+			index !== lastState.index &&
+			commitListElement.getItemIndex(nextLine) !== -1
+		) {
 			commitListElement.select(commitListElement.getItemIndex(nextLine));
 		} else if (index > lastState.index) {
 			const newLines = lines.slice(lineIndex - listHeight, lineIndex + 1);

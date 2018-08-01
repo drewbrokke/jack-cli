@@ -1,7 +1,5 @@
 import { store } from '../redux/store';
-import {
-	TextElement,
-} from '../types/types';
+import { TextElement } from '../types/types';
 import { getTextElement } from './interface-elements';
 
 const RETRIEVING_TEXT = 'Retrieving git log...';

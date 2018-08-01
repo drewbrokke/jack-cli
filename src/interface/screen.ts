@@ -36,9 +36,7 @@ export const getScreen = (): IScreen => {
 	screen.key(['C-c', 'q', 'escape'], () => process.exit(0));
 
 	for (const command of getCommands()) {
-		screen.key(
-			command.key,
-			async () => registerCommand(screen, command));
+		screen.key(command.key, async () => registerCommand(screen, command));
 	}
 
 	return screen;

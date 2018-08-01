@@ -19,7 +19,8 @@ export const doCopyCommitMessage = async () => {
 		notifySuccess(`Copied commit message to the clipoard:\n\n"${message}"`);
 	} catch (errorMessage) {
 		notifyError(
-			`Could not copy the commit message to the clipboard:\n\n${errorMessage}`);
+			`Could not copy the commit message to the clipboard:\n\n${errorMessage}`,
+		);
 	}
 };
 
@@ -31,13 +32,17 @@ export const doCopyCommitSHA = async () => {
 
 		notifySuccess(`Copied SHA to the clipboard: ${SHA}`);
 	} catch (errorMessage) {
-		notifyError(`Could not copy the SHA to the clipboard:\n\n${errorMessage}`);
+		notifyError(
+			`Could not copy the SHA to the clipboard:\n\n${errorMessage}`,
+		);
 	}
 };
 
 export const doOpenFilesInEditor = async () =>
 	doCommandWithMaybeMarkedCommit(
-		openFilesFromCommitRange, 'Could not open the files');
+		openFilesFromCommitRange,
+		'Could not open the files',
+	);
 
 export const doMarkCommit = () => {
 	const commit = getSHA();
@@ -53,26 +58,26 @@ export const doMarkCommit = () => {
 
 // Helpers
 
-const doCommandWithMaybeMarkedCommit =
-	async (command: (SHA1: string, SHA2: string) => any, errorText: string) => {
-		const markedSHA = getMarkedSHA();
+const doCommandWithMaybeMarkedCommit = async (
+	command: (SHA1: string, SHA2: string) => any,
+	errorText: string,
+) => {
+	const markedSHA = getMarkedSHA();
 
-		try {
-			const SHA = getSHA();
+	try {
+		const SHA = getSHA();
 
-			const sorted = markedSHA
-				? await sortSHAs(markedSHA, SHA)
-				: [SHA, SHA];
+		const sorted = markedSHA ? await sortSHAs(markedSHA, SHA) : [SHA, SHA];
 
-			await command(sorted[0], sorted[1]);
-		} catch (errorMessage) {
-			notifyError(`${errorText}:\n\n${errorMessage}`);
-		}
+		await command(sorted[0], sorted[1]);
+	} catch (errorMessage) {
+		notifyError(`${errorText}:\n\n${errorMessage}`);
+	}
 
-		if (markedSHA) {
-			unmarkAnchorCommit();
-		}
-	};
+	if (markedSHA) {
+		unmarkAnchorCommit();
+	}
+};
 
 const getMarkedSHA = () => store.getState().markedSHA;
 const getSHA = () => store.getState().SHA;

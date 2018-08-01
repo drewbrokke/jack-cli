@@ -12,7 +12,8 @@ export const runFromPipedData = (): void => {
 	process.stderr.write('Piping into jack is not currently supported.\n');
 	process.stderr.write(
 		'If you would like to contribute or comment, please see the issue on ' +
-		'GitHub at https://github.com/drewbrokke/jack/issues/9.\n');
+			'GitHub at https://github.com/drewbrokke/jack/issues/9.\n',
+	);
 
 	process.exit(1);
 };

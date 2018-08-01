@@ -17,8 +17,11 @@ export const generateLog = (screen: IScreen) => {
 
 	store.dispatch(clearLog());
 
-	gitLogProcess = spawn(
-		'git', ['log', '--color=always', ...(stash.get(GIT_LOG_ARGS))]);
+	gitLogProcess = spawn('git', [
+		'log',
+		'--color=always',
+		...stash.get(GIT_LOG_ARGS),
+	]);
 
 	let errorString = '';
 
@@ -27,14 +30,15 @@ export const generateLog = (screen: IScreen) => {
 		store.dispatch(addCommits(data.trim().split('\n')));
 	});
 
-	gitLogProcess.stderr.on('data', (data: string) => errorString += data);
+	gitLogProcess.stderr.on('data', (data: string) => (errorString += data));
 
 	gitLogProcess.on('close', (code: number) => {
 		if (code > 0) {
 			screen.destroy();
 
 			process.stderr.write(
-				'jack encountered an error with the call to "git log":\n\n');
+				'jack encountered an error with the call to "git log":\n\n',
+			);
 			process.stderr.write(errorString);
 
 			process.exit(code);

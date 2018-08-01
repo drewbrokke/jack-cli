@@ -1,7 +1,4 @@
-import {
-	TextElement,
-	TextOptions,
-} from '../types/types';
+import { TextElement, TextOptions } from '../types/types';
 import { getHelpText } from '../util/help-text';
 import { getTextElement } from './interface-elements';
 

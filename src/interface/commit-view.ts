@@ -17,17 +17,17 @@ export const getCommitElement = (): ScrollableTextElement => {
 		vi: true,
 	});
 
-	commitElement.key(
-		['right', 'S-down', 'S-j'],
-		() => store.dispatch(updateIndex(1)));
+	commitElement.key(['right', 'S-down', 'S-j'], () =>
+		store.dispatch(updateIndex(1)),
+	);
 
-	commitElement.key(
-		['left', 'S-k', 'S-up'],
-		() => store.dispatch(updateIndex(-1)));
+	commitElement.key(['left', 'S-k', 'S-up'], () =>
+		store.dispatch(updateIndex(-1)),
+	);
 
-	commitElement.key(
-		['enter', 'space'],
-		() => store.dispatch(updateView(View.LIST)));
+	commitElement.key(['enter', 'space'], () =>
+		store.dispatch(updateView(View.LIST)),
+	);
 
 	commitElement.focus();
 

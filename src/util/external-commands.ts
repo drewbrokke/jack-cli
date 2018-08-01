@@ -2,32 +2,29 @@ import * as clipboardy from 'clipboardy';
 import * as opn from 'opn';
 import * as path from 'path';
 
-import {
-	gitCommitMessage,
-	gitDiffNameOnly,
-	gitTopLevel,
-} from './git-util';
+import { gitCommitMessage, gitDiffNameOnly, gitTopLevel } from './git-util';
 
 export const copyCommitMessageToClipboard = (SHA: string): Promise<any> =>
-	gitCommitMessage(SHA)
-		.then((message: string) => {
-			clipboardy.write(message);
+	gitCommitMessage(SHA).then((message: string) => {
+		clipboardy.write(message);
 
-			return message;
-		});
+		return message;
+	});
 
 export const copySHAToClipboard = (SHA: string): Promise<any> =>
 	clipboardy.write(SHA);
 
-export const openFilesFromCommitRange =
-	async (SHA1: string, SHA2: string): Promise<any> => {
+export const openFilesFromCommitRange = async (
+	SHA1: string,
+	SHA2: string,
+): Promise<any> => {
+	const topLevel = await gitTopLevel();
 
-		const topLevel = await gitTopLevel();
+	const filesString = await gitDiffNameOnly(SHA1, SHA2);
 
-		const filesString = await gitDiffNameOnly(SHA1, SHA2);
+	const filesArray = filesString
+		.split('\n')
+		.map((file) => path.join(topLevel, file));
 
-		const filesArray = filesString.split('\n')
-			.map((file) => path.join(topLevel, file));
-
-		return Promise.all(filesArray.map(opn));
-	};
+	return Promise.all(filesArray.map(opn));
+};
