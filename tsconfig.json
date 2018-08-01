@@ -16,7 +16,8 @@
 		"outDir": "./dist",
 		"pretty": true,
         "rootDir": "./src",
-        "skipLibCheck": true,
+		"skipLibCheck": true,
+		"sourceMap": true,
         "strict": true,
         "strictNullChecks": true,
         "target": "es5"

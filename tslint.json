@@ -3,7 +3,7 @@
     "extends": [
         "tslint:recommended"
     ],
-    "jsRules": {},
+	"jsRules": {},
     "rules": {
         "curly": [true, "ignore-same-line"],
         "indent": [true, "tabs", 4],
