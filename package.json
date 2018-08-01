@@ -16,7 +16,8 @@
   },
   "scripts": {
     "build": "node_modules/typescript/bin/tsc --project .",
-    "clean": "rm -rf node_modules dist",
+	"clean": "rm -rf node_modules dist",
+	"format": "node_modules/prettier/bin-prettier.js --write './src/**/*.ts'",
     "lint": "node_modules/tslint/bin/tslint --project . --fix",
     "test": "ava",
     "watch": "node_modules/typescript/bin/tsc --project . --watch"
