@@ -197,10 +197,10 @@ export const registerCommand = async (
 		if (command.foreground) {
 			await new Promise((resolve, reject) => {
 				screen.exec(
-					// @ts-ignore since 'spawnOpts' is passed to spawn and not
-					// exec, it will still function
 					commandArray[0],
 					commandArray.slice(1),
+					// @ts-ignore since 'spawnOpts' is passed to spawn and not
+					// exec, it will still function
 					spawnOpts,
 					(err, ok) => {
 						if (err) {
