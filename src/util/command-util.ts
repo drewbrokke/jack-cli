@@ -135,18 +135,8 @@ export const getCommands = () => {
 	return declaredCommands;
 };
 
-export const registerCommands =
-	(screen: IScreen, commands: ICommand[] = []): IScreen => {
-		commands.forEach(
-			(command) => screen.key(
-				command.key,
-				async () => registerCommand(screen, command)));
-
-		return screen;
-	};
-
 // tslint:disable-next-line:max-line-length
-const registerCommand = async (screen: IScreen, command: ICommand): Promise<any> => {
+export const registerCommand = async (screen: IScreen, command: ICommand): Promise<any> => {
 	const { markedSHA, SHA } = store.getState();
 
 	try {

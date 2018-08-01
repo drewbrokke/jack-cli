@@ -1,5 +1,5 @@
 import { IScreen } from '../types/types';
-import { getCommands, registerCommands } from '../util/command-util';
+import { getCommands, registerCommand } from '../util/command-util';
 import {
 	doCopyCommitMessage,
 	doCopyCommitSHA,
@@ -22,6 +22,11 @@ export const getScreen = (): IScreen => {
 
 	screen._listenedMouse = true;
 
+	screen.append(getMainContentContainer());
+	screen.append(getStatusBar());
+	screen.append(getNotificationContainer());
+	screen.append(getHelpDialog());
+
 	screen.key('?', toggleHelp);
 	screen.key('m', doCopyCommitMessage);
 	screen.key('o', doOpenFilesInEditor);
@@ -30,12 +35,11 @@ export const getScreen = (): IScreen => {
 	screen.key('y', doCopyCommitSHA);
 	screen.key(['C-c', 'q', 'escape'], () => process.exit(0));
 
-	registerCommands(screen, getCommands());
-
-	screen.append(getMainContentContainer());
-	screen.append(getStatusBar());
-	screen.append(getNotificationContainer());
-	screen.append(getHelpDialog());
+	for (const command of getCommands()) {
+		screen.key(
+			command.key,
+			async () => registerCommand(screen, command));
+	}
 
 	return screen;
 };
