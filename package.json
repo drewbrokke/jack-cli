@@ -15,10 +15,11 @@
     "node": ">=4"
   },
   "scripts": {
-    "build": "gulp build",
-    "dev": "gulp watch",
-    "tslint": "gulp tslint",
-    "test": "ava"
+    "build": "node_modules/typescript/bin/tsc --project .",
+    "clean": "rm -rf node_modules dist",
+    "lint": "node_modules/tslint/bin/tslint --project . --fix",
+    "test": "ava",
+    "watch": "node_modules/typescript/bin/tsc --project . --watch"
   },
   "prepublishOnly": "npm run build",
   "author": "Drew Brokke <drew.brokke@liferay.com> (https://github.com/drewbrokke)",
