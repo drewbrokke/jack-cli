@@ -6,11 +6,7 @@
     ],
 	"jsRules": {},
     "rules": {
-        "curly": [true, "ignore-same-line"],
-        "indent": [true, "tabs", 4],
-        "max-line-length": [true, 80],
         "only-arrow-functions": [true],
-        "quotemark": [true, "single", "avoid-escape"],
         "variable-name": [true, "allow-leading-underscore"]
     },
     "rulesDirectory": []
