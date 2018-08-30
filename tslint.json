@@ -6,6 +6,7 @@
     ],
 	"jsRules": {},
     "rules": {
+		"curly": [true, "ignore-same-line"],
         "only-arrow-functions": [true],
         "variable-name": [true, "allow-leading-underscore"]
     },
