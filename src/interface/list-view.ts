@@ -54,11 +54,11 @@ export const getCommitListElement = (): IListElement => {
 	);
 
 	commitListElement.key(['b', 'pageup'], () =>
-		store.dispatch(updateIndex(Number(-commitListElement.height))),
+		store.dispatch(updateIndex(-commitListElement.height)),
 	);
 
 	commitListElement.key(['f', 'pagedown'], () =>
-		store.dispatch(updateIndex(Number(commitListElement.height))),
+		store.dispatch(updateIndex(+commitListElement.height)),
 	);
 
 	commitListElement.key(['enter', 'space'], () =>
