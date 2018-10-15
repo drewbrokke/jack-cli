@@ -1,20 +1,29 @@
 import { updateIndex, updateView } from '../redux/action-creators';
 import { store } from '../redux/store';
-import { ScrollableTextElement, View } from '../types/types';
+import { BoxElement, View } from '../types/types';
 import { gitShow } from '../util/git-util';
-import { getScrollableTextElement } from './interface-elements';
+import { getBoxElement } from './interface-elements';
 import { notifyWarning } from './notification';
 
-export const getCommitElement = (): ScrollableTextElement => {
-	const commitElement: ScrollableTextElement = getScrollableTextElement({
+export const getCommitElement = (): BoxElement => {
+	const commitElement: BoxElement = getBoxElement({
+		alwaysScroll: true,
 		bottom: 0,
-		clickable: true,
 		keys: true,
 		left: 0,
 		right: 0,
 		scrollable: true,
 		top: 0,
 		vi: true,
+	});
+
+	commitElement.key(['f', 'pagedown'], () => {
+		commitElement.scroll(+commitElement.height);
+		commitElement.screen.render();
+	});
+	commitElement.key(['b', 'pageup'], () => {
+		commitElement.scroll(-commitElement.height);
+		commitElement.screen.render();
 	});
 
 	commitElement.key(['right', 'S-down', 'S-j'], () =>

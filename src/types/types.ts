@@ -10,8 +10,6 @@ export type ListElementStyle = Blessed.Widgets.ListElementStyle;
 export type ListOptions = Blessed.Widgets.ListOptions<ListElementStyle>;
 export type Node = Blessed.Widgets.Node;
 export type ScreenOptions = Blessed.Widgets.IScreenOptions;
-export type ScrollableTextElement = Blessed.Widgets.ScrollableTextElement;
-export type ScrollableTextOptions = Blessed.Widgets.ScrollableTextOptions;
 export type TextElement = Blessed.Widgets.TextElement;
 export type TextOptions = Blessed.Widgets.TextOptions;
 
