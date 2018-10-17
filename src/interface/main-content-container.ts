@@ -1,5 +1,5 @@
-import { store } from '../redux/store';
-import { BoxElement } from '../types/types';
+import { doSubscribe } from '../redux/store';
+import { BoxElement, UpdateFunction, View } from '../types/types';
 import { getCommitElement } from './commit-view';
 import { getBoxElement } from './interface-elements';
 import { getCommitListElement } from './list-view';
@@ -20,26 +20,22 @@ export const getMainContentContainer = (): BoxElement => {
 	mainContentContainer.append(commitElement);
 	mainContentContainer.append(commitListElement);
 
-	store.subscribe(updateView(commitElement, commitListElement));
+	doSubscribe(['view'], commitElement, updateView(View.COMMIT));
+	doSubscribe(['view'], commitListElement, updateView(View.LIST));
 
 	return mainContentContainer;
 };
 
-const updateView = (commitElement, commitListElement) => () => {
-	const state = store.getState();
-	const screen = commitListElement.screen;
+const updateView = (view: View): UpdateFunction<BoxElement> => async ({
+	state,
+	element,
+}) => {
+	if (state.view === view) {
+		element.setFront();
+		element.focus();
 
-	if (state.view === 'LIST' && screen.focused !== commitListElement) {
-		commitListElement.setFront();
-		commitListElement.focus();
-
-		return screen.render();
+		return true;
 	}
 
-	if (state.view === 'COMMIT' && screen.focused !== commitElement) {
-		commitElement.setFront();
-		commitElement.focus();
-
-		return screen.render();
-	}
+	return false;
 };
