@@ -1,5 +1,5 @@
 import { doSubscribe } from '../redux/store';
-import { TextElement, UpdateFunction } from '../types/types';
+import { StateProperty, TextElement, UpdateFunction } from '../types/types';
 import { getTextElement } from './interface-elements';
 
 export const getProgressIndicator = (): TextElement => {
@@ -9,7 +9,7 @@ export const getProgressIndicator = (): TextElement => {
 	});
 
 	doSubscribe(
-		['index', 'indexesWithSHAs'],
+		[StateProperty.index, StateProperty.indexesWithSHAs],
 		progressIndicator,
 		updateProgressIndicator,
 	);

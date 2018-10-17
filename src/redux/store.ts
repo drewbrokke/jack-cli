@@ -1,19 +1,19 @@
 import * as Redux from 'redux';
 
-import { BlessedElement, UpdateFunction } from '../types/types';
+import { BlessedElement, StateProperty, UpdateFunction } from '../types/types';
 import { reducer } from './reducers';
 
 export const store = Redux.createStore(reducer);
 
 export const doSubscribe = <T extends BlessedElement>(
-	propertyNames: string[],
+	propertyNames: StateProperty[],
 	element: T,
 	updateFunction: UpdateFunction<T>,
 ) => {
 	let lastState = store.getState();
 
 	store.subscribe(async () => {
-		const modifiedProperties: string[] = [];
+		const modifiedProperties: StateProperty[] = [];
 
 		const state = store.getState();
 

@@ -1,5 +1,10 @@
 import { doSubscribe } from '../redux/store';
-import { BoxElement, UpdateFunction, View } from '../types/types';
+import {
+	BoxElement,
+	StateProperty,
+	UpdateFunction,
+	View,
+} from '../types/types';
 import { getCommitElement } from './commit-view';
 import { getBoxElement } from './interface-elements';
 import { getCommitListElement } from './list-view';
@@ -21,8 +26,8 @@ export const getMainContentContainer = (): BoxElement => {
 	mainContentContainer.append(commitElement);
 	mainContentContainer.append(commitListElement);
 
-	doSubscribe(['view'], commitElement, updateView(View.COMMIT));
-	doSubscribe(['view'], commitListElement, updateView(View.LIST));
+	doSubscribe([StateProperty.view], commitElement, updateView(View.COMMIT));
+	doSubscribe([StateProperty.view], commitListElement, updateView(View.LIST));
 
 	return mainContentContainer;
 };

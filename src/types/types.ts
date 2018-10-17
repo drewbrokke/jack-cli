@@ -47,20 +47,30 @@ export interface IAction {
 	payload?: any;
 }
 
+export enum StateProperty {
+	index = 'index',
+	indexesWithSHAs = 'indexesWithSHAs',
+	lines = 'lines',
+	status = 'status',
+	markedSHA = 'markedSHA',
+	SHA = 'SHA',
+	view = 'view',
+}
+
 export interface IState {
-	index: number;
-	indexesWithSHAs: number[];
-	lines: string[];
-	status: Status;
-	markedSHA: string | null;
-	SHA: string;
-	view: View;
+	[StateProperty.index]: number;
+	[StateProperty.indexesWithSHAs]: number[];
+	[StateProperty.lines]: string[];
+	[StateProperty.status]: Status;
+	[StateProperty.markedSHA]: string | null;
+	[StateProperty.SHA]: string;
+	[StateProperty.view]: View;
 }
 
 export interface IUpdateFunctionArgumentObject<T extends BlessedElement> {
 	element: T;
 	lastState: IState;
-	modifiedProperties: string[];
+	modifiedProperties: StateProperty[];
 	state: IState;
 }
 
