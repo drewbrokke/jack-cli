@@ -1,6 +1,6 @@
 import { updateIndex, updateView } from '../redux/action-creators';
-import { store } from '../redux/store';
-import { BoxElement, View } from '../types/types';
+import { doSubscribe, store } from '../redux/store';
+import { BoxElement, UpdateFunction, View } from '../types/types';
 import { gitShow } from '../util/git-util';
 import { getBoxElement } from './interface-elements';
 import { notifyWarning } from './notification';
@@ -40,40 +40,34 @@ export const getCommitElement = (): BoxElement => {
 
 	commitElement.focus();
 
-	store.subscribe(updateCommitElement(commitElement));
+	doSubscribe(['SHA', 'view'], commitElement, updateCommitElement);
 
 	return commitElement;
 };
 
-const updateCommitElement = (commitElement) => {
-	let lastState = store.getState();
+const updateCommitElement: UpdateFunction<BoxElement> = async ({
+	element: commitElement,
+	nextState,
+}) => {
+	const { SHA, view } = nextState;
 
-	return async () => {
-		const state = store.getState();
+	if (view !== View.COMMIT) {
+		commitElement.content = '';
 
-		const { SHA, view } = state;
-		const { SHA: lastSHA, view: lastView } = lastState;
+		return false;
+	}
 
-		lastState = state;
+	try {
+		const commitContent = await gitShow(SHA);
 
-		try {
-			if (view !== View.COMMIT) {
-				commitElement.content = '';
+		commitElement.setContent(commitContent);
 
-				return;
-			}
+		commitElement.scrollTo(0);
 
-			if (SHA !== lastSHA || view !== lastView) {
-				const commitContent = await gitShow(SHA);
+		return true;
+	} catch (error) {
+		notifyWarning(`Couldn't retrieve commit content for ${SHA}`);
+	}
 
-				commitElement.setContent(commitContent);
-
-				commitElement.scrollTo(0);
-
-				commitElement.screen.render();
-			}
-		} catch (error) {
-			notifyWarning(`Couldn't retrieve commit content for ${SHA}`);
-		}
-	};
+	return false;
 };

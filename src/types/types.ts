@@ -56,3 +56,14 @@ export interface IState {
 	SHA: string;
 	view: View;
 }
+
+export interface IUpdateFunctionArgumentObject<T extends BlessedElement> {
+	element: T;
+	lastState: IState;
+	modifiedProperties: string[];
+	nextState: IState;
+}
+
+export type UpdateFunction<T extends BlessedElement> = (
+	argumentObject: IUpdateFunctionArgumentObject<T>,
+) => Promise<boolean>;
