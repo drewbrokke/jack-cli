@@ -12,6 +12,7 @@ export const getHelpDialog = () => {
 	const options: TextOptions = {
 		border: 'line',
 		content: getHelpText(),
+		name: 'helpDialog',
 		padding: {
 			bottom: 0,
 			left: 1,

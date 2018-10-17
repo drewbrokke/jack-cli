@@ -9,6 +9,7 @@ export const getStatusBar = (): BoxElement => {
 	statusBar = getBoxElement({
 		bottom: 0,
 		height: 1,
+		name: 'statusBar',
 		right: 0,
 		shrink: true,
 		width: '100%',

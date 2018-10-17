@@ -15,6 +15,7 @@ export const getCommitListElement = (): IListElement => {
 	commitListElement = getListElement({
 		bottom: 0,
 		left: 0,
+		name: 'commitLogContainer',
 		right: 0,
 		style: {
 			selected: {

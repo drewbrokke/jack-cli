@@ -11,6 +11,7 @@ export const getCommitElement = (): BoxElement => {
 		bottom: 0,
 		keys: true,
 		left: 0,
+		name: 'commitContentContainer',
 		right: 0,
 		scrollable: true,
 		top: 0,

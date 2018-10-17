@@ -8,6 +8,7 @@ export const getLogCompletedStatus = (): TextElement => {
 	const progressIndicator: TextElement = getTextElement({
 		content: RETRIEVING_TEXT,
 		left: 'center',
+		name: 'statusIndicator',
 		style: { bold: true, fg: 'yellow' },
 	});
 

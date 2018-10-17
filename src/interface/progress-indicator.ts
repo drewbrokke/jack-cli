@@ -5,6 +5,7 @@ import { getTextElement } from './interface-elements';
 export const getProgressIndicator = (): TextElement => {
 	const progressIndicator: TextElement = getTextElement({
 		left: 0,
+		name: 'progressIndicator',
 	});
 
 	doSubscribe(

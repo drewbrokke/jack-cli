@@ -10,6 +10,7 @@ export const getMainContentContainer = (): BoxElement => {
 	mainContentContainer = getBoxElement({
 		bottom: 1,
 		left: 0,
+		name: 'mainContentContainer',
 		right: 0,
 		top: 0,
 	});

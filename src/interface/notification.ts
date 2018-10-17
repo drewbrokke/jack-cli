@@ -14,6 +14,7 @@ export const getNotificationContainer = (): BoxElement => {
 			type: 'line',
 		},
 		bottom: 1,
+		name: 'notificationContainer',
 		padding: {
 			left: 1,
 			right: 1,
