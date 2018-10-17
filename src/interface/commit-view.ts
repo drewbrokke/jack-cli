@@ -47,9 +47,9 @@ export const getCommitElement = (): BoxElement => {
 
 const updateCommitElement: UpdateFunction<BoxElement> = async ({
 	element: commitElement,
-	nextState,
+	state,
 }) => {
-	const { SHA, view } = nextState;
+	const { SHA, view } = state;
 
 	if (view !== View.COMMIT) {
 		commitElement.content = '';

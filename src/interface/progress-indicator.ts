@@ -1,5 +1,5 @@
-import { store } from '../redux/store';
-import { TextElement } from '../types/types';
+import { doSubscribe } from '../redux/store';
+import { TextElement, UpdateFunction } from '../types/types';
 import { getTextElement } from './interface-elements';
 
 export const getProgressIndicator = (): TextElement => {
@@ -7,31 +7,26 @@ export const getProgressIndicator = (): TextElement => {
 		left: 0,
 	});
 
-	store.subscribe(updateProgressIndicator(progressIndicator));
+	doSubscribe(
+		['index', 'indexesWithSHAs'],
+		progressIndicator,
+		updateProgressIndicator,
+	);
 
 	return progressIndicator;
 };
 
-const updateProgressIndicator = (progressIndicator) => {
-	let lastState = store.getState();
+const updateProgressIndicator: UpdateFunction<TextElement> = async ({
+	element: progressIndicator,
+	state,
+}) => {
+	const { index, indexesWithSHAs } = state;
 
-	return () => {
-		const state = store.getState();
+	progressIndicator.setText(
+		constructProgressText(index, indexesWithSHAs.length),
+	);
 
-		const { index } = state;
-		const { length } = state.indexesWithSHAs;
-
-		if (
-			length !== lastState.indexesWithSHAs.length ||
-			index !== lastState.index
-		) {
-			progressIndicator.setText(constructProgressText(index, length));
-		}
-
-		lastState = state;
-
-		progressIndicator.screen.render();
-	};
+	return true;
 };
 
 const constructProgressText = (index: number = 0, total: number = 0): string =>

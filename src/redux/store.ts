@@ -15,10 +15,10 @@ export const doSubscribe = <T extends BlessedElement>(
 	store.subscribe(async () => {
 		const modifiedProperties: string[] = [];
 
-		const nextState = store.getState();
+		const state = store.getState();
 
 		for (const propertyName of propertyNames) {
-			if (nextState[propertyName] !== lastState[propertyName]) {
+			if (state[propertyName] !== lastState[propertyName]) {
 				modifiedProperties.push(propertyName);
 			}
 		}
@@ -29,12 +29,12 @@ export const doSubscribe = <T extends BlessedElement>(
 				element,
 				lastState,
 				modifiedProperties,
-				nextState,
+				state,
 			}))
 		) {
 			element.screen.render();
 		}
 
-		lastState = nextState;
+		lastState = state;
 	});
 };

@@ -61,7 +61,7 @@ export interface IUpdateFunctionArgumentObject<T extends BlessedElement> {
 	element: T;
 	lastState: IState;
 	modifiedProperties: string[];
-	nextState: IState;
+	state: IState;
 }
 
 export type UpdateFunction<T extends BlessedElement> = (
