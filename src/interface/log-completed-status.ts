@@ -1,5 +1,10 @@
-import { store } from '../redux/store';
-import { TextElement } from '../types/types';
+import { doSubscribe } from '../redux/store';
+import {
+	StateProperty,
+	Status,
+	TextElement,
+	UpdateFunction,
+} from '../types/types';
 import { getTextElement } from './interface-elements';
 
 const RETRIEVING_TEXT = 'Retrieving git log...';
@@ -12,34 +17,29 @@ export const getLogCompletedStatus = (): TextElement => {
 		style: { bold: true, fg: 'yellow' },
 	});
 
-	store.subscribe(updateProgressIndicator(progressIndicator));
+	doSubscribe(
+		[StateProperty.status],
+		progressIndicator,
+		updateProgressIndicator,
+	);
 
 	return progressIndicator;
 };
 
-const updateProgressIndicator = (progressIndicator) => {
-	let { status: lastStatus } = store.getState();
+const statusInfo = {
+	[Status.LOG_COMPLETED]: ['green', 'End of log'],
+	[Status.LOG_STALE]: ['red', 'Log is stale, please refresh'],
+	[Status.RETRIEVING_LOG]: ['yellow', 'RETRIEVING_TEXT'],
+};
 
-	return () => {
-		const { status } = store.getState();
+const updateProgressIndicator: UpdateFunction<TextElement> = async ({
+	element: progressIndicator,
+	state,
+}) => {
+	const statusTuple = statusInfo[state.status];
 
-		if (status === lastStatus) {
-			return;
-		}
+	progressIndicator.style.fg = statusTuple[0];
+	progressIndicator.setText(statusTuple[1]);
 
-		if (status === 'LOG_COMPLETED') {
-			progressIndicator.setText('End of log');
-			progressIndicator.style.fg = 'green';
-		} else if (status === 'LOG_STALE') {
-			progressIndicator.setText('Log is stale, please refresh');
-			progressIndicator.style.fg = 'red';
-		} else if (status === 'RETRIEVING_LOG') {
-			progressIndicator.setText(RETRIEVING_TEXT);
-			progressIndicator.style.fg = 'yellow';
-		}
-
-		progressIndicator.screen.render();
-
-		lastStatus = status;
-	};
+	return true;
 };
