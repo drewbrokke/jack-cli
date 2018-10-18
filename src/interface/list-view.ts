@@ -1,18 +1,18 @@
 import { updateIndex, updateView } from '../redux/action-creators';
-import { store } from '../redux/store';
-import { IAction, IListElement, View } from '../types/types';
+import { doSubscribe, store } from '../redux/store';
+import {
+	IAction,
+	IListElement,
+	StateProperty,
+	UpdateFunction,
+	View,
+} from '../types/types';
 import { KEY_NAV_INTERVAL, stash } from '../util/stash';
 import { getListElement } from './interface-elements';
 import { notifyInfo } from './notification';
 
-let commitListElement: IListElement;
-
 export const getCommitListElement = (): IListElement => {
-	if (commitListElement) {
-		return commitListElement;
-	}
-
-	commitListElement = getListElement({
+	const commitListElement: IListElement = getListElement({
 		bottom: 0,
 		left: 0,
 		name: 'commitLogContainer',
@@ -68,56 +68,64 @@ export const getCommitListElement = (): IListElement => {
 
 	commitListElement.focus();
 
-	store.subscribe(updateCommitListElement());
+	doSubscribe(
+		[StateProperty.index, StateProperty.lines],
+		commitListElement,
+		updateCommitListElement,
+	);
 
 	return commitListElement;
 };
 
-const updateCommitListElement = () => {
-	let lastState = store.getState();
+const updateCommitListElement: UpdateFunction<IListElement> = async ({
+	element: commitListElement,
+	lastState,
+	state,
+}) => {
+	const { index, lines } = state;
 
-	return () => {
-		const state = store.getState();
+	const listHeight: number = commitListElement.height as number;
 
-		const { index, lines } = state;
+	const lineIndex = state.indexesWithSHAs[index];
+	const nextLine = state.lines[lineIndex];
 
-		const listHeight: number = commitListElement.height as number;
+	if (
+		lines !== lastState.lines &&
+		commitListElement.children.length < listHeight
+	) {
+		commitListElement.setItems(
+			lines.slice(lineIndex, lineIndex + listHeight),
+		);
+	}
 
-		const lineIndex = state.indexesWithSHAs[index];
-		const nextLine = state.lines[lineIndex];
-
-		if (
-			lines !== lastState.lines &&
-			commitListElement.children.length < listHeight
-		) {
+	if (lines !== lastState.lines) {
+		if (commitListElement.children.length < listHeight) {
 			commitListElement.setItems(
 				lines.slice(lineIndex, lineIndex + listHeight),
 			);
 		}
+	}
 
-		if (!lines.length) {
-			commitListElement.setItems(lines);
-		} else if (
-			index !== lastState.index &&
-			commitListElement.getItemIndex(nextLine) !== -1
-		) {
-			commitListElement.select(commitListElement.getItemIndex(nextLine));
-		} else if (index > lastState.index) {
-			const newLines = lines.slice(lineIndex - listHeight, lineIndex + 1);
+	if (!lines.length) {
+		commitListElement.setItems(lines);
+	} else if (
+		index !== lastState.index &&
+		commitListElement.getItemIndex(nextLine) !== -1
+	) {
+		commitListElement.select(commitListElement.getItemIndex(nextLine));
+	} else if (index > lastState.index) {
+		const newLines = lines.slice(lineIndex - listHeight, lineIndex + 1);
 
-			commitListElement.setItems(newLines);
+		commitListElement.setItems(newLines);
 
-			commitListElement.select(newLines.indexOf(nextLine));
-		} else if (index < lastState.index) {
-			const newLines = lines.slice(lineIndex, lineIndex + listHeight);
+		commitListElement.select(newLines.indexOf(nextLine));
+	} else if (index < lastState.index) {
+		const newLines = lines.slice(lineIndex, lineIndex + listHeight);
 
-			commitListElement.setItems(newLines);
+		commitListElement.setItems(newLines);
 
-			commitListElement.select(newLines.indexOf(nextLine));
-		}
+		commitListElement.select(newLines.indexOf(nextLine));
+	}
 
-		lastState = state;
-
-		commitListElement.screen.render();
-	};
+	return true;
 };
