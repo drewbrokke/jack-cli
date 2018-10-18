@@ -1,4 +1,4 @@
-import { IScreen } from '../types/types';
+import { Screen } from '../types/types';
 import { getCommands, registerCommand } from '../util/command-util';
 import {
 	doCopyCommitMessage,
@@ -13,8 +13,8 @@ import { getMainContentContainer } from './main-content-container';
 import { getNotificationContainer } from './notification';
 import { getStatusBar } from './status-bar';
 
-export const getScreen = (): IScreen => {
-	const screen: IScreen = getScreenElement({
+export const getScreen = (): Screen => {
+	const screen: Screen = getScreenElement({
 		autoPadding: true,
 		fullUnicode: true,
 		name: 'screen',

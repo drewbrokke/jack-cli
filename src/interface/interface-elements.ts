@@ -2,9 +2,9 @@ import * as Blessed from 'blessed';
 import {
 	BoxElement,
 	BoxOptions,
-	IListElement,
-	IScreen,
+	ListElement,
 	ListOptions,
+	Screen,
 	ScreenOptions,
 	TextElement,
 	TextOptions,
@@ -13,11 +13,11 @@ import {
 export const getBoxElement = (options: BoxOptions): BoxElement =>
 	Blessed.box(options);
 
-export const getListElement = (options: ListOptions): IListElement =>
+export const getListElement = (options: ListOptions): ListElement =>
 	Blessed.list(options);
 
-export const getScreenElement = (options: ScreenOptions): IScreen =>
-	Blessed.screen(options) as IScreen;
+export const getScreenElement = (options: ScreenOptions): Screen =>
+	Blessed.screen(options) as Screen;
 
 export const getTextElement = (options: TextOptions): TextElement =>
 	Blessed.text(options);

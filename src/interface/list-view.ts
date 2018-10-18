@@ -1,8 +1,8 @@
 import { updateIndex, updateView } from '../redux/action-creators';
 import { doSubscribe, store } from '../redux/store';
 import {
-	IAction,
-	IListElement,
+	Action,
+	ListElement,
 	StateProperty,
 	UpdateFunction,
 	View,
@@ -11,8 +11,8 @@ import { KEY_NAV_INTERVAL, stash } from '../util/stash';
 import { getListElement } from './interface-elements';
 import { notifyInfo } from './notification';
 
-export const getCommitListElement = (): IListElement => {
-	const commitListElement: IListElement = getListElement({
+export const getCommitListElement = (): ListElement => {
+	const commitListElement: ListElement = getListElement({
 		bottom: 0,
 		left: 0,
 		name: 'commitLogContainer',
@@ -25,7 +25,7 @@ export const getCommitListElement = (): IListElement => {
 		top: 0,
 	});
 
-	const doUpdateIndex = (action: (interval: number) => IAction) => {
+	const doUpdateIndex = (action: (interval: number) => Action) => {
 		const interval: number = stash.has(KEY_NAV_INTERVAL)
 			? stash.get(KEY_NAV_INTERVAL)
 			: 1;
@@ -77,7 +77,7 @@ export const getCommitListElement = (): IListElement => {
 	return commitListElement;
 };
 
-const updateCommitListElement: UpdateFunction<IListElement> = async ({
+const updateCommitListElement: UpdateFunction<ListElement> = async ({
 	element: commitListElement,
 	lastState,
 	state,

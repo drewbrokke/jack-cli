@@ -11,12 +11,12 @@ export type ScreenOptions = Blessed.Widgets.IScreenOptions;
 export type TextElement = Blessed.Widgets.TextElement;
 export type TextOptions = Blessed.Widgets.TextOptions;
 
-export interface IListElement extends Blessed.Widgets.ListElement {
+export interface ListElement extends Blessed.Widgets.ListElement {
 	getItemIndex(items: BlessedElement | string): number;
 	setItems(items: BlessedElement[] | string[]): void;
 }
 
-export interface IScreen extends Blessed.Widgets.Screen {
+export interface Screen extends Blessed.Widgets.Screen {
 	_listenedMouse: boolean;
 }
 
@@ -42,7 +42,7 @@ export enum View {
 	LIST = 'LIST',
 }
 
-export interface IAction {
+export interface Action {
 	type: ActionType;
 	payload?: any;
 }
@@ -57,7 +57,8 @@ export enum StateProperty {
 	view = 'view',
 }
 
-export interface IState {
+// tslint:disable-next-line:interface-name
+export interface State {
 	[StateProperty.index]: number;
 	[StateProperty.indexesWithSHAs]: number[];
 	[StateProperty.lines]: string[];
@@ -67,13 +68,13 @@ export interface IState {
 	[StateProperty.view]: View;
 }
 
-export interface IUpdateFunctionArgumentObject<T extends BlessedElement> {
+export interface UpdateFunctionArgumentObject<T extends BlessedElement> {
 	element: T;
-	lastState: IState;
+	lastState: State;
 	modifiedProperties: StateProperty[];
-	state: IState;
+	state: State;
 }
 
 export type UpdateFunction<T extends BlessedElement> = (
-	argumentObject: IUpdateFunctionArgumentObject<T>,
+	argumentObject: UpdateFunctionArgumentObject<T>,
 ) => Promise<boolean>;

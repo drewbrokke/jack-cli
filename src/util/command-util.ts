@@ -5,7 +5,7 @@ import {
 } from '../interface/notification';
 import { markSHA } from '../redux/action-creators';
 import { store } from '../redux/store';
-import { IScreen } from '../types/types';
+import { Screen } from '../types/types';
 import { COMMANDS, ICommand, Placeholder } from './commands-def';
 import { getCommands as getConfigurationCommands } from './config-util';
 import { gitCommitMessage, sortSHAs } from './git-util';
@@ -157,7 +157,7 @@ export const getCommands = () => {
 
 // tslint:disable-next-line:max-line-length
 export const registerCommand = async (
-	screen: IScreen,
+	screen: Screen,
 	command: ICommand,
 ): Promise<any> => {
 	const { markedSHA, SHA } = store.getState();

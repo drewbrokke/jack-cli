@@ -1,8 +1,8 @@
 import { produce } from 'immer';
-import { ActionType, IAction, IState, Status, View } from '../types/types';
+import { Action, ActionType, State, Status, View } from '../types/types';
 
 const COMMIT_SHA_REGEX: RegExp = new RegExp(/[0-9a-f]{7,40}\b/);
-const INITIAL_STATE: IState = {
+const INITIAL_STATE: State = {
 	SHA: '',
 	index: 0,
 	indexesWithSHAs: [0],
@@ -12,10 +12,7 @@ const INITIAL_STATE: IState = {
 	view: View.LIST,
 };
 
-export const reducer = (
-	state: IState = INITIAL_STATE,
-	action: IAction,
-): IState =>
+export const reducer = (state: State = INITIAL_STATE, action: Action): State =>
 	produce(state, (draft) => {
 		switch (action.type) {
 			case ActionType.ADD_COMMITS:

@@ -1,12 +1,12 @@
 import { ChildProcess, spawn } from 'child_process';
 import { addCommits, clearLog, updateStatus } from '../redux/action-creators';
 import { store } from '../redux/store';
-import { IScreen, Status } from '../types/types';
+import { Screen, Status } from '../types/types';
 import { GIT_LOG_ARGS, stash } from './stash';
 
 let gitLogProcess: ChildProcess;
 
-export const generateLog = (screen: IScreen) => {
+export const generateLog = (screen: Screen) => {
 	if (gitLogProcess) {
 		gitLogProcess.stdout.removeAllListeners();
 		gitLogProcess.stderr.removeAllListeners();
