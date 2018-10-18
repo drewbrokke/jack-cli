@@ -17,41 +17,26 @@ export const reducer = (
 	action: IAction,
 ): IState =>
 	produce(state, (draft) => {
-		const {
-			index: currentIndex,
-			indexesWithSHAs: currentIndexesWithSHAs,
-			lines: currentLines,
-			SHA: currentSHA,
-		} = state;
-
 		switch (action.type) {
 			case ActionType.ADD_COMMITS:
 				const newLines = action.payload;
 
-				const lines = [...currentLines, ...newLines];
+				newLines.forEach((line, index) => {
+					if (COMMIT_SHA_REGEX.test(line)) {
+						draft.indexesWithSHAs.push(index + state.lines.length);
+					}
+				});
 
-				const newIndexesWithSHAs: number[] = newLines
-					.map((line: string, index: number) => {
-						if (COMMIT_SHA_REGEX.test(line)) {
-							return index + currentLines.length;
-						}
+				const allLines = [...state.lines, ...newLines];
 
-						return 0;
-					})
-					.filter(Boolean);
+				draft.SHA = state.SHA
+					? state.SHA
+					: getSHA(
+							allLines[draft.indexesWithSHAs[state.index]],
+							state.SHA,
+					  );
 
-				const indexesWithSHAs: number[] = [
-					...currentIndexesWithSHAs,
-					...newIndexesWithSHAs,
-				];
-
-				const SHA = currentSHA
-					? currentSHA
-					: getSHA(indexesWithSHAs[currentIndex], lines, currentSHA);
-
-				draft.SHA = SHA;
-				draft.lines = lines;
-				draft.indexesWithSHAs = indexesWithSHAs;
+				draft.lines = allLines;
 
 				break;
 
@@ -65,14 +50,13 @@ export const reducer = (
 
 			case ActionType.UPDATE_INDEX:
 				const newIndex = Math.min(
-					Math.max(currentIndex + action.payload, 0),
-					currentIndexesWithSHAs.length - 1,
+					Math.max(state.index + action.payload, 0),
+					state.indexesWithSHAs.length - 1,
 				);
 
 				draft.SHA = getSHA(
-					currentIndexesWithSHAs[newIndex],
-					currentLines,
-					currentSHA,
+					state.lines[state.indexesWithSHAs[newIndex]],
+					state.SHA,
 				);
 
 				draft.index = newIndex;
@@ -89,24 +73,18 @@ export const reducer = (
 		}
 	});
 
-const getSHA = (
-	index: number,
-	commits: string[],
-	currentSHA: string,
-): string => {
-	const matches: RegExpExecArray | null = COMMIT_SHA_REGEX.exec(
-		commits[index],
-	);
+const getSHA = (lineText: string, defaultValue: string): string => {
+	const matches: RegExpExecArray | null = COMMIT_SHA_REGEX.exec(lineText);
 
 	if (!matches) {
-		return currentSHA;
+		return defaultValue;
 	}
 
-	const sha: string | null = matches[0];
+	const matchedSHA: string | null = matches[0];
 
-	if (sha) {
-		return sha;
+	if (matchedSHA) {
+		return matchedSHA;
 	}
 
-	return currentSHA;
+	return defaultValue;
 };
