@@ -23,12 +23,7 @@ const updateProgressIndicator: UpdateFunction<TextElement> = async ({
 }) => {
 	const { index, indexesWithSHAs } = state;
 
-	progressIndicator.setText(
-		constructProgressText(index, indexesWithSHAs.length),
-	);
+	progressIndicator.setText(`Commit ${index + 1}/${indexesWithSHAs.length}`);
 
 	return true;
 };
-
-const constructProgressText = (index: number = 0, total: number = 0): string =>
-	`Commit ${index + 1}/${total}`;
