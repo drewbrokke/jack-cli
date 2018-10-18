@@ -1,5 +1,7 @@
-import { produce } from 'immer';
+import * as immer from 'immer';
 import { Action, ActionType, State, Status, View } from '../types/types';
+
+immer.setAutoFreeze(false);
 
 const COMMIT_SHA_REGEX: RegExp = new RegExp(/[0-9a-f]{7,40}\b/);
 const INITIAL_STATE: State = {
@@ -13,7 +15,7 @@ const INITIAL_STATE: State = {
 };
 
 export const reducer = (state: State = INITIAL_STATE, action: Action): State =>
-	produce(state, (draft) => {
+	immer.produce(state, (draft) => {
 		switch (action.type) {
 			case ActionType.ADD_COMMITS:
 				action.payload.forEach((line, index) => {
