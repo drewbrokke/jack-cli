@@ -16,24 +16,20 @@ export const reducer = (state: State = INITIAL_STATE, action: Action): State =>
 	produce(state, (draft) => {
 		switch (action.type) {
 			case ActionType.ADD_COMMITS:
-				const newLines = action.payload;
+				action.payload.forEach((line, index) => {
+					draft.lines.push(line);
 
-				newLines.forEach((line, index) => {
 					if (COMMIT_SHA_REGEX.test(line)) {
 						draft.indexesWithSHAs.push(index + state.lines.length);
 					}
 				});
 
-				const allLines = [...state.lines, ...newLines];
-
 				draft.SHA = state.SHA
 					? state.SHA
 					: getSHA(
-							allLines[draft.indexesWithSHAs[state.index]],
+							draft.lines[draft.indexesWithSHAs[state.index]],
 							state.SHA,
 					  );
-
-				draft.lines = allLines;
 
 				break;
 
