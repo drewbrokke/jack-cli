@@ -40,10 +40,7 @@ export const reducer = (
 			return INITIAL_STATE;
 
 		case ActionType.MARK_SHA:
-			return {
-				...state,
-				markedSHA: action.payload,
-			};
+			return { ...state, markedSHA: action.payload };
 
 		case ActionType.UPDATE_INDEX:
 			const index = Math.min(
@@ -61,16 +58,10 @@ export const reducer = (
 			};
 
 		case ActionType.UPDATE_STATUS:
-			return {
-				...state,
-				status: action.payload,
-			};
+			return { ...state, status: action.payload };
 
 		case ActionType.UPDATE_VIEW:
-			return {
-				...state,
-				view: action.payload,
-			};
+			return { ...state, view: action.payload };
 
 		default:
 			return state;
