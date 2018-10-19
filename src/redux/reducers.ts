@@ -1,7 +1,4 @@
-import * as immer from 'immer';
 import { Action, ActionType, State, Status, View } from '../types/types';
-
-immer.setAutoFreeze(false);
 
 const COMMIT_SHA_REGEX: RegExp = new RegExp(/[0-9a-f]{7,40}\b/);
 const INITIAL_STATE: State = {
@@ -14,59 +11,71 @@ const INITIAL_STATE: State = {
 	view: View.LIST,
 };
 
-export const reducer = (state: State = INITIAL_STATE, action: Action): State =>
-	immer.produce(state, (draft) => {
-		switch (action.type) {
-			case ActionType.ADD_COMMITS:
-				action.payload.forEach((line, index) => {
-					draft.lines.push(line);
+export const reducer = (
+	state: State = INITIAL_STATE,
+	action: Action,
+): State => {
+	switch (action.type) {
+		case ActionType.ADD_COMMITS:
+			const indexesWithSHAs = [...state.indexesWithSHAs];
 
-					if (COMMIT_SHA_REGEX.test(line)) {
-						draft.indexesWithSHAs.push(index + state.lines.length);
-					}
-				});
+			action.payload.forEach((line, i) => {
+				if (COMMIT_SHA_REGEX.test(line)) {
+					indexesWithSHAs.push(i + state.lines.length);
+				}
+			});
 
-				draft.SHA = state.SHA
+			const lines = [...state.lines, ...action.payload];
+
+			return {
+				...state,
+				SHA: state.SHA
 					? state.SHA
-					: getSHA(
-							draft.lines[draft.indexesWithSHAs[state.index]],
-							state.SHA,
-					  );
+					: getSHA(lines[indexesWithSHAs[state.index]], state.SHA),
+				indexesWithSHAs,
+				lines,
+			};
 
-				break;
+		case ActionType.CLEAR_LOG:
+			return INITIAL_STATE;
 
-			case ActionType.CLEAR_LOG:
-				Object.assign(draft, INITIAL_STATE);
-				break;
+		case ActionType.MARK_SHA:
+			return {
+				...state,
+				markedSHA: action.payload,
+			};
 
-			case ActionType.MARK_SHA:
-				draft.markedSHA = action.payload;
-				break;
+		case ActionType.UPDATE_INDEX:
+			const index = Math.min(
+				Math.max(state.index + action.payload, 0),
+				state.indexesWithSHAs.length - 1,
+			);
 
-			case ActionType.UPDATE_INDEX:
-				const newIndex = Math.min(
-					Math.max(state.index + action.payload, 0),
-					state.indexesWithSHAs.length - 1,
-				);
-
-				draft.SHA = getSHA(
-					state.lines[state.indexesWithSHAs[newIndex]],
+			return {
+				...state,
+				SHA: getSHA(
+					state.lines[state.indexesWithSHAs[index]],
 					state.SHA,
-				);
+				),
+				index,
+			};
 
-				draft.index = newIndex;
+		case ActionType.UPDATE_STATUS:
+			return {
+				...state,
+				status: action.payload,
+			};
 
-				break;
+		case ActionType.UPDATE_VIEW:
+			return {
+				...state,
+				view: action.payload,
+			};
 
-			case ActionType.UPDATE_STATUS:
-				draft.status = action.payload;
-				break;
-
-			case ActionType.UPDATE_VIEW:
-				draft.view = action.payload;
-				break;
-		}
-	});
+		default:
+			return state;
+	}
+};
 
 const getSHA = (lineText: string, defaultValue: string): string => {
 	const matches: RegExpExecArray | null = COMMIT_SHA_REGEX.exec(lineText);
