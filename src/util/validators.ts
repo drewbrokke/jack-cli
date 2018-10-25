@@ -5,121 +5,70 @@ type CommandValidator = (commandOptions: ICommand) => void;
 const KEY_REGEX = /^([CS]-)?[a-z]$/;
 const RESERVED_KEYS = [...'bfgjkmoqrxy?'.split(''), 'C-c', 'S-j', 'S-k'];
 
-export class ValidatorError extends Error {
-	public commandOptions: ICommand;
-
-	constructor(message: string, commandOptions: ICommand) {
-		super(message);
-
-		this.commandOptions = commandOptions;
-	}
-}
-
-const validateCommandProperty: CommandValidator = (
-	commandOptions: ICommand,
-) => {
-	if (!commandOptions.command) {
-		throw new ValidatorError(
-			`Command object is missing the required property "command".`,
-			commandOptions,
-		);
+const validateCommandProperty: CommandValidator = ({ command }) => {
+	if (!command) {
+		throw new Error(`Missing required property "command".`);
 	}
 
-	if (typeof commandOptions.command !== 'string') {
-		throw new ValidatorError(
-			`The property "command" must be a string.`,
-			commandOptions,
-		);
+	if (typeof command !== 'string') {
+		throw new Error(`Property "command" must be a string.`);
 	}
 };
 
-const validateDescriptionProperty: CommandValidator = (
-	commandOptions: ICommand,
-) => {
-	if (!commandOptions.description) {
-		throw new ValidatorError(
-			`Command object is missing the required property "description".`,
-			commandOptions,
-		);
+const validateDescriptionProperty: CommandValidator = ({ description }) => {
+	if (!description) {
+		throw new Error(`Missing required property "description".`);
 	}
 
-	if (typeof commandOptions.description !== 'string') {
-		throw new ValidatorError(
-			`The property "description" must be a string.`,
-			commandOptions,
-		);
+	if (typeof description !== 'string') {
+		throw new Error(`Property "description" must be a string.`);
 	}
 };
-const validateKeyProperty: CommandValidator = (commandOptions) => {
-	if (!commandOptions.key) {
-		throw new ValidatorError(
-			`Command object is missing the required property "key".`,
-			commandOptions,
+
+const validateKeyProperty: CommandValidator = ({ key }) => {
+	if (!key) {
+		throw new Error(`Missing required property "key".`);
+	}
+
+	if (typeof key !== 'string') {
+		throw new Error(`Property "key" must be a string.`);
+	}
+
+	if (!KEY_REGEX.test(key)) {
+		throw new Error(
+			`Property "key" must match against the regex "${KEY_REGEX}"`,
 		);
 	}
 
-	if (typeof commandOptions.key !== 'string') {
-		throw new ValidatorError(
-			`The property "key" must be a string.`,
-			commandOptions,
-		);
-	}
-
-	if (!KEY_REGEX.test(commandOptions.key)) {
-		throw new ValidatorError(
-			`The property "key" must match against the regex "${KEY_REGEX}"`,
-			commandOptions,
-		);
-	}
-
-	if (RESERVED_KEYS.includes(commandOptions.key)) {
-		throw new ValidatorError(
+	if (RESERVED_KEYS.includes(key)) {
+		throw new Error(
 			// tslint:disable-next-line:max-line-length
-			`The key combination "${
-				commandOptions.key
-			}" is reserved. Here is the list of reserved key combinations: ${RESERVED_KEYS.join(
+			`The key combination "${key}" is reserved. Here is the list of reserved key combinations: ${RESERVED_KEYS.join(
 				' ',
 			)}`,
-			commandOptions,
 		);
 	}
 };
 
-const validateForegroundProperty: CommandValidator = (commandOptions) => {
-	if (
-		commandOptions.foreground &&
-		typeof commandOptions.foreground !== 'boolean'
-	) {
-		throw new ValidatorError(
-			'The property "foreground" must be a boolean.',
-			commandOptions,
-		);
+const validateForegroundProperty: CommandValidator = ({ foreground }) => {
+	if (foreground && typeof foreground !== 'boolean') {
+		throw new Error('Property "foreground" must be a boolean.');
 	}
 };
 
-const validateOnErrorCommandProperty: CommandValidator = (commandOptions) => {
-	if (
-		commandOptions.onErrorCommand &&
-		typeof commandOptions.onErrorCommand !== 'string'
-	) {
-		throw new ValidatorError(
-			'The property "onErrorCommand" must be a string',
-			commandOptions,
-		);
+const validateOnErrorCommandProperty: CommandValidator = ({
+	onErrorCommand,
+}) => {
+	if (onErrorCommand && typeof onErrorCommand !== 'string') {
+		throw new Error('Property "onErrorCommand" must be a string');
 	}
 };
 
-const validateRefreshOnCompleteProperty: CommandValidator = (
-	commandOptions,
-) => {
-	if (
-		commandOptions.refreshOnComplete &&
-		typeof commandOptions.refreshOnComplete !== 'boolean'
-	) {
-		throw new ValidatorError(
-			'The property "refreshOnComplete" must be a boolean.',
-			commandOptions,
-		);
+const validateRefreshOnCompleteProperty: CommandValidator = ({
+	refreshOnComplete,
+}) => {
+	if (refreshOnComplete && typeof refreshOnComplete !== 'boolean') {
+		throw new Error('Property "refreshOnComplete" must be a boolean.');
 	}
 };
 

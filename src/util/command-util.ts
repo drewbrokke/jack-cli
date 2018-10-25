@@ -13,40 +13,54 @@ import { generateLog } from './log-util';
 import { spawnPromise } from './promisify-child-process';
 import { stringToCommandArray } from './util-functions';
 import { uniqByLast } from './util-functions';
-import { ValidatorError, VALIDATORS } from './validators';
+import { VALIDATORS } from './validators';
 
 let declaredCommands: ICommand[];
 
-const crash = (validatorError: ValidatorError) => {
-	process.stderr.write(
-		'There was a problem registering a custom command from your ' +
-			'.jack.json config file:\n\n',
-	);
-	process.stderr.write(validatorError.message + '\n\n');
+const buildErrorMessage = (
+	command: ICommand,
+	errorMessages: string[],
+): string => `Command object:
 
-	if (validatorError.commandOptions) {
-		process.stderr.write('Fix this command object:\n');
-		process.stderr.write(
-			JSON.stringify(validatorError.commandOptions, null, '    ') + '\n',
-		);
-	}
+${JSON.stringify(command, null, '    ')}
 
-	process.exit(1);
-};
+has the following errors:
+
+${errorMessages.join('\n')}
+
+`;
 
 export const getCommands = () => {
 	if (declaredCommands) return declaredCommands;
 
 	declaredCommands = [...COMMANDS, ...getConfigurationCommands()];
 
-	try {
-		for (const command of declaredCommands) {
-			for (const validator of VALIDATORS) {
+	const errorMessages: string[] = [];
+
+	for (const command of declaredCommands) {
+		const commandErrors: string[] = [];
+
+		for (const validator of VALIDATORS) {
+			try {
 				validator(command);
+			} catch (error) {
+				commandErrors.push(error.message);
 			}
 		}
-	} catch (error) {
-		crash(error);
+
+		if (commandErrors.length) {
+			errorMessages.push(buildErrorMessage(command, commandErrors));
+		}
+	}
+
+	if (errorMessages.length > 0) {
+		process.stderr.write(
+			`There was an error registering commands from your .jack.json file:
+
+${errorMessages.join('\n')}`,
+		);
+
+		process.exit(1);
 	}
 
 	declaredCommands = uniqByLast(declaredCommands, 'key');
