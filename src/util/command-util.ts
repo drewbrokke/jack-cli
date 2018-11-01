@@ -13,7 +13,7 @@ import { generateLog } from './log-util';
 import { spawnPromise } from './promisify-child-process';
 import { stringToCommandArray } from './util-functions';
 import { uniqByLast } from './util-functions';
-import { VALIDATORS } from './validators';
+import { validate } from './validators';
 
 let declaredCommands: ICommand[];
 
@@ -38,18 +38,10 @@ export const getCommands = () => {
 	const errorMessages: string[] = [];
 
 	for (const command of declaredCommands) {
-		const commandErrors: string[] = [];
+		const errors = validate(command);
 
-		for (const validator of VALIDATORS) {
-			try {
-				validator(command);
-			} catch (error) {
-				commandErrors.push(error.message);
-			}
-		}
-
-		if (commandErrors.length) {
-			errorMessages.push(buildErrorMessage(command, commandErrors));
+		if (errors.length) {
+			errorMessages.push(buildErrorMessage(command, errors));
 		}
 	}
 

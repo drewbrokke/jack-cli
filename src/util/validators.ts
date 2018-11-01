@@ -72,7 +72,7 @@ const validateRefreshOnCompleteProperty: CommandValidator = ({
 	}
 };
 
-export const VALIDATORS = [
+const VALIDATORS = [
 	validateCommandProperty,
 	validateDescriptionProperty,
 	validateKeyProperty,
@@ -80,3 +80,17 @@ export const VALIDATORS = [
 	validateOnErrorCommandProperty,
 	validateRefreshOnCompleteProperty,
 ];
+
+export const validate = (command: ICommand): string[] => {
+	const commandErrors: string[] = [];
+
+	for (const validator of VALIDATORS) {
+		try {
+			validator(command);
+		} catch (error) {
+			commandErrors.push(error.message);
+		}
+	}
+
+	return commandErrors;
+};
