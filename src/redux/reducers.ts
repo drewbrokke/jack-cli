@@ -4,7 +4,7 @@ const COMMIT_SHA_REGEX: RegExp = new RegExp(/[0-9a-f]{7,40}\b/);
 const INITIAL_STATE: State = {
 	SHA: '',
 	index: 0,
-	indexesWithSHAs: [0],
+	indexesWithSHAs: [],
 	lines: [],
 	markedSHA: '',
 	status: Status.RETRIEVING_LOG,
