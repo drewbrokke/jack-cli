@@ -98,14 +98,6 @@ const updateCommitListElement: UpdateFunction<ListElement> = async ({
 		);
 	}
 
-	if (lines !== lastState.lines) {
-		if (commitListElement.children.length < listHeight) {
-			commitListElement.setItems(
-				lines.slice(lineIndex, lineIndex + listHeight),
-			);
-		}
-	}
-
 	if (!lines.length) {
 		commitListElement.setItems(lines);
 	} else if (
