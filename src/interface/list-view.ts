@@ -68,16 +68,13 @@ export const getCommitListElement = (): ListElement => {
 
 	commitListElement.focus();
 
-	doSubscribe(
-		[StateProperty.index, StateProperty.lines],
-		commitListElement,
-		updateCommitListElement,
-	);
+	doSubscribe([StateProperty.index], commitListElement, renderIndex);
+	doSubscribe([StateProperty.lines], commitListElement, renderLines);
 
 	return commitListElement;
 };
 
-const updateCommitListElement: UpdateFunction<ListElement> = async ({
+const renderIndex: UpdateFunction<ListElement> = async ({
 	element: commitListElement,
 	lastState,
 	state,
@@ -89,21 +86,9 @@ const updateCommitListElement: UpdateFunction<ListElement> = async ({
 	const lineIndex = state.indexesWithSHAs[index];
 	const nextLine = state.lines[lineIndex];
 
-	if (
-		lines !== lastState.lines &&
-		commitListElement.children.length < listHeight
-	) {
-		commitListElement.setItems(
-			lines.slice(lineIndex, lineIndex + listHeight),
-		);
-	}
-
 	if (!lines.length) {
 		commitListElement.setItems(lines);
-	} else if (
-		index !== lastState.index &&
-		commitListElement.getItemIndex(nextLine) !== -1
-	) {
+	} else if (commitListElement.getItemIndex(nextLine) !== -1) {
 		commitListElement.select(commitListElement.getItemIndex(nextLine));
 	} else if (index > lastState.index) {
 		const newLines = lines.slice(lineIndex - listHeight, lineIndex + 1);
@@ -117,7 +102,25 @@ const updateCommitListElement: UpdateFunction<ListElement> = async ({
 		commitListElement.setItems(newLines);
 
 		commitListElement.select(newLines.indexOf(nextLine));
+	} else {
+		return false;
 	}
 
 	return true;
+};
+
+const renderLines: UpdateFunction<ListElement> = async ({ element, state }) => {
+	const { index, lines } = state;
+
+	const listHeight: number = element.height as number;
+
+	if (element.children.length < listHeight) {
+		const lineIndex = state.indexesWithSHAs[index];
+
+		element.setItems(lines.slice(lineIndex, lineIndex + listHeight));
+
+		return true;
+	}
+
+	return false;
 };
