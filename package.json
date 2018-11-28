@@ -1,62 +1,63 @@
 {
-  "name": "jack-cli",
-  "version": "0.8.3",
-  "description": "Chop through that Git log wicked fast!",
-  "main": "index.js",
-  "preferGlobal": true,
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/drewbrokke/jack-cli"
-  },
-  "bin": {
-    "jack": "index.js"
-  },
-  "engines": {
-    "node": ">=4"
-  },
-  "scripts": {
-    "build": "node_modules/typescript/bin/tsc --project .",
-    "clean": "rm -rf node_modules dist",
-    "format": "node_modules/prettier/bin-prettier.js --write './src/**/*.ts'",
-    "lint": "node_modules/tslint/bin/tslint --project . --fix",
-    "test": "node_modules/ava/cli.js",
-    "watch": "node_modules/typescript/bin/tsc --project . --watch"
-  },
-  "prepublishOnly": "npm run build",
-  "author": "Drew Brokke <drew.brokke@liferay.com> (https://github.com/drewbrokke)",
-  "license": "ISC",
-  "dependencies": {
-    "blessed": "^0.1.81",
-    "clipboardy": "^1.2.3",
-    "opn": "^5.3.0",
-    "os-homedir": "^1.0.2",
-    "redux": "^4.0.0"
-  },
-  "keywords": [
-    "cli",
-    "command",
-    "commit",
-    "diff",
-    "git",
-    "jack",
-    "line",
-    "log",
-    "look",
-    "lumber",
-    "lumberjack",
-    "quick",
-    "quicklook",
-    "show"
-  ],
-  "devDependencies": {
-    "@types/blessed": "^0.1.10",
-    "@types/clipboardy": "^1.1.0",
-    "@types/node": "^9.6.1",
-    "@types/redux": "^3.6.0",
-    "ava": "^1.0.0-beta.6",
-    "prettier": "1.14.0",
-    "tslint": "^5.9.1",
-    "tslint-config-prettier": "^1.14.0",
-    "typescript": "^3.0.1"
-  }
+	"name": "jack-cli",
+	"version": "0.8.3",
+	"description": "Chop through that Git log wicked fast!",
+	"main": "index.js",
+	"preferGlobal": true,
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/drewbrokke/jack-cli"
+	},
+	"bin": {
+		"jack": "index.js"
+	},
+	"engines": {
+		"node": ">=4"
+	},
+	"scripts": {
+		"build": "node_modules/typescript/bin/tsc --project .",
+		"clean": "rm -rf node_modules dist",
+		"dev": "npm run watch",
+		"format": "node_modules/prettier/bin-prettier.js --write './src/**/*.ts'",
+		"lint": "node_modules/tslint/bin/tslint --project . --fix",
+		"test": "node_modules/ava/cli.js",
+		"watch": "node_modules/typescript/bin/tsc --project . --watch"
+	},
+	"prepublishOnly": "npm run build",
+	"author": "Drew Brokke <drew.brokke@liferay.com> (https://github.com/drewbrokke)",
+	"license": "ISC",
+	"dependencies": {
+		"blessed": "^0.1.81",
+		"clipboardy": "^1.2.3",
+		"opn": "^5.3.0",
+		"os-homedir": "^1.0.2",
+		"redux": "^4.0.0"
+	},
+	"keywords": [
+		"cli",
+		"command",
+		"commit",
+		"diff",
+		"git",
+		"jack",
+		"line",
+		"log",
+		"look",
+		"lumber",
+		"lumberjack",
+		"quick",
+		"quicklook",
+		"show"
+	],
+	"devDependencies": {
+		"@types/blessed": "^0.1.10",
+		"@types/clipboardy": "^1.1.0",
+		"@types/node": "^9.6.1",
+		"@types/redux": "^3.6.0",
+		"ava": "^1.0.0-beta.6",
+		"prettier": "1.14.0",
+		"tslint": "^5.9.1",
+		"tslint-config-prettier": "^1.14.0",
+		"typescript": "^3.0.1"
+	}
 }
