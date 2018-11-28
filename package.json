@@ -15,7 +15,7 @@
 		"node": ">=4"
 	},
 	"scripts": {
-		"build": "node_modules/typescript/bin/tsc --project .",
+		"build": "npm run clean && npm install && node_modules/typescript/bin/tsc --project .",
 		"clean": "rm -rf node_modules dist",
 		"dev": "npm run watch",
 		"format": "node_modules/prettier/bin-prettier.js --write './src/**/*.ts'",
