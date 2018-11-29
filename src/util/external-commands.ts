@@ -1,5 +1,5 @@
 import * as clipboardy from 'clipboardy';
-import * as opn from 'opn';
+import opn = require('opn');
 import * as path from 'path';
 
 import { gitCommitMessage, gitDiffNameOnly, gitTopLevel } from './git-util';
@@ -26,5 +26,5 @@ export const openFilesFromCommitRange = async (
 		.split('\n')
 		.map((file) => path.join(topLevel, file));
 
-	return Promise.all(filesArray.map(opn));
+	return Promise.all(filesArray.map((file) => opn(file)));
 };

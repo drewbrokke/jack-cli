@@ -19,7 +19,7 @@ export const reducer = (
 		case ActionType.ADD_COMMITS:
 			const indexesWithSHAs = [...state.indexesWithSHAs];
 
-			action.payload.forEach((line, i) => {
+			action.payload.forEach((line: string, i: number) => {
 				if (COMMIT_SHA_REGEX.test(line)) {
 					indexesWithSHAs.push(i + state.lines.length);
 				}

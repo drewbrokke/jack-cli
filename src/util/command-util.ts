@@ -107,7 +107,7 @@ export const registerCommand = async (
 					// @ts-ignore since 'spawnOpts' is passed to spawn and not
 					// exec, it will still function
 					spawnOpts,
-					(err, ok) => {
+					(err: Error, ok: boolean) => {
 						if (err) {
 							reject(err.message);
 						} else if (!ok) {

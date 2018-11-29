@@ -51,7 +51,10 @@ export const stringToCommandArray = (s: string): string[] => {
 	return retVal;
 };
 
-export const uniqBy = <T>(arr: T[], keyPropertyName: string): T[] => {
+export const uniqBy = <T extends { [key: string]: any }>(
+	arr: T[],
+	keyPropertyName: string,
+): T[] => {
 	const keyProperties: any[] = [];
 
 	return arr.filter((object: T) => {
@@ -65,5 +68,7 @@ export const uniqBy = <T>(arr: T[], keyPropertyName: string): T[] => {
 	});
 };
 
-export const uniqByLast = <T>(arr: T[], keyPropertyName: string): T[] =>
-	uniqBy([...arr].reverse(), keyPropertyName).reverse();
+export const uniqByLast = <T extends { [key: string]: any }>(
+	arr: T[],
+	keyPropertyName: string,
+): T[] => uniqBy([...arr].reverse(), keyPropertyName).reverse();

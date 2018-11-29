@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import * as osHomedir from 'os-homedir';
+import osHomedir = require('os-homedir');
 import { join } from 'path';
 
 import { ICommand } from './commands-def';
