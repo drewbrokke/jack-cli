@@ -53,6 +53,8 @@
 		"@types/blessed": "^0.1.10",
 		"@types/clipboardy": "^1.1.0",
 		"@types/node": "^9.6.1",
+		"@types/opn": "^5.1.0",
+		"@types/os-homedir": "^1.0.0",
 		"@types/redux": "^3.6.0",
 		"ava": "^1.0.0-beta.6",
 		"prettier": "1.14.0",
