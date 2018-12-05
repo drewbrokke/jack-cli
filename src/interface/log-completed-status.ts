@@ -29,7 +29,7 @@ export const getLogCompletedStatus = (): TextElement => {
 const statusInfo = {
 	[Status.LOG_COMPLETED]: ['green', 'End of log'],
 	[Status.LOG_STALE]: ['red', 'Log is stale, please refresh'],
-	[Status.RETRIEVING_LOG]: ['yellow', 'RETRIEVING_TEXT'],
+	[Status.RETRIEVING_LOG]: ['yellow', RETRIEVING_TEXT],
 };
 
 const updateProgressIndicator: UpdateFunction<TextElement> = async ({
