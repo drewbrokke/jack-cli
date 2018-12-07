@@ -114,7 +114,7 @@ const renderLines: UpdateFunction<ListElement> = async ({ element, state }) => {
 
 	const listHeight: number = element.height as number;
 
-	if (element.children.length < listHeight) {
+	if (element.children.length < listHeight || lines.length < listHeight) {
 		const lineIndex = state.indexesWithSHAs[index];
 
 		element.setItems(lines.slice(lineIndex, lineIndex + listHeight));
