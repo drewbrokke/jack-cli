@@ -33,7 +33,7 @@ const getStore = (
 
 	return {
 		dispatch(action: Action) {
-			state = reducerFn({ ...state }, action);
+			state = reducerFn(state, action);
 
 			subscribers.forEach((subscriber) => subscriber());
 		},
@@ -47,6 +47,7 @@ const getStore = (
 		},
 	};
 };
+
 export const store: Store = getStore(reducer);
 
 export const doSubscribe = <T extends BlessedElement>(
