@@ -3,8 +3,8 @@ import {
 	notifyInfo,
 	notifySuccess,
 } from '../interface/notification';
-import { markSHA } from '../redux/action-creators';
-import { store } from '../redux/store';
+import { markSHA } from '../state/action-creators';
+import { store } from '../state/store';
 import { Screen } from '../types/types';
 import { COMMANDS, ICommand, Placeholder } from './commands-def';
 import { getCommands as getConfigurationCommands } from './config-util';

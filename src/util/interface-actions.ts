@@ -3,8 +3,8 @@ import {
 	notifyInfo,
 	notifySuccess,
 } from '../interface/notification';
-import { markSHA } from '../redux/action-creators';
-import { store } from '../redux/store';
+import { markSHA } from '../state/action-creators';
+import { store } from '../state/store';
 import {
 	copyCommitMessageToClipboard,
 	copySHAToClipboard,

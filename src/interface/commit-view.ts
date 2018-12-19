@@ -1,5 +1,5 @@
-import { updateIndex, updateView } from '../redux/action-creators';
-import { doSubscribe, store } from '../redux/store';
+import { updateIndex, updateView } from '../state/action-creators';
+import { doSubscribe, store } from '../state/store';
 import {
 	BoxElement,
 	StateProperty,

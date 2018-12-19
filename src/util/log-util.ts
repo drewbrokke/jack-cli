@@ -1,6 +1,6 @@
 import { ChildProcess, spawn } from 'child_process';
-import { addCommits, clearLog, updateStatus } from '../redux/action-creators';
-import { store } from '../redux/store';
+import { addCommits, clearLog, updateStatus } from '../state/action-creators';
+import { store } from '../state/store';
 import { Screen, Status } from '../types/types';
 import { GIT_LOG_ARGS, stash } from './stash';
 

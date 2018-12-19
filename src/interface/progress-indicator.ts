@@ -1,4 +1,4 @@
-import { doSubscribe } from '../redux/store';
+import { doSubscribe } from '../state/store';
 import {
 	StateProperty,
 	Status,
