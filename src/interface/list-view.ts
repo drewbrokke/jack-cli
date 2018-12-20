@@ -81,7 +81,7 @@ const renderIndex: UpdateFunction<ListElement> = async ({
 	const nextLine = state.lines[lineIndex];
 
 	if (!lines.length) {
-		commitListElement.setItems(lines);
+		commitListElement.setItems(lines as string[]);
 	} else if (commitListElement.getItemIndex(nextLine) !== -1) {
 		commitListElement.select(commitListElement.getItemIndex(nextLine));
 	} else if (index > lastState.index) {

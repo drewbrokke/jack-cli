@@ -57,13 +57,13 @@ export type StateProperty =
 	| 'view';
 
 export interface State {
-	index: number;
-	indexesWithSHAs: number[];
-	lines: string[];
-	status: Status;
-	markedSHA: string | null;
-	SHA: string;
-	view: View;
+	readonly index: number;
+	readonly indexesWithSHAs: ReadonlyArray<number>;
+	readonly lines: ReadonlyArray<string>;
+	readonly status: Status;
+	readonly markedSHA: string | null;
+	readonly SHA: string;
+	readonly view: View;
 }
 
 export interface UpdateFunctionArgumentObject<T extends BlessedElement> {
