@@ -69,7 +69,6 @@ export interface State {
 export interface UpdateFunctionArgumentObject<T extends BlessedElement> {
 	element: T;
 	lastState: State;
-	modifiedProperties: StateProperty[];
 	state: State;
 }
 

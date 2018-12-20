@@ -73,7 +73,6 @@ export const doSubscribe = <T extends BlessedElement>(
 			!!(await updateFunction({
 				element,
 				lastState,
-				modifiedProperties,
 				state,
 			}))
 		) {
