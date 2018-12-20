@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import osHomedir = require('os-homedir');
+import { homedir } from 'os';
 import { join } from 'path';
 
 import { ICommand } from './commands-def';
@@ -12,7 +12,7 @@ interface IConfig {
 }
 
 const CONFIG_FILE_NAME = '.jack.json';
-const CONFIG_FILE_PATH = join(osHomedir(), CONFIG_FILE_NAME);
+const CONFIG_FILE_PATH = join(homedir(), CONFIG_FILE_NAME);
 
 const DEFAULT_GIT_SHOW_OPTIONS = '--patch-with-stat --stat-width 1000 --color';
 const DEFAULT_NOTIFICATION_TIMEOUT = 5000;
