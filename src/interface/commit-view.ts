@@ -1,11 +1,6 @@
 import { updateIndex, updateView } from '../state/action-creators';
 import { doSubscribe, store } from '../state/store';
-import {
-	BoxElement,
-	StateProperty,
-	UpdateFunction,
-	View,
-} from '../types/types';
+import { BoxElement, UpdateFunction, View } from '../types/types';
 import { gitShow } from '../util/git-util';
 import { getBoxElement } from './interface-elements';
 import { notifyWarning } from './notification';
@@ -46,11 +41,7 @@ export const getCommitElement = (): BoxElement => {
 
 	commitElement.focus();
 
-	doSubscribe(
-		[StateProperty.SHA, StateProperty.view],
-		commitElement,
-		updateCommitElement,
-	);
+	doSubscribe(['SHA', 'view'], commitElement, updateCommitElement);
 
 	return commitElement;
 };

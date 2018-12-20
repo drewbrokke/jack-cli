@@ -1,12 +1,6 @@
 import { updateIndex, updateView } from '../state/action-creators';
 import { doSubscribe, store } from '../state/store';
-import {
-	Action,
-	ListElement,
-	StateProperty,
-	UpdateFunction,
-	View,
-} from '../types/types';
+import { Action, ListElement, UpdateFunction, View } from '../types/types';
 import { KEY_NAV_INTERVAL, stash } from '../util/stash';
 import { getListElement } from './interface-elements';
 import { notifyInfo } from './notification';
@@ -68,8 +62,8 @@ export const getCommitListElement = (): ListElement => {
 
 	commitListElement.focus();
 
-	doSubscribe([StateProperty.index], commitListElement, renderIndex);
-	doSubscribe([StateProperty.lines], commitListElement, renderLines);
+	doSubscribe(['index'], commitListElement, renderIndex);
+	doSubscribe(['lines'], commitListElement, renderLines);
 
 	return commitListElement;
 };

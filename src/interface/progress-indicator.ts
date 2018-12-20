@@ -1,10 +1,5 @@
 import { doSubscribe } from '../state/store';
-import {
-	StateProperty,
-	Status,
-	TextElement,
-	UpdateFunction,
-} from '../types/types';
+import { Status, TextElement, UpdateFunction } from '../types/types';
 import { getTextElement } from './interface-elements';
 
 const TOTAL_PLACEHOLDER = '---';
@@ -17,7 +12,7 @@ export const getProgressIndicator = (): TextElement => {
 	});
 
 	doSubscribe(
-		[StateProperty.index, StateProperty.status],
+		['index', 'status'],
 		progressIndicator,
 		updateProgressIndicator,
 	);

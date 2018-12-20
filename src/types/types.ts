@@ -47,25 +47,23 @@ export interface Action {
 	payload?: any;
 }
 
-export enum StateProperty {
-	index = 'index',
-	indexesWithSHAs = 'indexesWithSHAs',
-	lines = 'lines',
-	status = 'status',
-	markedSHA = 'markedSHA',
-	SHA = 'SHA',
-	view = 'view',
-}
+export type StateProperty =
+	| 'index'
+	| 'indexesWithSHAs'
+	| 'lines'
+	| 'status'
+	| 'markedSHA'
+	| 'SHA'
+	| 'view';
 
-// tslint:disable-next-line:interface-name
 export interface State {
-	[StateProperty.index]: number;
-	[StateProperty.indexesWithSHAs]: number[];
-	[StateProperty.lines]: string[];
-	[StateProperty.status]: Status;
-	[StateProperty.markedSHA]: string | null;
-	[StateProperty.SHA]: string;
-	[StateProperty.view]: View;
+	index: number;
+	indexesWithSHAs: number[];
+	lines: string[];
+	status: Status;
+	markedSHA: string | null;
+	SHA: string;
+	view: View;
 }
 
 export interface UpdateFunctionArgumentObject<T extends BlessedElement> {

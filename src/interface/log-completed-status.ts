@@ -1,10 +1,5 @@
 import { doSubscribe } from '../state/store';
-import {
-	StateProperty,
-	Status,
-	TextElement,
-	UpdateFunction,
-} from '../types/types';
+import { Status, TextElement, UpdateFunction } from '../types/types';
 import { getTextElement } from './interface-elements';
 
 const RETRIEVING_TEXT = 'Retrieving git log...';
@@ -17,11 +12,7 @@ export const getLogCompletedStatus = (): TextElement => {
 		style: { bold: true, fg: 'yellow' },
 	});
 
-	doSubscribe(
-		[StateProperty.status],
-		progressIndicator,
-		updateProgressIndicator,
-	);
+	doSubscribe(['status'], progressIndicator, updateProgressIndicator);
 
 	return progressIndicator;
 };
