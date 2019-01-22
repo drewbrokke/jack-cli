@@ -1,7 +1,10 @@
 import { Action, ActionType, State } from '../types/types';
+import { getShowLineNumbers } from '../util/config-util';
 import { INITIAL_STATE } from './store';
 
 const COMMIT_SHA_REGEX: RegExp = new RegExp(/[0-9a-f]{7,40}\b/);
+
+const showLineNumbers = getShowLineNumbers();
 
 export const reducer = (
 	state: State = INITIAL_STATE,
@@ -11,13 +14,21 @@ export const reducer = (
 		case ActionType.ADD_COMMITS:
 			const indexesWithSHAs = [...state.indexesWithSHAs];
 
-			action.payload.forEach((line: string, i: number) => {
+			const newLines = action.payload.map((line: string, i: number) => {
 				if (COMMIT_SHA_REGEX.test(line)) {
-					indexesWithSHAs.push(i + state.lines.length);
+					const indexWithLine = i + state.lines.length;
+
+					indexesWithSHAs.push(indexWithLine);
+
+					if (showLineNumbers) {
+						return `${indexesWithSHAs.length}: ${line}`;
+					}
 				}
+
+				return line;
 			});
 
-			const lines = [...state.lines, ...action.payload];
+			const lines = [...state.lines, ...newLines];
 
 			return {
 				...state,

@@ -9,6 +9,7 @@ interface IConfig {
 	commands: ICommand[];
 	gitShowOptions?: string;
 	notificationTimeout?: number;
+	showLineNumbers?: boolean;
 }
 
 const CONFIG_FILE_NAME = '.jack.json';
@@ -16,6 +17,7 @@ const CONFIG_FILE_PATH = join(homedir(), CONFIG_FILE_NAME);
 
 const DEFAULT_GIT_SHOW_OPTIONS = '--patch-with-stat --stat-width 1000 --color';
 const DEFAULT_NOTIFICATION_TIMEOUT = 5000;
+const DEFAULT_SHOW_LINE_NUMBERS = false;
 
 let config: IConfig;
 
@@ -34,6 +36,10 @@ export const getNotificationTimeout = (): number => {
 	return getConfig().notificationTimeout || DEFAULT_NOTIFICATION_TIMEOUT;
 };
 
+export const getShowLineNumbers = (): boolean => {
+	return getConfig().showLineNumbers || DEFAULT_SHOW_LINE_NUMBERS;
+};
+
 const getConfig = (): IConfig => {
 	if (!config) {
 		config = readConfig();
@@ -47,6 +53,7 @@ const readConfig = (): IConfig => {
 		commands: [],
 		gitShowOptions: DEFAULT_GIT_SHOW_OPTIONS,
 		notificationTimeout: DEFAULT_NOTIFICATION_TIMEOUT,
+		showLineNumbers: DEFAULT_SHOW_LINE_NUMBERS,
 	};
 
 	if (!fs.existsSync(CONFIG_FILE_PATH)) {
