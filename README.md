@@ -107,3 +107,13 @@ A full explanation of each variable is provided in the comments of [commands-def
 Type: String Array
 
 When evaluating which lines contain commit hashes, jack will skip lines that match any of the Regex strings in the array.
+
+### Environment variables
+
+**JACK_CLI_CONFIG_FILE_PATH**
+
+```
+JACK_CLI_CONFIG_FILE_PATH="/users/username/path/to/custom-jack-config.json"
+```
+
+If you would like to use `jack` with different configuration files for different shell user logins, you can point to a custom json file by setting the JACK_CLI_CONFIG_FILE_PATH environment variable. If the file doesn't exist, `jack` will create it when it first starts up.
