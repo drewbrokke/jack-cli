@@ -12,9 +12,21 @@ interface IConfig {
 	notificationTimeout?: number;
 	showLineNumbers?: boolean;
 }
+let CONFIG_FILE_PATH: string;
 
-const CONFIG_FILE_NAME = '.jack.json';
-const CONFIG_FILE_PATH = join(homedir(), CONFIG_FILE_NAME);
+if (process.env.JACK_CLI_CONFIG_FILE_PATH) {
+	if (!process.env.JACK_CLI_CONFIG_FILE_PATH.endsWith('.json')) {
+		process.stderr.write(
+			'The JACK_CLI_CONFIG_FILE_PATH environment variable must define a path to a *.json file. If this file does not exist, jack-cli will create it.',
+		);
+
+		process.exit(1);
+	}
+
+	CONFIG_FILE_PATH = process.env.JACK_CLI_CONFIG_FILE_PATH;
+} else {
+	CONFIG_FILE_PATH = join(homedir(), '.jack.json');
+}
 
 const DEFAULT_GIT_SHOW_OPTIONS = '--patch-with-stat --stat-width 1000 --color';
 const DEFAULT_NOTIFICATION_TIMEOUT = 5000;
