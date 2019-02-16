@@ -6,6 +6,7 @@ import { ICommand } from './commands-def';
 import { stringToCommandArray } from './util-functions';
 
 interface IConfig {
+	blacklistPatterns?: string[];
 	commands: ICommand[];
 	gitShowOptions?: string;
 	notificationTimeout?: number;
@@ -40,6 +41,14 @@ export const getShowLineNumbers = (): boolean => {
 	return getConfig().showLineNumbers || DEFAULT_SHOW_LINE_NUMBERS;
 };
 
+export const getBlacklistPatterns = (): RegExp[] => {
+	const blacklistPatterns = getConfig().blacklistPatterns || [];
+
+	return blacklistPatterns.map(
+		(blacklistPattern) => new RegExp(blacklistPattern),
+	);
+};
+
 const getConfig = (): IConfig => {
 	if (!config) {
 		config = readConfig();
@@ -50,6 +59,7 @@ const getConfig = (): IConfig => {
 
 const readConfig = (): IConfig => {
 	const defaultConfig: IConfig = {
+		blacklistPatterns: [],
 		commands: [],
 		gitShowOptions: DEFAULT_GIT_SHOW_OPTIONS,
 		notificationTimeout: DEFAULT_NOTIFICATION_TIMEOUT,

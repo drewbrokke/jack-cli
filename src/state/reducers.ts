@@ -1,9 +1,10 @@
 import { Action, ActionType, State } from '../types/types';
-import { getShowLineNumbers } from '../util/config-util';
+import { getBlacklistPatterns, getShowLineNumbers } from '../util/config-util';
 import { INITIAL_STATE } from './store';
 
 const COMMIT_SHA_REGEX: RegExp = new RegExp(/[0-9a-f]{7,40}\b/);
 
+const blacklistPatterns: RegExp[] = getBlacklistPatterns();
 const showLineNumbers = getShowLineNumbers();
 
 export const reducer = (
@@ -15,7 +16,12 @@ export const reducer = (
 			const indexesWithSHAs = [...state.indexesWithSHAs];
 
 			const newLines = action.payload.map((line: string, i: number) => {
-				if (COMMIT_SHA_REGEX.test(line)) {
+				if (
+					COMMIT_SHA_REGEX.test(line) &&
+					!blacklistPatterns.some((blacklistPattern) =>
+						blacklistPattern.test(line),
+					)
+				) {
 					const indexWithLine = i + state.lines.length;
 
 					indexesWithSHAs.push(indexWithLine);
