@@ -93,3 +93,17 @@ A full explanation of each property can be found in the comments of [commands-de
 -   "[%SHA_SINGLE%]"
 
 A full explanation of each variable is provided in the comments of [commands-def.ts#L79-L114](https://github.com/drewbrokke/jack-cli/blob/master/src/util/commands-def.ts#L79-L114).
+
+### Other configuration options
+
+**blacklistPatterns**
+
+```json
+{
+	"blacklistPatterns": ["exception1", "exception2"]
+}
+```
+
+Type: String Array
+
+When evaluating which lines contain commit hashes, jack will skip lines that match any of the Regex strings in the array.
