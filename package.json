@@ -57,6 +57,6 @@
 		"prettier": "1.14.0",
 		"tslint": "^5.9.1",
 		"tslint-config-prettier": "^1.14.0",
-		"typescript": "^3.2.1"
+		"typescript": "^3.3.3"
 	}
 }
