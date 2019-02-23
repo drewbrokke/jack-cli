@@ -1,5 +1,5 @@
 import { TextElement, TextOptions } from '../types/types';
-import { getHelpText } from '../util/help-text';
+import { HELP_TEXT } from '../util/help-text';
 import { getTextElement } from './interface-elements';
 
 let helpDialog: TextElement;
@@ -11,7 +11,7 @@ export const getHelpDialog = () => {
 
 	const options: TextOptions = {
 		border: 'line',
-		content: getHelpText(),
+		content: HELP_TEXT,
 		name: 'helpDialog',
 		padding: {
 			bottom: 0,

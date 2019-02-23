@@ -1,48 +1,52 @@
 import { getCommands } from './command-util';
 import { ICommand } from './commands-def';
 
-export const getHelpText = () => {
-	const documentedCommands = documentCommands(getCommands());
-
-	return helpText + documentedCommands;
-};
-
 const documentCommands = (commands: ICommand[]) => {
 	return commands.reduce(
 		(accumulator, command) =>
 			`${accumulator}
-{bold}${pad(command.key)} ->   ${command.description}{/bold}
+{bold}${pad(6, command.key)} ->   ${command.description}{/bold}
 			${command.command}`,
 		'{bold}Registered Keys{/bold}\n',
 	);
 };
 
-const helpText = `
-{bold}Preset Keys{/bold}
+const getPresetKeysText = () => {
+	const keys = [
+		[`Space, Enter`, `"Quick Look" a commit's contents (toggle)`],
+		[`j/k, down/up`, `(list view) Navgate between commits`],
+		[`0-9`, `(list view) Set a movement interval (like Vim)`],
+		[`j/k, down/up`, `(commit view) scroll down`],
+		[`left/right`, `(commit view) View previous/next commit`],
+		['', ''],
+		[`x`, `Mark a commit as a range anchor`],
+		[`e`, `Open diff in default editor`],
+		[`o`, `Open changed files in default editor`],
+		[`m`, `Copy commit message to clipboard`],
+		[`y`, `Copy commit SHA to clipboard`],
+		['', ''],
+		[`r`, `Refresh the list`],
+		[`q, esc, C-c`, `Exit {bold}jack{/bold}`],
+		[`?`, `Show/hide help dialog`],
+	];
 
-C = Control key
-S = Shift key
+	const longest: number = keys.reduce(
+		(acc: number, [key]) => Math.max(acc, key.length),
+		0,
+	);
 
-{bold}Space, Enter{/bold}    ->  "Quick Look" a commit's contents (toggle)
-{bold}j/k, down/up{/bold}    ->  (list view) Navgate between commits
-{bold}0-9{/bold}             ->  (list view) Set a movement interval (like Vim)
-{bold}j/k, down/up{/bold}    ->  (commit view) scroll down
-{bold}left/right{/bold}      ->  (commit view) View previous/next commit
+	return keys
+		.map(
+			([key, value]) =>
+				key.length
+					? `{bold}${pad(longest + 2, key)}{/bold} ->  ${value}`
+					: '',
+		)
+		.join('\n');
+};
 
-{bold}x{/bold}               ->  Mark a commit as a range anchor
-{bold}e{/bold}               ->  Open diff in default editor
-{bold}o{/bold}               ->  Open changed files in default editor
-{bold}m{/bold}               ->  Copy commit message to clipboard
-{bold}y{/bold}               ->  Copy commit SHA to clipboard
-
-{bold}r{/bold}               ->  Refresh the list
-{bold}q, esc, C-c{/bold}     ->  Exit {bold}jack{/bold}
-{bold}?{/bold}               ->  Show/hide help dialog
-
-`;
-
-const pad = (s: string) => {
-	const delta = 6 - s.length;
+const pad = (l: number, s: string) => {
+	const delta = l - s.length;
 
 	if (delta > 0) {
 		s += ' '.repeat(delta);
@@ -50,3 +54,14 @@ const pad = (s: string) => {
 
 	return s;
 };
+
+export const HELP_TEXT = `
+{bold}Preset Keys{/bold}
+
+C = Control key
+S = Shift key
+
+${getPresetKeysText()}
+
+${documentCommands(getCommands())}
+`;
