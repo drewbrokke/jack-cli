@@ -35,7 +35,12 @@ const appendNotification = (content: string, color: string | null = null) => {
 			.split('\n')
 			.reduce((acc, cur) => (acc >= cur.length ? acc : cur.length), 0);
 
-		notificationContainer.pushLine('-'.repeat(longestLineLength));
+		notificationContainer.pushLine(
+			'-'.repeat(
+				Math.min(longestLineLength, notificationContainer.screen
+					.width as number),
+			),
+		);
 	}
 
 	notificationContainer.pushLine(
