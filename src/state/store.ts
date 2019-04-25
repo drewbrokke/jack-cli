@@ -19,6 +19,7 @@ export const INITIAL_STATE: State = {
 	search: '',
 	status: Status.RETRIEVING_LOG,
 	view: View.LIST,
+	visibleLines: [],
 };
 
 export interface Store {

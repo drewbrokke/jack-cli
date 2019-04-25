@@ -23,6 +23,7 @@ export const getCommitListElement = (): ListElement => {
 				bg: '#555',
 			},
 		},
+		tags: true,
 		top: 0,
 	});
 
@@ -85,8 +86,8 @@ export const getCommitListElement = (): ListElement => {
 
 	commitListElement.focus();
 
-	doSubscribe(['index'], commitListElement, renderIndex);
-	doSubscribe(['lines'], commitListElement, renderLines);
+	doSubscribe(['index', 'search'], commitListElement, renderIndex);
+	doSubscribe(['visibleLines'], commitListElement, renderLines);
 
 	return commitListElement;
 };
@@ -96,25 +97,28 @@ const renderIndex: UpdateFunction<ListElement> = async ({
 	lastState,
 	state,
 }) => {
-	const { index, lines } = state;
+	const { index, visibleLines } = state;
 
 	const listHeight: number = commitListElement.height as number;
 
 	const lineIndex = state.indexesWithSHAs[index];
-	const nextLine = state.lines[lineIndex];
+	const nextLine = visibleLines[lineIndex];
 
-	if (!lines.length) {
-		commitListElement.setItems(lines as string[]);
+	if (!visibleLines.length) {
+		commitListElement.setItems(visibleLines as string[]);
 	} else if (commitListElement.getItemIndex(nextLine) !== -1) {
 		commitListElement.select(commitListElement.getItemIndex(nextLine));
 	} else if (index > lastState.index) {
-		const newLines = lines.slice(lineIndex - listHeight, lineIndex + 1);
+		const newLines = visibleLines.slice(
+			lineIndex - listHeight,
+			lineIndex + 1,
+		);
 
 		commitListElement.setItems(newLines);
 
 		commitListElement.select(newLines.indexOf(nextLine));
 	} else if (index < lastState.index) {
-		const newLines = lines.slice(lineIndex, lineIndex + listHeight);
+		const newLines = visibleLines.slice(lineIndex, lineIndex + listHeight);
 
 		commitListElement.setItems(newLines);
 
@@ -127,14 +131,17 @@ const renderIndex: UpdateFunction<ListElement> = async ({
 };
 
 const renderLines: UpdateFunction<ListElement> = async ({ element, state }) => {
-	const { index, lines } = state;
+	const { index, visibleLines } = state;
 
 	const listHeight: number = element.height as number;
 
-	if (element.children.length < listHeight || lines.length < listHeight) {
+	if (
+		element.children.length < listHeight ||
+		visibleLines.length < listHeight
+	) {
 		const lineIndex = state.indexesWithSHAs[index];
 
-		element.setItems(lines.slice(lineIndex, lineIndex + listHeight));
+		element.setItems(visibleLines.slice(lineIndex, lineIndex + listHeight));
 
 		return true;
 	}

@@ -53,11 +53,14 @@ export interface Action {
 export type StateProperty =
 	| 'index'
 	| 'indexesWithSHAs'
+	| 'indexesMatchingSearch'
 	| 'lines'
+	| 'search'
 	| 'status'
 	| 'markedSHA'
 	| 'SHA'
-	| 'view';
+	| 'view'
+	| 'visibleLines';
 
 export interface State {
 	readonly index: number;
@@ -69,6 +72,7 @@ export interface State {
 	readonly markedSHA: string | null;
 	readonly SHA: string;
 	readonly view: View;
+	readonly visibleLines: ReadonlyArray<string>;
 }
 
 export interface UpdateFunctionArgumentObject<T extends BlessedElement> {

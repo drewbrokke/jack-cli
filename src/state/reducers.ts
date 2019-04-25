@@ -35,6 +35,7 @@ export const reducer = (
 		});
 
 		const lines = [...state.lines, ...newLines];
+		const visibleLines = [...state.visibleLines, ...newLines];
 
 		const index = indexesWithSHAs.includes(state.index)
 			? state.index
@@ -46,6 +47,7 @@ export const reducer = (
 			index,
 			indexesWithSHAs,
 			lines,
+			visibleLines,
 		};
 	} else if (action.type === ActionType.CLEAR_LOG) {
 		return INITIAL_STATE;
@@ -79,10 +81,7 @@ export const reducer = (
 		};
 	} else if (action.type === ActionType.UPDATE_SEARCH) {
 		let indexesMatchingSearch: number[] = [];
-		const { index, indexesWithSHAs, lines, SHA } = state;
-
-		let newIndex = index;
-		let newSHA = SHA;
+		let { index, indexesWithSHAs, lines, SHA, visibleLines } = state;
 
 		if (!!action.payload) {
 			const searchTerm = action.payload.toLowerCase();
@@ -101,15 +100,29 @@ export const reducer = (
 		}
 
 		if (indexesMatchingSearch.length) {
-			newIndex = getNextIndex(indexesMatchingSearch, newIndex);
-			newSHA = getSHA(lines[newIndex], newSHA);
+			index = getNextIndex(indexesMatchingSearch, index);
+			visibleLines = lines.map((line, i) => {
+				if (indexesMatchingSearch.includes(i)) {
+					return line.replace(
+						new RegExp(action.payload.toLowerCase(), 'gi'),
+						(match) =>
+							`{white-bg}{black-fg}${match}{/black-fg}{/white-bg}`,
+					);
+				} else {
+					return line;
+				}
+			});
+			SHA = getSHA(lines[index], SHA);
+		} else {
+			visibleLines = lines;
 		}
 
 		return {
 			...state,
-			index: newIndex,
+			index,
 			indexesMatchingSearch,
-			SHA: newSHA,
+			visibleLines,
+			SHA,
 		};
 	} else if (action.type === ActionType.UPDATE_INDEX) {
 		const indexFn = action.payload > 0 ? getNextIndex : getPreviousIndex;
