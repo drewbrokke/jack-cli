@@ -2,6 +2,8 @@ import {
 	updateIndex,
 	updateView,
 	updateSearch,
+	nextSearchResult,
+	previousSearchResult,
 } from '../state/action-creators';
 import { doSubscribe, store } from '../state/store';
 import { Action, ListElement, UpdateFunction, View } from '../types/types';
@@ -77,6 +79,9 @@ export const getCommitListElement = (): ListElement => {
 
 		commitListElement.screen.render();
 	});
+
+	commitListElement.key('C-n', () => store.dispatch(nextSearchResult()));
+	commitListElement.key('C-p', () => store.dispatch(previousSearchResult()));
 
 	commitListElement.focus();
 

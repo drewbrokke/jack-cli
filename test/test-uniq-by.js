@@ -10,12 +10,12 @@ const objects = [
 
 const stringify = (objArray) => objArray.map((obj) => obj.id).join('');
 
-test('uniqBy', t => {
+test('uniqBy', (t) => {
 	t.plan(1);
 	t.is(stringify(uniqBy(objects, 'name')), '12');
 });
 
-test('uniqByLast', async t => {
+test('uniqByLast', async (t) => {
 	t.plan(1);
 	t.is(stringify(uniqByLast(objects, 'name')), '23');
 });

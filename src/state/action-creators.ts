@@ -12,6 +12,14 @@ export const markSHA = (payload: string | null): Action => ({
 	type: ActionType.MARK_SHA,
 });
 
+export const nextSearchResult = (): Action => ({
+	type: ActionType.NEXT_SEARCH_RESULT,
+});
+
+export const previousSearchResult = (): Action => ({
+	type: ActionType.PREVIOUS_SEARCH_RESULT,
+});
+
 export const updateIndex = (payload: number): Action => ({
 	payload,
 	type: ActionType.UPDATE_INDEX,

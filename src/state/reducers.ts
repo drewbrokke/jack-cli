@@ -1,6 +1,7 @@
 import { Action, ActionType, State } from '../types/types';
 import { getBlacklistPatterns, getShowLineNumbers } from '../util/config-util';
 import { INITIAL_STATE } from './store';
+import { getNextIndex, getPreviousIndex } from '../util/util-functions';
 
 const COMMIT_SHA_REGEX: RegExp = new RegExp(/[0-9a-f]{7,40}\b/);
 
@@ -35,11 +36,14 @@ export const reducer = (
 
 		const lines = [...state.lines, ...newLines];
 
+		const index = indexesWithSHAs.includes(state.index)
+			? state.index
+			: getNextIndex(indexesWithSHAs, state.index);
+
 		return {
 			...state,
-			SHA: state.SHA
-				? state.SHA
-				: getSHA(lines[indexesWithSHAs[state.index]], state.SHA),
+			SHA: state.SHA ? state.SHA : getSHA(lines[state.index], state.SHA),
+			index,
 			indexesWithSHAs,
 			lines,
 		};
@@ -47,6 +51,32 @@ export const reducer = (
 		return INITIAL_STATE;
 	} else if (action.type === ActionType.MARK_SHA) {
 		return { ...state, markedSHA: action.payload };
+	} else if (action.type === ActionType.NEXT_SEARCH_RESULT) {
+		let { index, indexesMatchingSearch, lines, SHA } = state;
+
+		if (indexesMatchingSearch.length) {
+			index = getNextIndex([...indexesMatchingSearch], index);
+			SHA = getSHA(lines[index], SHA);
+		}
+
+		return {
+			...state,
+			index,
+			SHA,
+		};
+	} else if (action.type === ActionType.PREVIOUS_SEARCH_RESULT) {
+		let { index, indexesMatchingSearch, lines, SHA } = state;
+
+		if (indexesMatchingSearch.length) {
+			index = getPreviousIndex([...indexesMatchingSearch], index);
+			SHA = getSHA(lines[index], SHA);
+		}
+
+		return {
+			...state,
+			index,
+			SHA,
+		};
 	} else if (action.type === ActionType.UPDATE_SEARCH) {
 		let indexesMatchingSearch: number[] = [];
 		const { index, indexesWithSHAs, lines, SHA } = state;
@@ -71,16 +101,8 @@ export const reducer = (
 		}
 
 		if (indexesMatchingSearch.length) {
-			// update index to go to the first sha in the matching search
-			const indexWithSHA = indexesWithSHAs[index];
-			const nextIndexWithSHA = indexesMatchingSearch.find(
-				(i) => i > indexWithSHA,
-			);
-
-			if (!!nextIndexWithSHA) {
-				newIndex = indexesWithSHAs.indexOf(nextIndexWithSHA);
-				newSHA = getSHA(lines[newIndex], SHA);
-			}
+			newIndex = getNextIndex(indexesMatchingSearch, newIndex);
+			newSHA = getSHA(lines[newIndex], newSHA);
 		}
 
 		return {
@@ -90,14 +112,17 @@ export const reducer = (
 			SHA: newSHA,
 		};
 	} else if (action.type === ActionType.UPDATE_INDEX) {
-		const index = Math.min(
-			Math.max(state.index + action.payload, 0),
-			state.indexesWithSHAs.length - 1,
-		);
+		const indexFn = action.payload > 0 ? getNextIndex : getPreviousIndex;
+
+		let { index, indexesWithSHAs } = state;
+
+		for (let i = Math.abs(action.payload); i > 0; i--) {
+			index = indexFn([...indexesWithSHAs], index);
+		}
 
 		return {
 			...state,
-			SHA: getSHA(state.lines[state.indexesWithSHAs[index]], state.SHA),
+			SHA: getSHA(state.lines[index], state.SHA),
 			index,
 		};
 	} else if (action.type === ActionType.UPDATE_STATUS) {

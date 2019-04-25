@@ -4,6 +4,27 @@ const CONST_SPACE = ' ';
 
 const matchChars = [CONST_SINGLE_QUOTE, CONST_DOUBLE_QUOTE];
 
+export const getNextIndex = (
+	indexArray: number[],
+	currentIndex: number,
+): number => {
+	return (
+		indexArray.find((i) => i > currentIndex) ||
+		indexArray[indexArray.length - 1]
+	);
+};
+
+export const getPreviousIndex = (
+	indexArray: number[],
+	currentIndex: number,
+): number => {
+	const reversed = [...indexArray].reverse();
+
+	return (
+		reversed.find((i) => i < currentIndex) || reversed[reversed.length - 1]
+	);
+};
+
 export const stringToCommandArray = (s: string): string[] => {
 	const retVal: string[] = [];
 
