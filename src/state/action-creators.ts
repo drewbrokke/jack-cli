@@ -17,6 +17,11 @@ export const updateIndex = (payload: number): Action => ({
 	type: ActionType.UPDATE_INDEX,
 });
 
+export const updateSearch = (payload: string | null): Action => ({
+	payload,
+	type: ActionType.UPDATE_SEARCH,
+});
+
 export const updateStatus = (payload: Status): Action => ({
 	payload,
 	type: ActionType.UPDATE_STATUS,

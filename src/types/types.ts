@@ -27,6 +27,7 @@ export enum ActionType {
 	MARK_SHA = 'MARK_SHA',
 	CLEAR_LOG = 'CLEAR_LOG',
 	UPDATE_INDEX = 'UPDATE_INDEX',
+	UPDATE_SEARCH = 'UPDATE_SEARCH',
 	UPDATE_STATUS = 'UPDATE_STATUS',
 	UPDATE_VIEW = 'UPDATE_VIEW',
 }
@@ -58,8 +59,10 @@ export type StateProperty =
 
 export interface State {
 	readonly index: number;
+	readonly indexesMatchingSearch: ReadonlyArray<number>;
 	readonly indexesWithSHAs: ReadonlyArray<number>;
 	readonly lines: ReadonlyArray<string>;
+	readonly search: string;
 	readonly status: Status;
 	readonly markedSHA: string | null;
 	readonly SHA: string;

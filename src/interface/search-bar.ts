@@ -1,0 +1,28 @@
+import * as Blessed from 'blessed';
+
+export const getSearchInput = (valueCallback: (value: string) => void) => {
+	const input = Blessed.textarea({
+		bottom: 0,
+		height: 1,
+		name: 'searchInput',
+		right: 0,
+		shrink: true,
+		width: '100%',
+		// keys: true,
+		// vi: false,
+		inputOnFocus: true,
+	});
+
+	input.onceKey('enter', () => {
+		valueCallback(input.value.trim());
+
+		input.submit();
+	});
+
+	input.on('action', () => {
+		input.destroy();
+		input.screen.render();
+	});
+
+	return input;
+};

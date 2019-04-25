@@ -1,9 +1,14 @@
-import { updateIndex, updateView } from '../state/action-creators';
+import {
+	updateIndex,
+	updateView,
+	updateSearch,
+} from '../state/action-creators';
 import { doSubscribe, store } from '../state/store';
 import { Action, ListElement, UpdateFunction, View } from '../types/types';
 import { KEY_NAV_INTERVAL, stash } from '../util/stash';
 import { getListElement } from './interface-elements';
 import { notifyInfo } from './notification';
+import { getSearchInput } from './search-bar';
 
 export const getCommitListElement = (): ListElement => {
 	const commitListElement: ListElement = getListElement({
@@ -59,6 +64,19 @@ export const getCommitListElement = (): ListElement => {
 	commitListElement.key(['enter', 'space'], () =>
 		store.dispatch(updateView(View.COMMIT)),
 	);
+
+	commitListElement.key('/', () => {
+		const searchInput = getSearchInput((value) => {
+			store.dispatch(updateSearch(value));
+		});
+
+		commitListElement.screen.append(searchInput);
+
+		searchInput.show();
+		searchInput.focus();
+
+		commitListElement.screen.render();
+	});
 
 	commitListElement.focus();
 

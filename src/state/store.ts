@@ -12,9 +12,11 @@ import { reducer } from './reducers';
 export const INITIAL_STATE: State = {
 	SHA: '',
 	index: 0,
+	indexesMatchingSearch: [],
 	indexesWithSHAs: [],
 	lines: [],
 	markedSHA: '',
+	search: '',
 	status: Status.RETRIEVING_LOG,
 	view: View.LIST,
 };

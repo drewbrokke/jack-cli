@@ -11,69 +11,101 @@ export const reducer = (
 	state: State = INITIAL_STATE,
 	action: Action,
 ): State => {
-	switch (action.type) {
-		case ActionType.ADD_COMMITS:
-			const indexesWithSHAs = [...state.indexesWithSHAs];
+	if (action.type === ActionType.ADD_COMMITS) {
+		const indexesWithSHAs = [...state.indexesWithSHAs];
 
-			const newLines = action.payload.map((line: string, i: number) => {
-				if (
-					COMMIT_SHA_REGEX.test(line) &&
-					!blacklistPatterns.some((blacklistPattern) =>
-						blacklistPattern.test(line),
-					)
-				) {
-					const indexWithLine = i + state.lines.length;
+		const newLines = action.payload.map((line: string, i: number) => {
+			if (
+				COMMIT_SHA_REGEX.test(line) &&
+				!blacklistPatterns.some((blacklistPattern) =>
+					blacklistPattern.test(line),
+				)
+			) {
+				const indexWithLine = i + state.lines.length;
 
-					indexesWithSHAs.push(indexWithLine);
+				indexesWithSHAs.push(indexWithLine);
 
-					if (showLineNumbers) {
-						return `${indexesWithSHAs.length}: ${line}`;
-					}
+				if (showLineNumbers) {
+					return `${indexesWithSHAs.length}: ${line}`;
+				}
+			}
+
+			return line;
+		});
+
+		const lines = [...state.lines, ...newLines];
+
+		return {
+			...state,
+			SHA: state.SHA
+				? state.SHA
+				: getSHA(lines[indexesWithSHAs[state.index]], state.SHA),
+			indexesWithSHAs,
+			lines,
+		};
+	} else if (action.type === ActionType.CLEAR_LOG) {
+		return INITIAL_STATE;
+	} else if (action.type === ActionType.MARK_SHA) {
+		return { ...state, markedSHA: action.payload };
+	} else if (action.type === ActionType.UPDATE_SEARCH) {
+		let indexesMatchingSearch: number[] = [];
+		const { index, indexesWithSHAs, lines, SHA } = state;
+
+		let newIndex = index;
+		let newSHA = SHA;
+
+		if (!!action.payload) {
+			const searchTerm = action.payload.toLowerCase();
+
+			for (let i = 0; i < lines.length; i++) {
+				if (!indexesWithSHAs.includes(i)) {
+					continue;
 				}
 
-				return line;
-			});
+				const searchableLine = lines[i].toLowerCase();
 
-			const lines = [...state.lines, ...newLines];
+				if (searchableLine.includes(searchTerm)) {
+					indexesMatchingSearch.push(i);
+				}
+			}
+		}
 
-			return {
-				...state,
-				SHA: state.SHA
-					? state.SHA
-					: getSHA(lines[indexesWithSHAs[state.index]], state.SHA),
-				indexesWithSHAs,
-				lines,
-			};
-
-		case ActionType.CLEAR_LOG:
-			return INITIAL_STATE;
-
-		case ActionType.MARK_SHA:
-			return { ...state, markedSHA: action.payload };
-
-		case ActionType.UPDATE_INDEX:
-			const index = Math.min(
-				Math.max(state.index + action.payload, 0),
-				state.indexesWithSHAs.length - 1,
+		if (indexesMatchingSearch.length) {
+			// update index to go to the first sha in the matching search
+			const indexWithSHA = indexesWithSHAs[index];
+			const nextIndexWithSHA = indexesMatchingSearch.find(
+				(i) => i > indexWithSHA,
 			);
 
-			return {
-				...state,
-				SHA: getSHA(
-					state.lines[state.indexesWithSHAs[index]],
-					state.SHA,
-				),
-				index,
-			};
+			if (!!nextIndexWithSHA) {
+				newIndex = indexesWithSHAs.indexOf(nextIndexWithSHA);
+				newSHA = getSHA(lines[newIndex], SHA);
+			}
+		}
 
-		case ActionType.UPDATE_STATUS:
-			return { ...state, status: action.payload };
+		return {
+			...state,
+			index: newIndex,
+			indexesMatchingSearch,
+			SHA: newSHA,
+		};
+	} else if (action.type === ActionType.UPDATE_INDEX) {
+		const index = Math.min(
+			Math.max(state.index + action.payload, 0),
+			state.indexesWithSHAs.length - 1,
+		);
 
-		case ActionType.UPDATE_VIEW:
-			return { ...state, view: action.payload };
-
-		default:
-			return state;
+		return {
+			...state,
+			SHA: getSHA(state.lines[state.indexesWithSHAs[index]], state.SHA),
+			index,
+		};
+	} else if (action.type === ActionType.UPDATE_STATUS) {
+		return { ...state, status: action.payload };
+	} else if (action.type === ActionType.UPDATE_VIEW) {
+		return { ...state, view: action.payload };
+	} else {
+		return state;
 	}
 };
 
