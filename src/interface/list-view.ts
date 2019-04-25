@@ -81,8 +81,8 @@ export const getCommitListElement = (): ListElement => {
 		commitListElement.screen.render();
 	});
 
-	commitListElement.key('C-n', () => store.dispatch(nextSearchResult()));
-	commitListElement.key('C-p', () => store.dispatch(previousSearchResult()));
+	commitListElement.key('n', () => store.dispatch(nextSearchResult()));
+	commitListElement.key('S-n', () => store.dispatch(previousSearchResult()));
 
 	commitListElement.focus();
 

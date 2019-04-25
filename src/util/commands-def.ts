@@ -132,7 +132,7 @@ export const COMMANDS: ICommand[] = [
 		command: `git -p diff ${Placeholder.SHA_RANGE} --name-only`,
 		description: 'View changed file names',
 		foreground: true,
-		key: 'n',
+		key: 'l',
 	},
 
 	/**

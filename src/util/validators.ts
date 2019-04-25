@@ -3,7 +3,7 @@ import { ICommand } from './commands-def';
 type CommandValidator = (commandOptions: ICommand) => void;
 
 const KEY_REGEX = /^([CS]-)?[a-z]$/;
-const RESERVED_KEYS = [...'bfgjkmoqrxy?'.split(''), 'C-c', 'S-j', 'S-k'];
+const RESERVED_KEYS = [...'bfjkmnoqrxy?'.split(''), 'C-c', 'S-n'];
 
 const validateCommandProperty: CommandValidator = ({ command }) => {
 	if (!command) {
