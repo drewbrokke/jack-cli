@@ -50,6 +50,9 @@ You can then perform actions on the log using the keys below.
 | **0-9**          | (list view) Set a movement interval (like Vim) |
 | **j/k, down/up** | (commit view) scroll down or up                |
 | **left/right**   | (commit view) View previous/next commit        |
+| **/**            | Focus search bar. Press enter to begin search. |
+| **n**            | Jump to next search result                     |
+| **N**            | Jump to previous search result                 |
 | **x**            | Mark a commit as a range anchor                |
 | **e**            | Open diff in default editor                    |
 | **o**            | Open changed files in default editor           |
