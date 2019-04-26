@@ -14,7 +14,7 @@ const documentCommands = (commands: ICommand[]) => {
 const getPresetKeysText = () => {
 	const keys = [
 		[`Space, Enter`, `"Quick Look" a commit's contents (toggle)`],
-		[`j/k, down/up`, `(list view) Navgate between commits`],
+		[`j/k, down/up`, `(list view) Navigate between commits`],
 		[`0-9`, `(list view) Set a movement interval (like Vim)`],
 		[`j/k, down/up`, `(commit view) scroll down`],
 		[`left/right`, `(commit view) View previous/next commit`],

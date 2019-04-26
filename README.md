@@ -46,7 +46,7 @@ You can then perform actions on the log using the keys below.
 | Key              | Description                                    |
 | ---------------- | ---------------------------------------------- |
 | **Space, Enter** | View a commit's contents (toggle)              |
-| **j/k, down/up** | (list view) Navgate between commits            |
+| **j/k, down/up** | (list view) Navigate between commits            |
 | **0-9**          | (list view) Set a movement interval (like Vim) |
 | **j/k, down/up** | (commit view) scroll down or up                |
 | **left/right**   | (commit view) View previous/next commit        |
