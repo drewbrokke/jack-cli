@@ -4,7 +4,11 @@ export const getSearchInput = (valueCallback: (value: string) => void) => {
 	const input = Blessed.textarea({
 		bottom: 0,
 		height: 1,
+		label: 'search:',
 		name: 'searchInput',
+		padding: {
+			left: 10,
+		},
 		right: 0,
 		shrink: true,
 		width: '100%',
