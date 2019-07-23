@@ -294,7 +294,7 @@ S-n
 
 `jack` defines several placeholder tokens that may be used in the [`command`](#command-required) property of a Command object. These will be substituted with information from the currently selected commit.
 
-The placeholder tokens are delimited by `[%` and `%]`.
+The placeholder tokens are delimited by `[%` and `%]`. (NOTE: if you are already using this feature from an older version, make sure that your delimiters do not include spaces. So instead of `[% SHA_RANGE %]`, it should be `[%SHA_RANGE%]`)
 
 Example usage:
 
