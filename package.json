@@ -29,7 +29,7 @@
 	"dependencies": {
 		"blessed": "^0.1.81",
 		"clipboardy": "^1.2.3",
-		"opn": "^5.3.0"
+		"open": "^6.4.0"
 	},
 	"keywords": [
 		"cli",
@@ -51,7 +51,6 @@
 		"@types/blessed": "^0.1.10",
 		"@types/clipboardy": "^1.1.0",
 		"@types/node": "^9.6.1",
-		"@types/opn": "^5.1.0",
 		"@types/os-homedir": "^1.0.0",
 		"ava": "^1.2.1",
 		"prettier": "1.14.0",
