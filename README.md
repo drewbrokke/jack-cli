@@ -36,9 +36,9 @@ jack -n 100
 
 You can then perform actions on the log using the keys below.
 
-### Built-in Key Commands
+## Built-in Key Commands
 
-**Preset Keys**
+### Preset Keys
 
 -   C = Control key
 -   S = Shift key
@@ -96,9 +96,9 @@ A full explanation of each property can be found in the comments of [commands-de
 
 A full explanation of each variable is provided in the comments of [commands-def.ts#L79-L114](https://github.com/drewbrokke/jack-cli/blob/master/src/util/commands-def.ts#L79-L114).
 
-### Other configuration options
+## Other configuration options
 
-**blacklistPatterns**
+### blacklistPatterns
 
 ```json
 {
@@ -106,13 +106,13 @@ A full explanation of each variable is provided in the comments of [commands-def
 }
 ```
 
-Type: String Array
+**Type**: String Array
 
 When evaluating which lines contain commit hashes, jack will skip lines that match any of the Regex strings in the array.
 
-### Environment variables
+## Environment variables
 
-**JACK_CLI_CONFIG_FILE_PATH**
+### JACK_CLI_CONFIG_FILE_PATH
 
 ```shell
 JACK_CLI_CONFIG_FILE_PATH="/users/username/path/to/custom-jack-config.json"
