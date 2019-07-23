@@ -12,7 +12,7 @@ After I built that, I wanted to be able to _do more_, so I added custom commands
 
 ## Installation
 
-```
+```shell
 npm i -g jack-cli
 ```
 
@@ -24,7 +24,7 @@ npm i -g jack-cli
 
 Just use `jack` instead of `git log`! Since **jack** calls `git log` and passes in all the arguments, you don't have to learn a new syntax.
 
-```
+```shell
 jack
 
 jack --grep 'some commit message pattern'
@@ -46,7 +46,7 @@ You can then perform actions on the log using the keys below.
 | Key              | Description                                    |
 | ---------------- | ---------------------------------------------- |
 | **Space, Enter** | View a commit's contents (toggle)              |
-| **j/k, down/up** | (list view) Navigate between commits            |
+| **j/k, down/up** | (list view) Navigate between commits           |
 | **0-9**          | (list view) Set a movement interval (like Vim) |
 | **j/k, down/up** | (commit view) scroll down or up                |
 | **left/right**   | (commit view) View previous/next commit        |
@@ -66,19 +66,19 @@ You can then perform actions on the log using the keys below.
 
 `jack` can register custom key commands, meaning you can call any executable from `jack`. When `jack` starts up, it will create a `.jack.json` file in your home directory, where you can define command objects in this shape:
 
-```
+```json
 {
-	commandArray: [
-		'git',
-		'-p',
-		'diff',
-		'[%SHA_RANGE%]',
-		'--patch',
-		'--stat-width=1000',
+	"commandArray": [
+		"git",
+		"-p",
+		"diff",
+		"[%SHA_RANGE%]",
+		"--patch",
+		"--stat-width=1000"
 	],
-	description: 'View total diff',
-	foreground: true,
-	key: 'd',
+	"description": "View total diff",
+	"foreground": true,
+	"key": "d"
 }
 ```
 
@@ -115,7 +115,7 @@ When evaluating which lines contain commit hashes, jack will skip lines that mat
 
 **JACK_CLI_CONFIG_FILE_PATH**
 
-```
+```shell
 JACK_CLI_CONFIG_FILE_PATH="/users/username/path/to/custom-jack-config.json"
 ```
 
