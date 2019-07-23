@@ -24,7 +24,6 @@ const getPresetKeysText = () => {
 		[`N`, `Jump to previous search result`],
 		['', ''],
 		[`x`, `Mark a commit as a range anchor`],
-		[`e`, `Open diff in default editor`],
 		[`o`, `Open changed files in default editor`],
 		[`m`, `Copy commit message to clipboard`],
 		[`y`, `Copy commit SHA to clipboard`],

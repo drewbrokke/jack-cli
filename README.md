@@ -54,7 +54,6 @@ You can then perform actions on the log using the keys below.
 | **n**            | Jump to next search result                     |
 | **N**            | Jump to previous search result                 |
 | **x**            | Mark a commit as a range anchor                |
-| **e**            | Open diff in default editor                    |
 | **o**            | Open changed files in default editor           |
 | **m**            | Copy commit message to clipboard               |
 | **y**            | Copy commit SHA to clipboard                   |
