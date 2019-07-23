@@ -4,15 +4,18 @@ import * as path from 'path';
 
 import { gitCommitMessage, gitDiffNameOnly, gitTopLevel } from './git-util';
 
-export const copyCommitMessageToClipboard = (SHA: string): Promise<any> =>
-	gitCommitMessage(SHA).then((message: string) => {
-		clipboardy.write(message);
+export const copyCommitMessageToClipboard = async (
+	SHA: string,
+): Promise<any> => {
+	const message = await gitCommitMessage(SHA);
 
-		return message;
-	});
+	clipboardy.write(message);
 
-export const copySHAToClipboard = (SHA: string): Promise<any> =>
-	clipboardy.write(SHA);
+	return message;
+};
+
+export const copySHAToClipboard = async (SHA: string): Promise<void> =>
+	await clipboardy.write(SHA);
 
 export const openFilesFromCommitRange = async (
 	SHA1: string,
