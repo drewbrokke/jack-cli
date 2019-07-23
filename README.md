@@ -34,6 +34,8 @@
     - [**SHA_SINGLE**](#sha_single)
   - [Environment variables](#environment-variables)
     - [JACK_CLI_CONFIG_FILE_PATH](#jack_cli_config_file_path)
+  - [Miscellaneous](#miscellaneous)
+    - [Why does the `foreground` option for my custom command not work?](#why-does-the-foreground-option-for-my-custom-command-not-work)
 
 # jack
 
@@ -339,3 +341,24 @@ JACK_CLI_CONFIG_FILE_PATH="/users/username/path/to/custom-jack-config.json"
 If you would like to use `jack` with different configuration files for different shell user logins, you can point to a custom json file by setting the JACK_CLI_CONFIG_FILE_PATH environment variable. If the file doesn't exist, `jack` will create it when it first starts up.
 
 ---
+
+<!-- markdownlint-disable no-trailing-punctuation -->
+
+## Miscellaneous
+
+### Why does the `foreground` option for my custom command not work?
+
+If the `foreground` property is set to true in one of your custom Command objects, you may run into one or more issues:
+
+1. The process will just quit immediately and return you to the list.
+2. The output will look garbled.
+
+To fix these issues, you may need to configure your pager. For example, if your pager is `less`, try setting one of these environment variable:
+
+```shell
+export LESS=-r
+
+export LESS=-R
+```
+
+Unfortunately this is not a guaranteed fix, and `jack` does not work properly in all terminals right now. If you come across a problem, please file an issue at [jack-cli/issues](https://github.com/drewbrokke/jack-cli/issues).
