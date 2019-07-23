@@ -15,6 +15,16 @@ const validateCommandProperty: CommandValidator = ({ command }) => {
 	}
 };
 
+const validateCommandArrayProperty: CommandValidator = ({ commandArray }) => {
+	if (commandArray) {
+		throw new Error(
+			`Property 'commandArray' is deprecated. Use 'command' instead:
+
+    "command": "${commandArray.join(' ')}"`,
+		);
+	}
+};
+
 const validateDescriptionProperty: CommandValidator = ({ description }) => {
 	if (!description) {
 		throw new Error(`Missing required property "description".`);
@@ -74,6 +84,7 @@ const validateRefreshOnCompleteProperty: CommandValidator = ({
 
 const VALIDATORS = [
 	validateCommandProperty,
+	validateCommandArrayProperty,
 	validateDescriptionProperty,
 	validateKeyProperty,
 	validateForegroundProperty,
