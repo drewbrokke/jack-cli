@@ -35,7 +35,8 @@
   - [Environment variables](#environment-variables)
     - [JACK_CLI_CONFIG_FILE_PATH](#jack_cli_config_file_path)
   - [Miscellaneous](#miscellaneous)
-    - [Why does the `foreground` option for my custom command not work?](#why-does-the-foreground-option-for-my-custom-command-not-work)
+    - [**Why does the `foreground` option for my custom command not work?**](#why-does-the-foreground-option-for-my-custom-command-not-work)
+    - [**iTerm drag and drop is potentially dangerous while using `jack`**](#iterm-drag-and-drop-is-potentially-dangerous-while-using-jack)
 
 # jack
 
@@ -346,7 +347,7 @@ If you would like to use `jack` with different configuration files for different
 
 ## Miscellaneous
 
-### Why does the `foreground` option for my custom command not work?
+### **Why does the `foreground` option for my custom command not work?**
 
 If the `foreground` property is set to true in one of your custom Command objects, you may run into one or more issues:
 
@@ -362,3 +363,13 @@ export LESS=-R
 ```
 
 Unfortunately this is not a guaranteed fix, and `jack` does not work properly in all terminals right now. If you come across a problem, please file an issue at [jack-cli/issues](https://github.com/drewbrokke/jack-cli/issues).
+
+### **iTerm drag and drop is potentially dangerous while using `jack`**
+
+If you are using iTerm, you may want to consider turning off selection drag-and-drop while using `jack`. If you accidentally select text and drag and drop it into an active `jack` process, `jack` will interpret _every single character_ in the selected text as a keystroke. If you have custom commands registered that can make changes of any kind, they may accidentally be triggered.
+
+To turn this off in iTerm, go to:
+
+Preferences > Advanced > "To drag images or select text, you must hold ⌘. This prevents accidental drags."
+
+Set this value to "Yes".
