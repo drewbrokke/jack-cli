@@ -1,6 +1,6 @@
 {
 	"name": "jack-cli",
-	"version": "0.8.3",
+	"version": "1.0.0",
 	"description": "Chop through that Git log wicked fast!",
 	"main": "index.js",
 	"preferGlobal": true,
