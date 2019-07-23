@@ -20,13 +20,13 @@ let declaredCommands: ICommand[];
 const buildErrorMessage = (
 	command: ICommand,
 	errorMessages: string[],
-): string => `Command object:
+): string => `----------
+
+${errorMessages.map((s) => `ERROR: ${s}`).join('\n')}
+
+Command object:
 
 ${JSON.stringify(command, null, '    ')}
-
-has the following errors:
-
-${errorMessages.join('\n')}
 
 `;
 
@@ -47,7 +47,8 @@ export const getCommands = () => {
 
 	if (errorMessages.length > 0) {
 		process.stderr.write(
-			`There was an error registering commands from your .jack.json file:
+			`
+One or more errors while registering commands from your .jack.json file:
 
 ${errorMessages.join('\n')}`,
 		);
