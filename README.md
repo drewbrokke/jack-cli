@@ -289,17 +289,23 @@ S-n
 
 ## Placeholder tokens
 
-`jack` defines several placeholder tokens that may be used in the [`command`](#command-required) property.
+`jack` defines several placeholder tokens that may be used in the [`command`](#command-required) property of a Command object. These will be substituted with information from the currently selected commit.
+
+The placeholder tokens are delimited by `[%` and `%]`.
+
+Example usage:
+
+`"git -p diff [%SHA_RANGE%] --patch --stat-width=1000"`
 
 ### **COMMIT_MESSAGE**
 
-The commit message of the currently selected commit
+Will be replaced by the commit message of the currently selected commit
 
 ### **SHA_RANGE**
 
-Will always be replaced by a revision range, even if there is no marked commit. Commands such as `git diff` require this to show the changes for just a single commit.
+Will always be replaced by a revision range, even if there is no marked commit. Commands such as `git diff` or `git difftool` require this to show the changes for just a single commit.
 
-Examples:
+Example replacement values:
 
 -   Single Commit: `4a22d67^..4a22d67`
 -   With Marked Commit: `9103ae0^..4a22d67`
@@ -308,7 +314,7 @@ Examples:
 
 Will be replaced by either a single commit SHA or a revision range if there is a marked commit.
 
-Examples:
+Example replacement values:
 
 -   Single Commit: `4a22d67`
 -   With Marked Commit: `9103ae0^..4a22d67`
@@ -317,7 +323,7 @@ Examples:
 
 Will be replaced by the currently selected commit SHA.
 
-Examples:
+Example replacement values:
 
 -   Single Commit: `4a22d67`
 -   With Marked Commit: `4a22d67`
