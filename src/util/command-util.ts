@@ -71,25 +71,43 @@ export const registerCommand = async (
 	try {
 		const sorted = markedSHA ? await sortSHAs(markedSHA, SHA) : [SHA, SHA];
 
-		const commandArray = stringToCommandArray(command.command)
-			.map(replacer(Placeholder.SHA_SINGLE, SHA))
-			.map(replacer(Placeholder.SHA_RANGE, `${sorted[0]}^..${sorted[1]}`))
-			.map(
-				replacer(
-					Placeholder.SHA_SINGLE_OR_RANGE,
-					markedSHA ? `${sorted[0]}^..${sorted[1]}` : SHA,
-				),
-			)
-			.map(
-				replacer(
-					Placeholder.COMMIT_MESSAGE,
-					await gitCommitMessage(SHA),
-				),
+		let commandString = command.command;
+
+		commandString = commandString.replace(Placeholder.SHA_SINGLE, SHA);
+		commandString = commandString.replace(
+			Placeholder.SHA_RANGE,
+			`${sorted[0]}^..${sorted[1]}`,
+		);
+		commandString = commandString.replace(
+			Placeholder.SHA_SINGLE_OR_RANGE,
+			markedSHA ? `${sorted[0]}^..${sorted[1]}` : SHA,
+		);
+		commandString = commandString.replace(
+			Placeholder.COMMIT_MESSAGE,
+			await gitCommitMessage(SHA),
+		);
+
+		const invalidTokenIndex = commandString.search(/\[% [^\%]+ %\]/g);
+
+		if (invalidTokenIndex !== -1) {
+			const invalidTokenString = commandString.slice(
+				invalidTokenIndex,
+				commandString.indexOf('%]', invalidTokenIndex) + 2,
 			);
+
+			await Promise.reject(
+				`Invalid token found: ${invalidTokenString}
+
+Use ${invalidTokenString.replace(/ /g, '')} instead.
+
+For command: ${commandString}`,
+			);
+		}
+
+		const commandArray = stringToCommandArray(commandString);
 
 		const spawnOpts = { shell: commandArray.includes('|') };
 
-		const commandString = commandArray.join(' ');
 		const messages: string[] = [];
 
 		if (command.description) {
@@ -161,6 +179,3 @@ export const registerCommand = async (
 		notifyInfo('Unmarked commit');
 	}
 };
-
-const replacer = (s: string, r: string) => (i: string): string =>
-	i.replace(s, r);
