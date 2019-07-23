@@ -1,10 +1,12 @@
+<!-- markdownlint-disable list-marker-space -->
+
 # jack
 
 **jack** is `git log` with actions.
 
 It allows you call `git log` like normal, then act on that log in virtually any way you'd like. There are a lot of built-in commands (like pressing `space` to call `git show` on the current commit), but you can assign a **custom command** to almost any key, and **jack** will call it and pass along the info you need.
 
-## Why?
+## Motivation
 
 `git log` is much faster and more flexible than most Git GUI apps, but I got tired of always calling `git log`, then copying the commit hash, then calling `git show` on that hash. I wanted an experience like "Quick Look" on macOS - one key press to see what you need, another to go back.
 
@@ -67,17 +69,17 @@ You can then perform actions on the log using the keys below.
 
 ```json
 {
-	"commandArray": [
-		"git",
-		"-p",
-		"diff",
-		"[%SHA_RANGE%]",
-		"--patch",
-		"--stat-width=1000"
-	],
-	"description": "View total diff",
-	"foreground": true,
-	"key": "d"
+    "commandArray": [
+        "git",
+        "-p",
+        "diff",
+        "[%SHA_RANGE%]",
+        "--patch",
+        "--stat-width=1000"
+    ],
+    "description": "View total diff",
+    "foreground": true,
+    "key": "d"
 }
 ```
 
@@ -102,7 +104,7 @@ A full explanation of each variable is provided in the comments of [commands-def
 
 ```json
 {
-	"blacklistPatterns": ["exception1", "exception2"]
+    "blacklistPatterns": ["exception1", "exception2"]
 }
 ```
 
