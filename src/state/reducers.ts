@@ -54,10 +54,38 @@ export const reducer = (
 	} else if (action.type === ActionType.MARK_SHA) {
 		return { ...state, markedSHA: action.payload };
 	} else if (action.type === ActionType.NEXT_SEARCH_RESULT) {
-		let { index, indexesMatchingSearch, lines, SHA } = state;
+		let {
+			index,
+			indexesWithSHAs,
+			indexesMatchingSearch,
+			lines,
+			SHA,
+		} = state;
 
 		if (indexesMatchingSearch.length) {
-			index = getNextIndex([...indexesMatchingSearch], index);
+			let searchResultIndex = getNextIndex(
+				[...indexesMatchingSearch],
+				index,
+			);
+
+			if (!indexesWithSHAs.includes(searchResultIndex)) {
+				const nextSHAIndex = getNextIndex([...indexesWithSHAs], index);
+
+				if (searchResultIndex < nextSHAIndex) {
+					searchResultIndex = getNextIndex(
+						[...indexesMatchingSearch],
+						searchResultIndex,
+					);
+				}
+
+				index = getPreviousIndex(
+					[...indexesWithSHAs],
+					searchResultIndex,
+				);
+			} else {
+				index = searchResultIndex;
+			}
+
 			SHA = getSHA(lines[index], SHA);
 		}
 
@@ -67,10 +95,29 @@ export const reducer = (
 			SHA,
 		};
 	} else if (action.type === ActionType.PREVIOUS_SEARCH_RESULT) {
-		let { index, indexesMatchingSearch, lines, SHA } = state;
+		let {
+			index,
+			indexesWithSHAs,
+			indexesMatchingSearch,
+			lines,
+			SHA,
+		} = state;
 
 		if (indexesMatchingSearch.length) {
-			index = getPreviousIndex([...indexesMatchingSearch], index);
+			const searchResultIndex = getPreviousIndex(
+				[...indexesMatchingSearch],
+				index,
+			);
+
+			if (!indexesWithSHAs.includes(searchResultIndex)) {
+				index = getPreviousIndex(
+					[...indexesWithSHAs],
+					searchResultIndex,
+				);
+			} else {
+				index = searchResultIndex;
+			}
+
 			SHA = getSHA(lines[index], SHA);
 		}
 
@@ -87,10 +134,6 @@ export const reducer = (
 			const searchTerm = action.payload.toLowerCase();
 
 			for (let i = 0; i < lines.length; i++) {
-				if (!indexesWithSHAs.includes(i)) {
-					continue;
-				}
-
 				const searchableLine = lines[i].toLowerCase();
 
 				if (searchableLine.includes(searchTerm)) {
@@ -100,7 +143,6 @@ export const reducer = (
 		}
 
 		if (indexesMatchingSearch.length) {
-			index = getNextIndex(indexesMatchingSearch, index);
 			visibleLines = lines.map((line, i) => {
 				if (indexesMatchingSearch.includes(i)) {
 					return line.replace(
@@ -112,6 +154,21 @@ export const reducer = (
 					return line;
 				}
 			});
+
+			const searchResultIndex = getNextIndex(
+				indexesMatchingSearch,
+				index,
+			);
+
+			if (!indexesWithSHAs.includes(searchResultIndex)) {
+				index = getPreviousIndex(
+					[...indexesWithSHAs],
+					searchResultIndex,
+				);
+			} else {
+				index = searchResultIndex;
+			}
+
 			SHA = getSHA(lines[index], SHA);
 		} else {
 			visibleLines = lines;
