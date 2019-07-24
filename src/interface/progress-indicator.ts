@@ -31,7 +31,7 @@ const updateProgressIndicator: UpdateFunction<TextElement> = async ({
 }) => {
 	progressIndicator.setText(
 		getStatusMessage(
-			index + 1,
+			indexesWithSHAs.indexOf(index) + 1,
 			status === Status.LOG_COMPLETED
 				? indexesWithSHAs.length
 				: TOTAL_PLACEHOLDER,
