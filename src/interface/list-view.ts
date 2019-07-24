@@ -101,24 +101,20 @@ const renderIndex: UpdateFunction<ListElement> = async ({
 
 	const listHeight: number = commitListElement.height as number;
 
-	const lineIndex = state.indexesWithSHAs[index];
-	const nextLine = visibleLines[lineIndex];
+	const nextLine = visibleLines[index];
 
 	if (!visibleLines.length) {
 		commitListElement.setItems(visibleLines as string[]);
 	} else if (commitListElement.getItemIndex(nextLine) !== -1) {
 		commitListElement.select(commitListElement.getItemIndex(nextLine));
 	} else if (index > lastState.index) {
-		const newLines = visibleLines.slice(
-			lineIndex - listHeight,
-			lineIndex + 1,
-		);
+		const newLines = visibleLines.slice(index - listHeight, index + 1);
 
 		commitListElement.setItems(newLines);
 
 		commitListElement.select(newLines.indexOf(nextLine));
 	} else if (index < lastState.index) {
-		const newLines = visibleLines.slice(lineIndex, lineIndex + listHeight);
+		const newLines = visibleLines.slice(index, index + listHeight);
 
 		commitListElement.setItems(newLines);
 
