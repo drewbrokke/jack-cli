@@ -122,7 +122,7 @@ Modifier Keys:
 
 On first startup, `jack` will create a `.jack.json` file in your home directory. `jack` will read configuration options from this file.
 
-You can change which JSON file is read by setting the [`JACK_CLI_CONFIG_FILE_PATH`](#jackcliconfigfilepath) environment variable.
+You can change which JSON file is read by setting the [JACK_CLI_CONFIG_FILE_PATH](#jack_cli_config_file_path) environment variable.
 
 ## Configuration options
 
