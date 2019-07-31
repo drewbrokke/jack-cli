@@ -29,6 +29,7 @@
 	"dependencies": {
 		"blessed": "^0.1.81",
 		"clipboardy": "^1.2.3",
+		"flexsearch": "^0.6.30",
 		"open": "^6.4.0"
 	},
 	"keywords": [
