@@ -10,7 +10,9 @@ interface IConfig {
 	commands: ICommand[];
 	gitShowOptions?: string;
 	notificationTimeout?: number;
+	searchIndexLimit?: number;
 	showLineNumbers?: boolean;
+	useSearchIndex?: boolean;
 }
 let CONFIG_FILE_PATH: string;
 
@@ -30,9 +32,19 @@ if (process.env.JACK_CLI_CONFIG_FILE_PATH) {
 
 const DEFAULT_GIT_SHOW_OPTIONS = '--patch-with-stat --stat-width 1000 --color';
 const DEFAULT_NOTIFICATION_TIMEOUT = 5000;
+const DEFAULT_SEARCH_INDEX_LIMIT = 300000;
 const DEFAULT_SHOW_LINE_NUMBERS = false;
+const DEFAULT_USE_SEARCH_INDEX = true;
 
 let config: IConfig;
+
+export const getBlacklistPatterns = (): RegExp[] => {
+	const blacklistPatterns = getConfig().blacklistPatterns || [];
+
+	return blacklistPatterns.map(
+		(blacklistPattern) => new RegExp(blacklistPattern),
+	);
+};
 
 export const getCommands = (): ICommand[] => {
 	return getConfig().commands || [];
@@ -49,16 +61,22 @@ export const getNotificationTimeout = (): number => {
 	return getConfig().notificationTimeout || DEFAULT_NOTIFICATION_TIMEOUT;
 };
 
+export const getSearchIndexLimit = (): number => {
+	return getConfig().searchIndexLimit || DEFAULT_SEARCH_INDEX_LIMIT;
+};
+
 export const getShowLineNumbers = (): boolean => {
 	return getConfig().showLineNumbers || DEFAULT_SHOW_LINE_NUMBERS;
 };
 
-export const getBlacklistPatterns = (): RegExp[] => {
-	const blacklistPatterns = getConfig().blacklistPatterns || [];
+export const getUseSearchIndex = (): boolean => {
+	const useSearchIndex = getConfig().useSearchIndex;
 
-	return blacklistPatterns.map(
-		(blacklistPattern) => new RegExp(blacklistPattern),
-	);
+	if (useSearchIndex != undefined) {
+		return useSearchIndex;
+	}
+
+	return DEFAULT_USE_SEARCH_INDEX;
 };
 
 const getConfig = (): IConfig => {
@@ -75,7 +93,9 @@ const readConfig = (): IConfig => {
 		commands: [],
 		gitShowOptions: DEFAULT_GIT_SHOW_OPTIONS,
 		notificationTimeout: DEFAULT_NOTIFICATION_TIMEOUT,
+		searchIndexLimit: DEFAULT_SEARCH_INDEX_LIMIT,
 		showLineNumbers: DEFAULT_SHOW_LINE_NUMBERS,
+		useSearchIndex: DEFAULT_USE_SEARCH_INDEX,
 	};
 
 	if (!fs.existsSync(CONFIG_FILE_PATH)) {

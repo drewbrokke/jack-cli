@@ -1,7 +1,6 @@
 import { SearchIndex } from '../types/types';
 import { store } from '../state/store';
-
-const USE_SEARCH_INDEXER = true;
+import { getSearchIndexLimit, getUseSearchIndex } from './config-util';
 
 const defaultSearchIndex: SearchIndex = {
 	clearIndex: function(): void {},
@@ -26,10 +25,9 @@ const defaultSearchIndex: SearchIndex = {
 	},
 };
 
-const FlexSearch = require('flexsearch');
-const LIMIT = 100000;
-
 const flexSearchSearchIndex = (limit: number): SearchIndex => {
+	const FlexSearch = require('flexsearch');
+
 	const searchIndex = FlexSearch.create({ async: true, profile: 'fast' });
 
 	return {
@@ -59,6 +57,10 @@ const flexSearchSearchIndex = (limit: number): SearchIndex => {
 	};
 };
 
-export const searchIndex: SearchIndex = USE_SEARCH_INDEXER
-	? flexSearchSearchIndex(LIMIT)
-	: defaultSearchIndex;
+let searchIndexImpl: SearchIndex = defaultSearchIndex;
+
+if (getUseSearchIndex()) {
+	searchIndexImpl = flexSearchSearchIndex(getSearchIndexLimit());
+}
+
+export const searchIndex: SearchIndex = searchIndexImpl;
