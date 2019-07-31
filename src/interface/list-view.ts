@@ -12,6 +12,8 @@ import { getListElement } from './interface-elements';
 import { notifyInfo } from './notification';
 import { getSearchInput } from './search-bar';
 
+import { searchIndex } from '../util/search';
+
 export const getCommitListElement = (): ListElement => {
 	const commitListElement: ListElement = getListElement({
 		bottom: 0,
@@ -69,8 +71,15 @@ export const getCommitListElement = (): ListElement => {
 	);
 
 	commitListElement.key('/', () => {
-		const searchInput = getSearchInput((value) => {
-			store.dispatch(updateSearch(value));
+		const searchInput = getSearchInput(async (value) => {
+			const results = await searchIndex.search(value);
+
+			store.dispatch(
+				updateSearch({
+					indexesMatchingSearch: results,
+					searchTerm: value,
+				}),
+			);
 		});
 
 		commitListElement.screen.append(searchInput);

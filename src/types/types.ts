@@ -75,6 +75,12 @@ export interface State {
 	readonly visibleLines: ReadonlyArray<string>;
 }
 
+export interface SearchIndex {
+	clearIndex(): void;
+	indexLine(id: number, line: string): void;
+	search(searchTerm: string): Promise<number[]>;
+}
+
 export interface UpdateFunctionArgumentObject<T extends BlessedElement> {
 	element: T;
 	lastState: State;

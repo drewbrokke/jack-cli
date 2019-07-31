@@ -25,7 +25,10 @@ export const updateIndex = (payload: number): Action => ({
 	type: ActionType.UPDATE_INDEX,
 });
 
-export const updateSearch = (payload: string | null): Action => ({
+export const updateSearch = (payload: {
+	searchTerm: string;
+	indexesMatchingSearch: number[] | null;
+}): Action => ({
 	payload,
 	type: ActionType.UPDATE_SEARCH,
 });

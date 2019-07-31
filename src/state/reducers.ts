@@ -127,26 +127,17 @@ export const reducer = (
 			SHA,
 		};
 	} else if (action.type === ActionType.UPDATE_SEARCH) {
-		let indexesMatchingSearch: number[] = [];
+		let { indexesMatchingSearch, searchTerm } = action.payload;
 		let { index, indexesWithSHAs, lines, SHA, visibleLines } = state;
 
-		if (!!action.payload) {
-			const searchTerm = action.payload.toLowerCase();
-
-			for (let i = 0; i < lines.length; i++) {
-				const searchableLine = lines[i].toLowerCase();
-
-				if (searchableLine.includes(searchTerm)) {
-					indexesMatchingSearch.push(i);
-				}
-			}
-		}
-
-		if (indexesMatchingSearch.length) {
+		if (indexesMatchingSearch && indexesMatchingSearch.length) {
 			visibleLines = lines.map((line, i) => {
 				if (indexesMatchingSearch.includes(i)) {
 					return line.replace(
-						new RegExp(action.payload.toLowerCase(), 'gi'),
+						new RegExp(
+							searchTerm.replace(new RegExp(' ', 'g'), '.*?'),
+							'gi',
+						),
 						(match) =>
 							`{white-bg}{black-fg}${match}{/black-fg}{/white-bg}`,
 					);

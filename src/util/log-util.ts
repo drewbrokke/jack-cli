@@ -3,6 +3,7 @@ import { addCommits, clearLog, updateStatus } from '../state/action-creators';
 import { store } from '../state/store';
 import { Screen, Status } from '../types/types';
 import { GIT_LOG_ARGS, stash } from './stash';
+import { searchIndex } from './search';
 
 let gitLogProcess: ChildProcess;
 
@@ -15,6 +16,8 @@ export const generateLog = (screen: Screen) => {
 		gitLogProcess.kill();
 	}
 
+	searchIndex.clearIndex();
+
 	store.dispatch(clearLog());
 
 	gitLogProcess = spawn('git', [
@@ -25,9 +28,18 @@ export const generateLog = (screen: Screen) => {
 
 	let errorString = '';
 
+	let total = 0;
+
 	gitLogProcess.stdout.setEncoding('utf8');
 	gitLogProcess.stdout.on('data', (data: string) => {
-		store.dispatch(addCommits(data.trim().split('\n')));
+		const lines = data.trim().split('\n');
+
+		lines.forEach((line) => {
+			searchIndex.indexLine(total, line);
+			total++;
+		});
+
+		store.dispatch(addCommits(lines));
 	});
 
 	gitLogProcess.stderr.on('data', (data: string) => (errorString += data));
