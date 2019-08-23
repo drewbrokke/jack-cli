@@ -127,23 +127,24 @@ export const reducer = (
 			SHA,
 		};
 	} else if (action.type === ActionType.UPDATE_SEARCH) {
-		let { indexesMatchingSearch, searchTerm } = action.payload;
-		let { index, indexesWithSHAs, lines, SHA, visibleLines } = state;
+		const indexesMatchingSearch: number[] =
+			action.payload.indexesMatchingSearch;
+		const searchTerm: string = action.payload.searchTerm;
 
-		if (indexesMatchingSearch && indexesMatchingSearch.length) {
-			visibleLines = lines.map((line, i) => {
-				if (indexesMatchingSearch.includes(i)) {
-					return line.replace(
-						new RegExp(
-							searchTerm.replace(new RegExp(' ', 'g'), '.*?'),
-							'gi',
-						),
-						(match) =>
-							`{white-bg}{black-fg}${match}{/black-fg}{/white-bg}`,
-					);
-				} else {
-					return line;
-				}
+		let { index, indexesWithSHAs, lines, SHA } = state;
+
+		let visibleLines: string[] = [...lines];
+
+		if (indexesMatchingSearch.length) {
+			indexesMatchingSearch.forEach((i) => {
+				visibleLines[i] = visibleLines[i].replace(
+					new RegExp(
+						searchTerm.replace(new RegExp(' ', 'g'), '.*?'),
+						'gi',
+					),
+					(match) =>
+						`{white-bg}{black-fg}${match}{/black-fg}{/white-bg}`,
+				);
 			});
 
 			const searchResultIndex = getNextIndex(
@@ -161,14 +162,13 @@ export const reducer = (
 			}
 
 			SHA = getSHA(lines[index], SHA);
-		} else {
-			visibleLines = lines;
 		}
 
 		return {
 			...state,
 			index,
 			indexesMatchingSearch,
+			search: searchTerm,
 			visibleLines,
 			SHA,
 		};
