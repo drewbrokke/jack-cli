@@ -19,7 +19,9 @@
     - [**commands**](#commands)
     - [**gitShowOptions**](#gitshowoptions)
     - [**notificationTimeout**](#notificationtimeout)
+    - [**searchIndexLimit**](#searchindexlimit)
     - [**showLineNumbers**](#showlinenumbers)
+    - [**useSearchIndex**](#usesearchindex)
   - [The `Command` object](#the-command-object)
     - [**command (Required)**](#command-required)
     - [**description (Required)**](#description-required)
@@ -196,6 +198,14 @@ These options can be configured in the `.jack.json` file:
 
 **Description**: The duration in milliseconds that notifications will stay on the screen.
 
+### **searchIndexLimit**
+
+**Type**: Number
+
+**Default**: `300000`
+
+**Description**: The maximum number of lines to index if [`useSearchIndex`](#useSearchIndex) is true. If Node runs out of memory, decrease this number. If you need to search more results, increase this number. This option is ignored if [`useSearchIndex`](#useSearchIndex) is set to `false`.
+
 ### **showLineNumbers**
 
 **Type**: Boolean
@@ -203,6 +213,14 @@ These options can be configured in the `.jack.json` file:
 **Default**: `false`
 
 **Description**: Whether or not to show line numbers.
+
+### **useSearchIndex**
+
+**Type**: Boolean
+
+**Default**: `false`
+
+**Description**: Whether or not to use the search indexer for searching. Using the indexer will allow dearches to be much faster, but may cause the program to run out of memory if the log is too large. If this option is set to true, you can limit the size of the search index using the [`searchIndexLimit`](#searchIndexLimit) option.
 
 ## The `Command` object
 
