@@ -1,6 +1,6 @@
 import test from 'ava';
 
-import { getNextIndex, getPreviousIndex } from '../dist/util/util-functions';
+import { getNextIndex, getPreviousIndex } from '../util/util-functions';
 
 test('getNextIndex', (t) => {
 	const fixture = [0, 5, 10, 15, 20];

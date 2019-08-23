@@ -20,7 +20,7 @@
 		"dev": "npm run watch",
 		"format": "node_modules/prettier/bin-prettier.js --write './src/**/*.ts'",
 		"lint": "node_modules/tslint/bin/tslint --project . --fix",
-		"test": "node_modules/ava/cli.js",
+		"test": "node_modules/typescript/bin/tsc --project . && node_modules/ava/cli.js **/test-*.js",
 		"watch": "node_modules/typescript/bin/tsc --project . --watch"
 	},
 	"prepublishOnly": "npm run build",
@@ -54,8 +54,18 @@
 		"@types/os-homedir": "^1.0.0",
 		"ava": "^1.2.1",
 		"prettier": "1.14.0",
+		"ts-node": "^8.3.0",
 		"tslint": "^5.9.1",
 		"tslint-config-prettier": "^1.14.0",
 		"typescript": "^3.3.3"
+	},
+	"ava": {
+		"compileEnhancements": false,
+		"extensions": [
+			"ts"
+		],
+		"require": [
+			"ts-node/register"
+		]
 	}
 }
