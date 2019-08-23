@@ -204,7 +204,7 @@ These options can be configured in the `.jack.json` file:
 
 **Default**: `300000`
 
-**Description**: The maximum number of lines to index if [`useSearchIndex`](#useSearchIndex) is true. If Node runs out of memory, decrease this number. If you need to search more results, increase this number. This option is ignored if [`useSearchIndex`](#useSearchIndex) is set to `false`.
+**Description**: The maximum number of lines to index if [`useSearchIndex`](#usesearchindex) is true. If Node runs out of memory, decrease this number. If you need to search more results, increase this number. This option is ignored if [`useSearchIndex`](#usesearchindex) is set to `false`.
 
 ### **showLineNumbers**
 
@@ -220,7 +220,7 @@ These options can be configured in the `.jack.json` file:
 
 **Default**: `false`
 
-**Description**: Whether or not to use the search indexer for searching. Using the indexer will allow dearches to be much faster, but may cause the program to run out of memory if the log is too large. If this option is set to true, you can limit the size of the search index using the [`searchIndexLimit`](#searchIndexLimit) option.
+**Description**: Whether or not to use the search indexer for searching. Using the indexer will allow dearches to be much faster, but may cause the program to run out of memory if the log is too large. If this option is set to true, you can limit the size of the search index using the [`searchIndexLimit`](#searchindexlimit) option.
 
 ## The `Command` object
 
