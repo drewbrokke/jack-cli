@@ -2,10 +2,7 @@
 	"compileOnSave": true,
 	"compilerOptions": {
 		"alwaysStrict": true,
-		"lib": [
-			"es2015",
-			"es2016.array.include"
-		],
+		"lib": ["es2015", "es2016.array.include"],
 		"module": "commonjs",
 		"noFallthroughCasesInSwitch": true,
 		"noImplicitAny": true,
