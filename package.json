@@ -15,11 +15,12 @@
 		"node": ">=4"
 	},
 	"scripts": {
-		"build": "npm run clean && npm install && tsc --project .",
+		"build": "tsc --project .",
 		"clean": "rm -rf node_modules dist",
 		"dev": "npm run watch",
 		"format": "prettier --write './src/**/*.ts'",
 		"lint": "tslint --project . --fix",
+		"prebuild": "npm run clean && npm install",
 		"pretest": "tsc --project .",
 		"test": "tslint --project . && node_modules/ava/cli.js **/test-*.js",
 		"watch": "tsc --project . --watch"
