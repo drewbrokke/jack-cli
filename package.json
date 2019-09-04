@@ -20,7 +20,8 @@
 		"dev": "npm run watch",
 		"format": "prettier --write './src/**/*.ts'",
 		"lint": "tslint --project . --fix",
-		"test": "tsc --project . && node_modules/ava/cli.js **/test-*.js",
+		"pretest": "tsc --project .",
+		"test": "tslint --project . && node_modules/ava/cli.js **/test-*.js",
 		"watch": "tsc --project . --watch"
 	},
 	"prepublishOnly": "npm run build",
