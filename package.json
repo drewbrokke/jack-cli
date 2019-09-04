@@ -15,13 +15,13 @@
 		"node": ">=4"
 	},
 	"scripts": {
-		"build": "npm run clean && npm install && node_modules/typescript/bin/tsc --project .",
+		"build": "npm run clean && npm install && tsc --project .",
 		"clean": "rm -rf node_modules dist",
 		"dev": "npm run watch",
-		"format": "node_modules/prettier/bin-prettier.js --write './src/**/*.ts'",
-		"lint": "node_modules/tslint/bin/tslint --project . --fix",
-		"test": "node_modules/typescript/bin/tsc --project . && node_modules/ava/cli.js **/test-*.js",
-		"watch": "node_modules/typescript/bin/tsc --project . --watch"
+		"format": "prettier --write './src/**/*.ts'",
+		"lint": "tslint --project . --fix",
+		"test": "tsc --project . && node_modules/ava/cli.js **/test-*.js",
+		"watch": "tsc --project . --watch"
 	},
 	"prepublishOnly": "npm run build",
 	"author": "Drew Brokke <drew.brokke@liferay.com> (https://github.com/drewbrokke)",
