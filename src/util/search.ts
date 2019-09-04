@@ -1,11 +1,15 @@
-import { SearchIndex } from '../types/types';
 import { store } from '../state/store';
+import { SearchIndex } from '../types/types';
 import { getSearchIndexLimit, getUseSearchIndex } from './config-util';
 
 const defaultSearchIndex: SearchIndex = {
-	clearIndex: function(): void {},
-	indexLine: function(_id: number, _line: string): void {},
-	search: async function(searchTerm: string): Promise<number[]> {
+	clearIndex(): void {
+		return;
+	},
+	indexLine(_id: number, _line: string): void {
+		return;
+	},
+	async search(searchTerm: string): Promise<number[]> {
 		const indexesMatchingSearch: number[] = [];
 
 		if (!!searchTerm) {
@@ -26,27 +30,27 @@ const defaultSearchIndex: SearchIndex = {
 };
 
 const flexSearchSearchIndex = (limit: number): SearchIndex => {
-	const FlexSearch = require('flexsearch');
+	const flexsearch = require('flexsearch');
 
-	const searchIndex = FlexSearch.create({ async: true, profile: 'fast' });
+	const flexSearchIndex = flexsearch.create({ async: true, profile: 'fast' });
 
 	return {
-		clearIndex: function(): void {
-			searchIndex.clear();
+		clearIndex(): void {
+			flexSearchIndex.clear();
 		},
-		indexLine: function(id: number, line: string): void {
+		indexLine(id: number, line: string): void {
 			if (id > limit) {
 				return;
 			}
 
-			if (!line || line.trim() == '') {
+			if (!line || line.trim() === '') {
 				return;
 			}
 
-			searchIndex.add(id, line);
+			flexSearchIndex.add(id, line);
 		},
-		search: async function(searchTerm: string): Promise<number[]> {
-			const results = await searchIndex.search(searchTerm, {
+		async search(searchTerm: string): Promise<number[]> {
+			const results = await flexSearchIndex.search(searchTerm, {
 				limit,
 			});
 

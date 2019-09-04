@@ -4,6 +4,7 @@ export const getSearchInput = (valueCallback: (value: string) => void) => {
 	const input = Blessed.textarea({
 		bottom: 0,
 		height: 1,
+		inputOnFocus: true,
 		label: 'search:',
 		name: 'searchInput',
 		padding: {
@@ -14,7 +15,6 @@ export const getSearchInput = (valueCallback: (value: string) => void) => {
 		width: '100%',
 		// keys: true,
 		// vi: false,
-		inputOnFocus: true,
 	});
 
 	input.onceKey('enter', () => {

@@ -1,4 +1,4 @@
-import { Screen, BoxElement, BlessedElement } from '../types/types';
+import { BlessedElement, BoxElement, Screen } from '../types/types';
 import { getCommands, registerCommand } from '../util/command-util';
 import {
 	doCopyCommitMessage,
@@ -8,7 +8,7 @@ import {
 } from '../util/interface-actions';
 import { generateLog } from '../util/log-util';
 import { getHelpDialog, toggleHelp } from './help-dialog';
-import { getScreenElement, getBoxElement } from './interface-elements';
+import { getBoxElement, getScreenElement } from './interface-elements';
 import { getMainContentContainer } from './main-content-container';
 import { getNotificationContainer } from './notification';
 import { getStatusBar } from './status-bar';
@@ -25,7 +25,7 @@ export const getScreen = (): Screen => {
 
 	screen._listenedMouse = true;
 
-	let wrapper: BoxElement = getBoxElement({
+	const wrapper: BoxElement = getBoxElement({
 		bottom: 0,
 		left: 0,
 		name: 'wrapper',

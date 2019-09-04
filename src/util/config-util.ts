@@ -72,7 +72,7 @@ export const getShowLineNumbers = (): boolean => {
 export const getUseSearchIndex = (): boolean => {
 	const useSearchIndex = getConfig().useSearchIndex;
 
-	if (useSearchIndex != undefined) {
+	if (useSearchIndex !== undefined) {
 		return useSearchIndex;
 	}
 

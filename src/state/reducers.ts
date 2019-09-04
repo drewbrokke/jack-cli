@@ -1,7 +1,7 @@
 import { Action, ActionType, State } from '../types/types';
 import { getBlacklistPatterns, getShowLineNumbers } from '../util/config-util';
-import { INITIAL_STATE } from './store';
 import { getNextIndex, getPreviousIndex } from '../util/util-functions';
+import { INITIAL_STATE } from './store';
 
 const COMMIT_SHA_REGEX: RegExp = new RegExp(/[0-9a-f]{7,40}\b/);
 
@@ -54,13 +54,8 @@ export const reducer = (
 	} else if (action.type === ActionType.MARK_SHA) {
 		return { ...state, markedSHA: action.payload };
 	} else if (action.type === ActionType.NEXT_SEARCH_RESULT) {
-		let {
-			index,
-			indexesWithSHAs,
-			indexesMatchingSearch,
-			lines,
-			SHA,
-		} = state;
+		let { index, SHA } = state;
+		const { indexesWithSHAs, indexesMatchingSearch, lines } = state;
 
 		if (indexesMatchingSearch.length) {
 			let searchResultIndex = getNextIndex(
@@ -90,18 +85,13 @@ export const reducer = (
 		}
 
 		return {
+			SHA,
 			...state,
 			index,
-			SHA,
 		};
 	} else if (action.type === ActionType.PREVIOUS_SEARCH_RESULT) {
-		let {
-			index,
-			indexesWithSHAs,
-			indexesMatchingSearch,
-			lines,
-			SHA,
-		} = state;
+		let { index, SHA } = state;
+		const { indexesWithSHAs, indexesMatchingSearch, lines } = state;
 
 		if (indexesMatchingSearch.length) {
 			const searchResultIndex = getPreviousIndex(
@@ -122,18 +112,19 @@ export const reducer = (
 		}
 
 		return {
+			SHA,
 			...state,
 			index,
-			SHA,
 		};
 	} else if (action.type === ActionType.UPDATE_SEARCH) {
 		const indexesMatchingSearch: number[] =
 			action.payload.indexesMatchingSearch;
 		const searchTerm: string = action.payload.searchTerm;
 
-		let { index, indexesWithSHAs, lines, SHA } = state;
+		let { index, SHA } = state;
+		const { indexesWithSHAs, lines } = state;
 
-		let visibleLines: string[] = [...lines];
+		const visibleLines: string[] = [...lines];
 
 		if (indexesMatchingSearch.length) {
 			indexesMatchingSearch.forEach((i) => {
@@ -165,17 +156,18 @@ export const reducer = (
 		}
 
 		return {
+			SHA,
 			...state,
 			index,
 			indexesMatchingSearch,
 			search: searchTerm,
 			visibleLines,
-			SHA,
 		};
 	} else if (action.type === ActionType.UPDATE_INDEX) {
 		const indexFn = action.payload > 0 ? getNextIndex : getPreviousIndex;
 
-		let { index, indexesWithSHAs } = state;
+		let { index } = state;
+		const { indexesWithSHAs } = state;
 
 		for (let i = Math.abs(action.payload); i > 0; i--) {
 			index = indexFn([...indexesWithSHAs], index);
