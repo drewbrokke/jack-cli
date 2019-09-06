@@ -1,5 +1,6 @@
 import { BlessedElement, BoxElement, Screen } from '../types/types';
-import { getCommands, registerCommand } from '../util/command-util';
+import { registerCommand } from '../util/command-util';
+import { ICommand } from '../util/commands-def';
 import {
 	doCopyCommitMessage,
 	doCopyCommitSHA,
@@ -13,7 +14,7 @@ import { getMainContentContainer } from './main-content-container';
 import { getNotificationContainer } from './notification';
 import { getStatusBar } from './status-bar';
 
-export const getScreen = (): Screen => {
+export const getScreen = (commands: ICommand[]): Screen => {
 	const screen: Screen = getScreenElement({
 		autoPadding: true,
 		fullUnicode: true,
@@ -49,7 +50,7 @@ export const getScreen = (): Screen => {
 
 	const wrapperHider = getHider(wrapper);
 
-	for (const command of getCommands()) {
+	for (const command of commands) {
 		screen.key(command.key, async () => {
 			if (command.foreground) {
 				wrapperHider.hide();

@@ -1,11 +1,12 @@
 import { getScreen } from './interface/screen';
+import { getCommands } from './util/command-util';
 import { generateLog } from './util/log-util';
 import { GIT_LOG_ARGS, stash } from './util/stash';
 
 export const run = (args: string[]): void => {
 	stash.set(GIT_LOG_ARGS, args);
 
-	generateLog(getScreen());
+	generateLog(getScreen(getCommands()));
 };
 
 export const runFromPipedData = (): void => {
