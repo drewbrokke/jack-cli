@@ -7,13 +7,16 @@ import { markSHA } from '../state/action-creators';
 import { store } from '../state/store';
 import { Screen } from '../types/types';
 import { COMMANDS, ICommand, Placeholder } from './commands-def';
-import { getCommands as getConfigurationCommands } from './config-util';
+import {
+	getCommands as getConfigurationCommands,
+	getConfigFilePath,
+} from './config-util';
 import { gitCommitMessage, sortSHAs } from './git-util';
 import { generateLog } from './log-util';
 import { spawnPromise } from './promisify-child-process';
 import { stringToCommandArray } from './util-functions';
 import { uniqByLast } from './util-functions';
-import { validate } from './validators';
+import { validateCommand } from './validators';
 
 let declaredCommands: ICommand[];
 
@@ -30,15 +33,11 @@ ${JSON.stringify(command, null, '    ')}
 
 `;
 
-export const getCommands = () => {
-	if (declaredCommands) return declaredCommands;
-
-	declaredCommands = [...COMMANDS, ...getConfigurationCommands()];
-
+const validateCommands = (commands: ICommand[]) => {
 	const errorMessages: string[] = [];
 
-	for (const command of declaredCommands) {
-		const errors = validate(command);
+	for (const command of commands) {
+		const errors = validateCommand(command);
 
 		if (errors.length) {
 			errorMessages.push(buildErrorMessage(command, errors));
@@ -49,12 +48,21 @@ export const getCommands = () => {
 		process.stderr.write(
 			`
 One or more errors while registering commands from your .jack.json file:
+Config file path: ${getConfigFilePath()}
 
 ${errorMessages.join('\n')}`,
 		);
 
 		process.exit(1);
 	}
+};
+
+export const getCommands = () => {
+	if (declaredCommands) return declaredCommands;
+
+	declaredCommands = [...COMMANDS, ...getConfigurationCommands()];
+
+	validateCommands(declaredCommands);
 
 	declaredCommands = uniqByLast(declaredCommands, 'key');
 

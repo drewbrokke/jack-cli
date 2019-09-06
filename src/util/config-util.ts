@@ -50,6 +50,8 @@ export const getCommands = (): ICommand[] => {
 	return getConfig().commands || [];
 };
 
+export const getConfigFilePath = () => CONFIG_FILE_PATH;
+
 export const getGitShowOptions = (): string[] => {
 	const gitShowOptionsString =
 		getConfig().gitShowOptions || DEFAULT_GIT_SHOW_OPTIONS;

@@ -107,7 +107,7 @@ const VALIDATORS = [
 	validateRefreshOnCompleteProperty,
 ];
 
-export const validate = (command: ICommand): string[] => {
+export const validateCommand = (command: ICommand): string[] => {
 	const commandErrors: string[] = [];
 
 	for (const validator of VALIDATORS) {
