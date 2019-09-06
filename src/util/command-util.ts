@@ -87,23 +87,6 @@ export const registerCommand = async (
 			await gitCommitMessage(SHA),
 		);
 
-		const invalidTokenIndex = commandString.search(/\[% [^\%]+ %\]/g);
-
-		if (invalidTokenIndex !== -1) {
-			const invalidTokenString = commandString.slice(
-				invalidTokenIndex,
-				commandString.indexOf('%]', invalidTokenIndex) + 2,
-			);
-
-			throw new Error(
-				`Invalid token found: ${invalidTokenString}
-
-Use ${invalidTokenString.replace(/ /g, '')} instead.
-
-For command: ${commandString}`,
-			);
-		}
-
 		const commandArray = stringToCommandArray(commandString);
 
 		const spawnOpts = { shell: commandArray.includes('|') };

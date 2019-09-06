@@ -13,6 +13,21 @@ const validateCommandProperty: CommandValidator = ({ command }) => {
 	if (typeof command !== 'string') {
 		throw new Error(`Property "command" must be a string.`);
 	}
+
+	const invalidTokenIndex = command.search(/\[% [^\%]+ %\]/g);
+
+	if (invalidTokenIndex !== -1) {
+		const invalidTokenString = command.slice(
+			invalidTokenIndex,
+			command.indexOf('%]', invalidTokenIndex) + 2,
+		);
+
+		throw new Error(
+			`Invalid token ${invalidTokenString} in command: "${command}"
+
+Use ${invalidTokenString.replace(/ /g, '')} instead.`,
+		);
+	}
 };
 
 const validateCommandArrayProperty: CommandValidator = ({ commandArray }) => {
