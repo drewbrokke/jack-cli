@@ -95,7 +95,7 @@ export const registerCommand = async (
 				commandString.indexOf('%]', invalidTokenIndex) + 2,
 			);
 
-			await Promise.reject(
+			throw new Error(
 				`Invalid token found: ${invalidTokenString}
 
 Use ${invalidTokenString.replace(/ /g, '')} instead.
@@ -128,9 +128,13 @@ For command: ${commandString}`,
 					spawnOpts,
 					(err: Error, ok: boolean) => {
 						if (err) {
-							reject(err.message);
+							reject(err);
 						} else if (!ok) {
-							reject('The command exited with a error code.');
+							reject(
+								new Error(
+									'The command exited with a error code.',
+								),
+							);
 						} else {
 							resolve();
 						}
@@ -150,8 +154,8 @@ For command: ${commandString}`,
 		}
 
 		notifySuccess(`Command finished: "${commandString}"`);
-	} catch (errorMessage) {
-		notifyError(errorMessage);
+	} catch (error) {
+		notifyError(error.message);
 
 		const { onErrorCommand } = command;
 
@@ -167,8 +171,8 @@ For command: ${commandString}`,
 					onErrorCommandArray[0],
 					onErrorCommandArray.slice(1),
 				);
-			} catch (cleanUpCommandErrorMessage) {
-				notifyError(cleanUpCommandErrorMessage);
+			} catch (cleanUpError) {
+				notifyError(cleanUpError.message);
 			}
 		}
 	}

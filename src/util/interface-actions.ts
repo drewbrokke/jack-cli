@@ -17,9 +17,11 @@ export const doCopyCommitMessage = async () => {
 		const message = await copyCommitMessageToClipboard(getSHA());
 
 		notifySuccess(`Copied commit message to the clipoard:\n\n"${message}"`);
-	} catch (errorMessage) {
+	} catch (error) {
 		notifyError(
-			`Could not copy the commit message to the clipboard:\n\n${errorMessage}`,
+			`Could not copy the commit message to the clipboard:\n\n${
+				error.message
+			}`,
 		);
 	}
 };
@@ -31,9 +33,9 @@ export const doCopyCommitSHA = async () => {
 		await copySHAToClipboard(SHA);
 
 		notifySuccess(`Copied SHA to the clipboard: ${SHA}`);
-	} catch (errorMessage) {
+	} catch (error) {
 		notifyError(
-			`Could not copy the SHA to the clipboard:\n\n${errorMessage}`,
+			`Could not copy the SHA to the clipboard:\n\n${error.message}`,
 		);
 	}
 };
@@ -70,8 +72,8 @@ const doCommandWithMaybeMarkedCommit = async (
 		const sorted = markedSHA ? await sortSHAs(markedSHA, SHA) : [SHA, SHA];
 
 		await command(sorted[0], sorted[1]);
-	} catch (errorMessage) {
-		notifyError(`${errorText}:\n\n${errorMessage}`);
+	} catch (error) {
+		notifyError(`${errorText}:\n\n${error.message}`);
 	}
 
 	if (markedSHA) {

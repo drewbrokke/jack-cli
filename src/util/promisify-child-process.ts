@@ -2,7 +2,7 @@ import { ChildProcess, spawn } from 'child_process';
 
 export const promisifyChildProcess = (
 	childProcess: ChildProcess,
-): Promise<any> => {
+): Promise<string> => {
 	return new Promise((resolve, reject) => {
 		let dataString = '';
 		let errorString = '';
@@ -17,7 +17,7 @@ export const promisifyChildProcess = (
 			if (code === 0) {
 				resolve(dataString.trim());
 			} else {
-				reject(errorString.trim());
+				reject(new Error(errorString.trim()));
 			}
 		});
 	});
