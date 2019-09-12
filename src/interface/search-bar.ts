@@ -2,19 +2,16 @@ import * as Blessed from 'blessed';
 
 export const getSearchInput = (valueCallback: (value: string) => void) => {
 	const input = Blessed.textarea({
+		border: { fg: 3, type: 'line' },
 		bottom: 0,
-		height: 1,
+		height: 3,
 		inputOnFocus: true,
-		label: 'search:',
+		label: '/ Search:',
 		name: 'searchInput',
 		padding: {
-			left: 10,
+			left: 1,
 		},
-		right: 0,
-		shrink: true,
 		width: '100%',
-		// keys: true,
-		// vi: false,
 	});
 
 	input.onceKey('enter', () => {
