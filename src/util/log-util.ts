@@ -4,6 +4,7 @@ import { store } from '../state/store';
 import { Screen, Status } from '../types/types';
 import { searchIndex } from './search';
 import { GIT_LOG_ARGS, stash } from './stash';
+import { getCounter } from './util-functions';
 
 let gitLogProcess: ChildProcess;
 
@@ -28,15 +29,14 @@ export const generateLog = (screen: Screen) => {
 
 	let errorString = '';
 
-	let total = 0;
+	const counter = getCounter();
 
 	gitLogProcess.stdout.setEncoding('utf8');
 	gitLogProcess.stdout.on('data', (data: string) => {
 		const lines = data.trim().split('\n');
 
 		lines.forEach((line) => {
-			searchIndex.indexLine(total, line);
-			total++;
+			searchIndex.indexLine(counter.next().value, line);
 		});
 
 		store.dispatch(addCommits(lines));

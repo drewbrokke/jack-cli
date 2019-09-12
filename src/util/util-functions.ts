@@ -4,6 +4,12 @@ const CONST_SPACE = ' ';
 
 const matchChars = [CONST_SINGLE_QUOTE, CONST_DOUBLE_QUOTE];
 
+export function* getCounter(n: number = 0) {
+	while (true) {
+		yield n++;
+	}
+}
+
 export const getNextIndex = (
 	indexArray: number[],
 	currentIndex: number,
