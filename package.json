@@ -52,7 +52,7 @@
 		"show"
 	],
 	"devDependencies": {
-		"@types/blessed": "^0.1.10",
+		"@types/blessed": "^0.1.12",
 		"@types/clipboardy": "^2.0.1",
 		"@types/node": "^9.6.1",
 		"ava": "^2.3.0",
