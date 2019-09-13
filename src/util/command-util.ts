@@ -2,6 +2,7 @@ import { notifier } from '../interface/notification';
 import { markSHA } from '../state/action-creators';
 import { store } from '../state/store';
 import { Screen } from '../types/types';
+import { colors } from './colors';
 import { COMMANDS, ICommand, Placeholder } from './commands-def';
 import {
 	getCommands as getConfigurationCommands,
@@ -17,37 +18,36 @@ import { validateCommand } from './validators';
 
 let declaredCommands: ICommand[];
 
-const buildErrorMessage = (
-	command: ICommand,
-	errorMessages: string[],
-): string => `----------
-
-${errorMessages.map((s) => `ERROR: ${s}`).join('\n')}
-
-Command object:
-
-${JSON.stringify(command, null, '    ')}
-
-`;
+interface CommandError {
+	messages: string[];
+	command: ICommand;
+}
 
 const validateCommands = (commands: ICommand[]) => {
-	const errorMessages: string[] = [];
+	const errorMessages: CommandError[] = [];
 
 	for (const command of commands) {
 		const errors = validateCommand(command);
 
 		if (errors.length) {
-			errorMessages.push(buildErrorMessage(command, errors));
+			errorMessages.push({ messages: errors, command });
 		}
 	}
 
 	if (errorMessages.length > 0) {
-		logger.warn(`
-One or more errors while registering commands from your .jack.json file:
-Config file path: ${getConfigFilePath()}`);
+		logger.error(
+			'\nOne or more errors while registering commands from your .jack.json file:',
+		);
+		logger.info(`Config file path: ${getConfigFilePath()}`);
 
 		for (const errorMessage of errorMessages) {
-			logger.warn(errorMessage);
+			logger.log('\n' + colors.emphasis('-'.repeat(40) + '\n'));
+
+			for (const message of errorMessage.messages) {
+				logger.error(`ERROR: ${message}`);
+			}
+
+			logger.warn(JSON.stringify(errorMessage.command, null, '    '));
 		}
 
 		process.exit(1);
