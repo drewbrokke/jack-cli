@@ -17,9 +17,7 @@ export const doCopyCommitMessage = async () => {
 		);
 	} catch (error) {
 		notifier.error(
-			`Could not copy the commit message to the clipboard:\n\n${
-				error.message
-			}`,
+			`Could not copy the commit message to the clipboard:\n\n${error.message}`,
 		);
 	}
 };

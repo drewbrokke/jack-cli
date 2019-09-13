@@ -117,9 +117,7 @@ export const COMMANDS: ICommand[] = [
 	 * Open a diff
 	 */
 	{
-		command: `git -p diff ${
-			Placeholder.SHA_RANGE
-		} --patch --stat-width=1000`,
+		command: `git -p diff ${Placeholder.SHA_RANGE} --patch --stat-width=1000`,
 		description: 'View total diff',
 		foreground: true,
 		key: 'd',

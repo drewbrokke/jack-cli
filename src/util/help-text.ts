@@ -44,11 +44,8 @@ const getPresetKeysText = () => {
 	);
 
 	return keys
-		.map(
-			([key, value]) =>
-				key.length
-					? emphasis(`${pad(longest + 2, key)} ->  ${value}`)
-					: '',
+		.map(([key, value]) =>
+			key.length ? emphasis(`${pad(longest + 2, key)} ->  ${value}`) : '',
 		)
 		.join('\n');
 };
