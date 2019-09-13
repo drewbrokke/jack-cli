@@ -36,7 +36,7 @@ export const generateLog = (screen: Screen) => {
 		const lines = data.trim().split('\n');
 
 		lines.forEach((line) => {
-			searchIndex.indexLine(counter.next().value, line);
+			searchIndex.indexLine(counter.next().value as number, line);
 		});
 
 		store.dispatch(addCommits(lines));
