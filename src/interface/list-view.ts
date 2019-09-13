@@ -9,7 +9,7 @@ import { doSubscribe, store } from '../state/store';
 import { Action, ListElement, UpdateFunction, View } from '../types/types';
 import { KEY_NAV_INTERVAL, stash } from '../util/stash';
 import { getListElement } from './interface-elements';
-import { notifyInfo } from './notification';
+import { notifier } from './notification';
 import { getSearchInput } from './search-bar';
 
 import { searchIndex } from '../util/search';
@@ -39,7 +39,7 @@ export const getCommitListElement = (): ListElement => {
 		if (stash.has(KEY_NAV_INTERVAL)) {
 			stash.delete(KEY_NAV_INTERVAL);
 
-			notifyInfo(`Movement interval reset.`);
+			notifier.info(`Movement interval reset.`);
 		}
 	};
 
@@ -50,7 +50,7 @@ export const getCommitListElement = (): ListElement => {
 
 		stash.set(KEY_NAV_INTERVAL, parseInt(newInterval, 10));
 
-		notifyInfo(`Movement interval: ${newInterval}`);
+		notifier.info(`Movement interval: ${newInterval}`);
 	});
 	commitListElement.key(['down', 'j'], () => doUpdateIndex(updateIndex));
 

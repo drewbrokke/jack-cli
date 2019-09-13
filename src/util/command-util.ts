@@ -1,8 +1,4 @@
-import {
-	notifyError,
-	notifyInfo,
-	notifySuccess,
-} from '../interface/notification';
+import { notifier } from '../interface/notification';
 import { markSHA } from '../state/action-creators';
 import { store } from '../state/store';
 import { Screen } from '../types/types';
@@ -107,7 +103,7 @@ export const registerCommand = async (
 
 		messages.push(`Running command "${commandString}"`);
 
-		notifyInfo(messages.join('\n'));
+		notifier.info(messages.join('\n'));
 
 		if (command.foreground) {
 			await new Promise((resolve, reject) => {
@@ -144,14 +140,14 @@ export const registerCommand = async (
 			generateLog(screen);
 		}
 
-		notifySuccess(`Command finished: "${commandString}"`);
+		notifier.success(`Command finished: "${commandString}"`);
 	} catch (error) {
-		notifyError(error.message);
+		notifier.error(error.message);
 
 		const { onErrorCommand } = command;
 
 		if (onErrorCommand) {
-			notifyInfo(`Performing clean-up command "${onErrorCommand}"`);
+			notifier.info(`Performing clean-up command "${onErrorCommand}"`);
 
 			try {
 				const onErrorCommandArray = stringToCommandArray(
@@ -163,7 +159,7 @@ export const registerCommand = async (
 					onErrorCommandArray.slice(1),
 				);
 			} catch (cleanUpError) {
-				notifyError(cleanUpError.message);
+				notifier.error(cleanUpError.message);
 			}
 		}
 	}
@@ -171,6 +167,6 @@ export const registerCommand = async (
 	if (markedSHA) {
 		store.dispatch(markSHA(null));
 
-		notifyInfo('Unmarked commit');
+		notifier.info('Unmarked commit');
 	}
 };

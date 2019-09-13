@@ -64,7 +64,9 @@ const appendNotification = (content: string, color: string | null = null) => {
 const notifyFn = (color: string) => (content: string) =>
 	appendNotification(content, color);
 
-export const notifyError = notifyFn('red');
-export const notifyInfo = notifyFn('blue');
-export const notifySuccess = notifyFn('green');
-export const notifyWarning = notifyFn('yellow');
+export const notifier = {
+	error: notifyFn('red'),
+	info: notifyFn('blue'),
+	success: notifyFn('green'),
+	warning: notifyFn('yellow'),
+};

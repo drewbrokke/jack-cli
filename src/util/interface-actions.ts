@@ -1,8 +1,4 @@
-import {
-	notifyError,
-	notifyInfo,
-	notifySuccess,
-} from '../interface/notification';
+import { notifier } from '../interface/notification';
 import { markSHA } from '../state/action-creators';
 import { store } from '../state/store';
 import {
@@ -16,9 +12,11 @@ export const doCopyCommitMessage = async () => {
 	try {
 		const message = await copyCommitMessageToClipboard(getSHA());
 
-		notifySuccess(`Copied commit message to the clipoard:\n\n"${message}"`);
+		notifier.success(
+			`Copied commit message to the clipoard:\n\n"${message}"`,
+		);
 	} catch (error) {
-		notifyError(
+		notifier.error(
 			`Could not copy the commit message to the clipboard:\n\n${
 				error.message
 			}`,
@@ -32,9 +30,9 @@ export const doCopyCommitSHA = async () => {
 
 		await copySHAToClipboard(SHA);
 
-		notifySuccess(`Copied SHA to the clipboard: ${SHA}`);
+		notifier.success(`Copied SHA to the clipboard: ${SHA}`);
 	} catch (error) {
-		notifyError(
+		notifier.error(
 			`Could not copy the SHA to the clipboard:\n\n${error.message}`,
 		);
 	}
@@ -54,7 +52,7 @@ export const doMarkCommit = () => {
 	} else {
 		store.dispatch(markSHA(commit));
 
-		notifyInfo(`Marked commit for diffing: ${commit}`);
+		notifier.info(`Marked commit for diffing: ${commit}`);
 	}
 };
 
@@ -73,7 +71,7 @@ const doCommandWithMaybeMarkedCommit = async (
 
 		await command(sorted[0], sorted[1]);
 	} catch (error) {
-		notifyError(`${errorText}:\n\n${error.message}`);
+		notifier.error(`${errorText}:\n\n${error.message}`);
 	}
 
 	if (markedSHA) {
@@ -87,5 +85,5 @@ const getSHA = () => store.getState().SHA;
 const unmarkAnchorCommit = () => {
 	store.dispatch(markSHA(null));
 
-	notifyInfo(`Unmarked commit`);
+	notifier.info(`Unmarked commit`);
 };

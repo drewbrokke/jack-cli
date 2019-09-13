@@ -3,7 +3,7 @@ import { doSubscribe, store } from '../state/store';
 import { BoxElement, UpdateFunction, View } from '../types/types';
 import { gitShow } from '../util/git-util';
 import { getBoxElement } from './interface-elements';
-import { notifyWarning } from './notification';
+import { notifier } from './notification';
 
 export const getCommitElement = (): BoxElement => {
 	const commitElement: BoxElement = getBoxElement({
@@ -67,7 +67,7 @@ const updateCommitElement: UpdateFunction<BoxElement> = async ({
 
 		return true;
 	} catch (error) {
-		notifyWarning(`Couldn't retrieve commit content for ${SHA}`);
+		notifier.warning(`Couldn't retrieve commit content for ${SHA}`);
 	}
 
 	return false;
