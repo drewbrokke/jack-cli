@@ -134,7 +134,7 @@ export const reducer = (
 						searchTerm.replace(new RegExp(' ', 'g'), '.*?'),
 						'gi',
 					),
-					(match) => colors.searchHit(match),
+					colors.searchHit,
 				);
 			});
 
