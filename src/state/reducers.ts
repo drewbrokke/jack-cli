@@ -1,4 +1,5 @@
 import { Action, ActionType, State } from '../types/types';
+import { colors } from '../util/colors';
 import { getBlacklistPatterns, getShowLineNumbers } from '../util/config-util';
 import { getNextIndex, getPreviousIndex } from '../util/util-functions';
 import { INITIAL_STATE } from './store';
@@ -133,8 +134,7 @@ export const reducer = (
 						searchTerm.replace(new RegExp(' ', 'g'), '.*?'),
 						'gi',
 					),
-					(match) =>
-						`{white-bg}{black-fg}${match}{/black-fg}{/white-bg}`,
+					(match) => colors.searchHit(match),
 				);
 			});
 

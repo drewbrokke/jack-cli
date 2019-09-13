@@ -1,4 +1,5 @@
 import { BoxElement } from '../types/types';
+import { ColorFn, colors } from '../util/colors';
 import { getNotificationTimeout } from '../util/config-util';
 import { getBoxElement } from './interface-elements';
 
@@ -29,7 +30,7 @@ export const getNotificationContainer = (): BoxElement => {
 	return notificationContainer;
 };
 
-const appendNotification = (content: string, color: string | null = null) => {
+const appendNotification = (colorFn: ColorFn, content: string) => {
 	if (notificationContainer.content.length) {
 		const longestLineLength = content
 			.split('\n')
@@ -43,9 +44,7 @@ const appendNotification = (content: string, color: string | null = null) => {
 		);
 	}
 
-	notificationContainer.pushLine(
-		color ? `{${color}-fg}{bold}${content}{/bold}{/${color}-fg}` : content,
-	);
+	notificationContainer.pushLine(colorFn(content));
 
 	setTimeout(() => {
 		notificationContainer.shiftLine(content.split('\n').length + 1);
@@ -61,12 +60,12 @@ const appendNotification = (content: string, color: string | null = null) => {
 	notificationContainer.screen.render();
 };
 
-const notifyFn = (color: string) => (content: string) =>
-	appendNotification(content, color);
+const notifyFn = (colorFn: ColorFn) => (content: string) =>
+	appendNotification(colorFn, content);
 
 export const notifier = {
-	error: notifyFn('red'),
-	info: notifyFn('blue'),
-	success: notifyFn('green'),
-	warning: notifyFn('yellow'),
+	error: notifyFn(colors.error),
+	info: notifyFn(colors.info),
+	success: notifyFn(colors.success),
+	warning: notifyFn(colors.warning),
 };

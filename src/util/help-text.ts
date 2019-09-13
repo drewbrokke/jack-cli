@@ -1,13 +1,18 @@
+import { colors } from './colors';
 import { getCommands } from './command-util';
 import { ICommand } from './commands-def';
+
+const { emphasis } = colors;
 
 const documentCommands = (commands: ICommand[]) => {
 	return commands.reduce(
 		(accumulator, command) =>
-			`${accumulator}
-{bold}${pad(6, command.key)} ->   ${command.description}{/bold}
-			${command.command}`,
-		'{bold}Registered Keys{/bold}\n',
+			`${accumulator}${emphasis(pad(6, command.key))} ->   ${emphasis(
+				command.description,
+			)}
+            ${command.command}
+`,
+		'',
 	);
 };
 
@@ -29,7 +34,7 @@ const getPresetKeysText = () => {
 		[`y`, `Copy commit SHA to clipboard`],
 		['', ''],
 		[`r`, `Refresh the list`],
-		[`q, esc, C-c`, `Exit {bold}jack{/bold}`],
+		[`q, esc, C-c`, `Exit ${emphasis('jack')}`],
 		[`?`, `Show/hide help dialog`],
 	];
 
@@ -42,7 +47,7 @@ const getPresetKeysText = () => {
 		.map(
 			([key, value]) =>
 				key.length
-					? `{bold}${pad(longest + 2, key)}{/bold} ->  ${value}`
+					? emphasis(`${pad(longest + 2, key)} ->  ${value}`)
 					: '',
 		)
 		.join('\n');
@@ -58,13 +63,14 @@ const pad = (l: number, s: string) => {
 	return s;
 };
 
-export const HELP_TEXT = `
-{bold}Preset Keys{/bold}
+export const HELP_TEXT = `${emphasis('Preset Keys')}
 
 C = Control key
 S = Shift key
 
 ${getPresetKeysText()}
+
+${emphasis('Registered Keys')}
 
 ${documentCommands(getCommands())}
 `;
