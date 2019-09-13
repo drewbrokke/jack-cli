@@ -2,6 +2,7 @@ import { ChildProcess, spawn } from 'child_process';
 import { addCommits, clearLog, updateStatus } from '../state/action-creators';
 import { store } from '../state/store';
 import { Screen, Status } from '../types/types';
+import { logger } from './logger';
 import { searchIndex } from './search';
 import { GIT_LOG_ARGS, stash } from './stash';
 import { getCounter } from './util-functions';
@@ -48,10 +49,8 @@ export const generateLog = (screen: Screen) => {
 		if (code > 0) {
 			screen.destroy();
 
-			process.stderr.write(
-				'jack encountered an error with the call to "git log":\n\n',
-			);
-			process.stderr.write(errorString);
+			logger.error('\nGIT LOG ERROR:');
+			logger.error(errorString);
 
 			process.exit(code);
 		} else {

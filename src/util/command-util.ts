@@ -9,6 +9,7 @@ import {
 } from './config-util';
 import { gitCommitMessage, sortSHAs } from './git-util';
 import { generateLog } from './log-util';
+import { logger } from './logger';
 import { spawnPromise } from './promisify-child-process';
 import { stringToCommandArray } from './util-functions';
 import { uniqByLast } from './util-functions';
@@ -41,13 +42,13 @@ const validateCommands = (commands: ICommand[]) => {
 	}
 
 	if (errorMessages.length > 0) {
-		process.stderr.write(
-			`
+		logger.warn(`
 One or more errors while registering commands from your .jack.json file:
-Config file path: ${getConfigFilePath()}
+Config file path: ${getConfigFilePath()}`);
 
-${errorMessages.join('\n')}`,
-		);
+		for (const errorMessage of errorMessages) {
+			logger.warn(errorMessage);
+		}
 
 		process.exit(1);
 	}

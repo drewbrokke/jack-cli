@@ -1,6 +1,6 @@
-import chalk, { Chalk } from 'chalk';
+import chalk from 'chalk';
 
-export type ColorFn = Chalk;
+export type ColorFn = (s: string) => string;
 
 export const colors = {
 	emphasis: chalk.bold,

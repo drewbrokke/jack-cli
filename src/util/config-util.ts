@@ -3,6 +3,7 @@ import { homedir } from 'os';
 import { join } from 'path';
 
 import { ICommand } from './commands-def';
+import { logger } from './logger';
 import { stringToCommandArray } from './util-functions';
 
 interface IConfig {
@@ -18,7 +19,7 @@ let CONFIG_FILE_PATH: string;
 
 if (process.env.JACK_CLI_CONFIG_FILE_PATH) {
 	if (!process.env.JACK_CLI_CONFIG_FILE_PATH.endsWith('.json')) {
-		process.stderr.write(
+		logger.warn(
 			'The JACK_CLI_CONFIG_FILE_PATH environment variable must define a path to a *.json file. If this file does not exist, jack-cli will create it.',
 		);
 

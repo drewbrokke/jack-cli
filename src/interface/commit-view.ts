@@ -67,7 +67,7 @@ const updateCommitElement: UpdateFunction<BoxElement> = async ({
 
 		return true;
 	} catch (error) {
-		notifier.warning(`Couldn't retrieve commit content for ${SHA}`);
+		notifier.warn(`Couldn't retrieve commit content for ${SHA}`);
 	}
 
 	return false;

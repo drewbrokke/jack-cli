@@ -1,6 +1,7 @@
 import { BoxElement } from '../types/types';
 import { ColorFn, colors } from '../util/colors';
 import { getNotificationTimeout } from '../util/config-util';
+import { Logger } from '../util/logger';
 import { getBoxElement } from './interface-elements';
 
 let notificationContainer: BoxElement;
@@ -63,9 +64,10 @@ const appendNotification = (colorFn: ColorFn, content: string) => {
 const notifyFn = (colorFn: ColorFn) => (content: string) =>
 	appendNotification(colorFn, content);
 
-export const notifier = {
+export const notifier: Logger = {
 	error: notifyFn(colors.error),
 	info: notifyFn(colors.info),
+	log: notifyFn((s) => s),
 	success: notifyFn(colors.success),
-	warning: notifyFn(colors.warning),
+	warn: notifyFn(colors.warning),
 };
