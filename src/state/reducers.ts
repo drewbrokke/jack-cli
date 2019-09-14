@@ -128,12 +128,14 @@ export const reducer = (
 		const visibleLines: string[] = [...lines];
 
 		if (indexesMatchingSearch.length) {
+			const searchRegex = new RegExp(
+				searchTerm.replace(new RegExp(' ', 'g'), '.*?'),
+				'gi',
+			);
+
 			indexesMatchingSearch.forEach((i) => {
 				visibleLines[i] = visibleLines[i].replace(
-					new RegExp(
-						searchTerm.replace(new RegExp(' ', 'g'), '.*?'),
-						'gi',
-					),
+					searchRegex,
 					colors.searchHit,
 				);
 			});
