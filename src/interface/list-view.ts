@@ -121,13 +121,13 @@ const renderIndex: UpdateFunction<ListElement> = async ({
 
 		commitListElement.setItems(newLines);
 
-		commitListElement.select(newLines.indexOf(nextLine));
-	} else if (index < lastState.index) {
+		commitListElement.select(commitListElement.children.length - 1);
+	} else if (index < lastState.index || state.search !== lastState.search) {
 		const newLines = visibleLines.slice(index, index + listHeight);
 
 		commitListElement.setItems(newLines);
 
-		commitListElement.select(newLines.indexOf(nextLine));
+		commitListElement.select(0);
 	} else {
 		return false;
 	}

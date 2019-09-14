@@ -138,10 +138,11 @@ export const reducer = (
 				);
 			});
 
-			const searchResultIndex = getNextIndex(
-				indexesMatchingSearch,
-				index,
-			);
+			let searchResultIndex = index;
+
+			if (!indexesMatchingSearch.includes(index)) {
+				searchResultIndex = getNextIndex(indexesMatchingSearch, index);
+			}
 
 			if (!indexesWithSHAs.includes(searchResultIndex)) {
 				index = getPreviousIndex(
