@@ -4,7 +4,7 @@
 	"jsRules": {},
 	"rules": {
 		"curly": [true, "ignore-same-line"],
-		"interface-name": false,
+		"interface-name": [true, "never-prefix"],
 		"only-arrow-functions": [true],
 		"variable-name": [true, "allow-leading-underscore"]
 	},
