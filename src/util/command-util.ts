@@ -3,7 +3,7 @@ import { markSHA } from '../state/action-creators';
 import { store } from '../state/store';
 import { Screen } from '../types/types';
 import { colors } from './colors';
-import { COMMANDS, ICommand, Placeholder } from './commands-def';
+import { Command, COMMANDS, Placeholder } from './commands-def';
 import {
 	getCommands as getConfigurationCommands,
 	getConfigFilePath,
@@ -16,14 +16,14 @@ import { stringToCommandArray } from './util-functions';
 import { uniqByLast } from './util-functions';
 import { validateCommand } from './validators';
 
-let declaredCommands: ICommand[];
+let declaredCommands: Command[];
 
 interface CommandError {
 	messages: string[];
-	command: ICommand;
+	command: Command;
 }
 
-const validateCommands = (commands: ICommand[]) => {
+const validateCommands = (commands: Command[]) => {
 	const errorMessages: CommandError[] = [];
 
 	for (const command of commands) {
@@ -69,7 +69,7 @@ export const getCommands = () => {
 // tslint:disable-next-line:max-line-length
 export const registerCommand = async (
 	screen: Screen,
-	command: ICommand,
+	command: Command,
 ): Promise<any> => {
 	const { markedSHA, SHA } = store.getState();
 

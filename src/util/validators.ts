@@ -1,6 +1,6 @@
-import { ICommand } from './commands-def';
+import { Command } from './commands-def';
 
-type CommandValidator = (commandOptions: ICommand) => void;
+type CommandValidator = (commandOptions: Command) => void;
 
 const KEY_REGEX = /^([CS]-)?[a-z]$/;
 const RESERVED_KEYS = [...'bfjkmnoqrxy?'.split(''), 'C-c', 'S-n'];
@@ -107,7 +107,7 @@ const VALIDATORS = [
 	validateRefreshOnCompleteProperty,
 ];
 
-export const validateCommand = (command: ICommand): string[] => {
+export const validateCommand = (command: Command): string[] => {
 	const commandErrors: string[] = [];
 
 	for (const validator of VALIDATORS) {

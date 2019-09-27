@@ -1,4 +1,4 @@
-export interface ICommand {
+export interface Command {
 	/**
 	 * A string containing the command to run and its arguments.
 	 * The placeholder variables are put into this string. This string supports
@@ -112,7 +112,7 @@ export enum Placeholder {
 	SHA_SINGLE = '[%SHA_SINGLE%]',
 }
 
-export const COMMANDS: ICommand[] = [
+export const COMMANDS: Command[] = [
 	/**
 	 * Open a diff
 	 */

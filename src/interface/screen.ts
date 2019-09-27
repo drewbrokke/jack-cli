@@ -1,6 +1,6 @@
 import { BlessedElement, BoxElement, Screen } from '../types/types';
 import { registerCommand } from '../util/command-util';
-import { ICommand } from '../util/commands-def';
+import { Command } from '../util/commands-def';
 import {
 	doCopyCommitMessage,
 	doCopyCommitSHA,
@@ -14,7 +14,7 @@ import { getMainContentContainer } from './main-content-container';
 import { getNotificationContainer } from './notification';
 import { getStatusBar } from './status-bar';
 
-export const getScreen = (commands: ICommand[]): Screen => {
+export const getScreen = (commands: Command[]): Screen => {
 	const screen: Screen = getScreenElement({
 		autoPadding: true,
 		fullUnicode: true,

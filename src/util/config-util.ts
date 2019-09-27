@@ -2,13 +2,13 @@ import * as fs from 'fs';
 import { homedir } from 'os';
 import { join } from 'path';
 
-import { ICommand } from './commands-def';
+import { Command } from './commands-def';
 import { logger } from './logger';
 import { stringToCommandArray } from './util-functions';
 
-interface IConfig {
+interface Config {
 	blacklistPatterns?: string[];
-	commands: ICommand[];
+	commands: Command[];
 	gitShowOptions?: string;
 	notificationTimeout?: number;
 	searchIndexLimit?: number;
@@ -37,7 +37,7 @@ const DEFAULT_SEARCH_INDEX_LIMIT = 300000;
 const DEFAULT_SHOW_LINE_NUMBERS = false;
 const DEFAULT_USE_SEARCH_INDEX = true;
 
-let config: IConfig;
+let config: Config;
 
 export const getBlacklistPatterns = (): RegExp[] => {
 	const blacklistPatterns = getConfig().blacklistPatterns || [];
@@ -47,7 +47,7 @@ export const getBlacklistPatterns = (): RegExp[] => {
 	);
 };
 
-export const getCommands = (): ICommand[] => {
+export const getCommands = (): Command[] => {
 	return getConfig().commands || [];
 };
 
@@ -82,7 +82,7 @@ export const getUseSearchIndex = (): boolean => {
 	return DEFAULT_USE_SEARCH_INDEX;
 };
 
-const getConfig = (): IConfig => {
+const getConfig = (): Config => {
 	if (!config) {
 		config = readConfig();
 	}
@@ -90,8 +90,8 @@ const getConfig = (): IConfig => {
 	return config;
 };
 
-const readConfig = (): IConfig => {
-	const defaultConfig: IConfig = {
+const readConfig = (): Config => {
+	const defaultConfig: Config = {
 		blacklistPatterns: [],
 		commands: [],
 		gitShowOptions: DEFAULT_GIT_SHOW_OPTIONS,

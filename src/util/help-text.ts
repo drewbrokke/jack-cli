@@ -1,10 +1,10 @@
 import { colors } from './colors';
 import { getCommands } from './command-util';
-import { ICommand } from './commands-def';
+import { Command } from './commands-def';
 
 const { emphasis } = colors;
 
-const documentCommands = (commands: ICommand[]) => {
+const documentCommands = (commands: Command[]) => {
 	return commands.reduce(
 		(accumulator, command) =>
 			`${accumulator}${emphasis(pad(6, command.key))} ->   ${emphasis(
