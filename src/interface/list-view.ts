@@ -1,12 +1,6 @@
-import {
-	nextSearchResult,
-	previousSearchResult,
-	updateIndex,
-	updateSearch,
-	updateView,
-} from '../state/action-creators';
-import { doSubscribe, store } from '../state/store';
-import { Action, ListElement, UpdateFunction, View } from '../types/types';
+import { Actions } from '../state/actions';
+import { doSubscribe } from '../state/store';
+import { ListElement, UpdateFunction, View } from '../types/types';
 import { KEY_NAV_INTERVAL, stash } from '../util/stash';
 import { getListElement } from './interface-elements';
 import { notifier } from './notification';
@@ -29,12 +23,12 @@ export const getCommitListElement = (): ListElement => {
 		top: 0,
 	});
 
-	const doUpdateIndex = (action: (interval: number) => Action) => {
+	const doUpdateIndex = (action: (interval: number) => void) => {
 		const interval: number = stash.has(KEY_NAV_INTERVAL)
 			? stash.get(KEY_NAV_INTERVAL)
 			: 1;
 
-		store.dispatch(action(interval));
+		action(interval);
 
 		if (stash.has(KEY_NAV_INTERVAL)) {
 			stash.delete(KEY_NAV_INTERVAL);
@@ -52,34 +46,34 @@ export const getCommitListElement = (): ListElement => {
 
 		notifier.info(`Movement interval: ${newInterval}`);
 	});
-	commitListElement.key(['down', 'j'], () => doUpdateIndex(updateIndex));
+	commitListElement.key(['down', 'j'], () =>
+		doUpdateIndex(Actions.updateIndex),
+	);
 
 	commitListElement.key(['k', 'up'], () =>
-		doUpdateIndex((interval: number) => updateIndex(-interval)),
+		doUpdateIndex((interval: number) => Actions.updateIndex(-interval)),
 	);
 
 	commitListElement.key(['b', 'pageup'], () =>
-		store.dispatch(updateIndex(-commitListElement.height)),
+		Actions.updateIndex(-commitListElement.height),
 	);
 
 	commitListElement.key(['f', 'pagedown'], () =>
-		store.dispatch(updateIndex(+commitListElement.height)),
+		Actions.updateIndex(+commitListElement.height),
 	);
 
 	commitListElement.key(['enter', 'space'], () =>
-		store.dispatch(updateView(View.COMMIT)),
+		Actions.updateView(View.COMMIT),
 	);
 
 	commitListElement.key('/', () => {
 		const searchInput = getSearchInput(async (value) => {
 			const results = await searchIndex.search(value);
 
-			store.dispatch(
-				updateSearch({
-					indexesMatchingSearch: results,
-					searchTerm: value,
-				}),
-			);
+			Actions.updateSearch({
+				indexesMatchingSearch: results,
+				searchTerm: value,
+			});
 		});
 
 		commitListElement.screen.append(searchInput);
@@ -90,8 +84,8 @@ export const getCommitListElement = (): ListElement => {
 		commitListElement.screen.render();
 	});
 
-	commitListElement.key('n', () => store.dispatch(nextSearchResult()));
-	commitListElement.key('S-n', () => store.dispatch(previousSearchResult()));
+	commitListElement.key('n', () => Actions.nextSearchResult());
+	commitListElement.key('S-n', () => Actions.previousSearchResult());
 
 	commitListElement.focus();
 

@@ -1,5 +1,5 @@
-import { updateIndex, updateView } from '../state/action-creators';
-import { doSubscribe, store } from '../state/store';
+import { Actions } from '../state/actions';
+import { doSubscribe } from '../state/store';
 import { BoxElement, UpdateFunction, View } from '../types/types';
 import { gitShow } from '../util/git-util';
 import { getBoxElement } from './interface-elements';
@@ -26,18 +26,9 @@ export const getCommitElement = (): BoxElement => {
 		commitElement.scroll(-commitElement.height);
 		commitElement.screen.render();
 	});
-
-	commitElement.key(['right', 'S-down', 'S-j'], () =>
-		store.dispatch(updateIndex(1)),
-	);
-
-	commitElement.key(['left', 'S-k', 'S-up'], () =>
-		store.dispatch(updateIndex(-1)),
-	);
-
-	commitElement.key(['enter', 'space'], () =>
-		store.dispatch(updateView(View.LIST)),
-	);
+	commitElement.key(['right', 'S-down', 'S-j'], () => Actions.updateIndex(1));
+	commitElement.key(['left', 'S-k', 'S-up'], () => Actions.updateIndex(-1));
+	commitElement.key(['enter', 'space'], () => Actions.updateView(View.LIST));
 
 	commitElement.focus();
 

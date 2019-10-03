@@ -1,5 +1,5 @@
 import { notifier } from '../interface/notification';
-import { markSHA } from '../state/action-creators';
+import { Actions } from '../state/actions';
 import { store } from '../state/store';
 import {
 	copyCommitMessageToClipboard,
@@ -48,7 +48,7 @@ export const doMarkCommit = () => {
 	if (getMarkedSHA() === commit) {
 		unmarkAnchorCommit();
 	} else {
-		store.dispatch(markSHA(commit));
+		Actions.markSHA(commit);
 
 		notifier.info(`Marked commit for diffing: ${commit}`);
 	}
@@ -81,7 +81,7 @@ const getMarkedSHA = () => store.getState().markedSHA;
 const getSHA = () => store.getState().SHA;
 
 const unmarkAnchorCommit = () => {
-	store.dispatch(markSHA(null));
+	Actions.markSHA(null);
 
 	notifier.info(`Unmarked commit`);
 };

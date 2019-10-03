@@ -1,5 +1,5 @@
 import { notifier } from '../interface/notification';
-import { markSHA } from '../state/action-creators';
+import { Actions } from '../state/actions';
 import { store } from '../state/store';
 import { Screen } from '../types/types';
 import { colors } from './colors';
@@ -166,7 +166,7 @@ export const registerCommand = async (
 	}
 
 	if (markedSHA) {
-		store.dispatch(markSHA(null));
+		Actions.markSHA(null);
 
 		notifier.info('Unmarked commit');
 	}

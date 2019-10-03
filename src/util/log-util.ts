@@ -1,6 +1,5 @@
 import { ChildProcess, spawn } from 'child_process';
-import { addCommits, clearLog, updateStatus } from '../state/action-creators';
-import { store } from '../state/store';
+import { Actions } from '../state/actions';
 import { Screen, Status } from '../types/types';
 import { logger } from './logger';
 import { searchIndex } from './search';
@@ -20,7 +19,7 @@ export const generateLog = (screen: Screen) => {
 
 	searchIndex.clearIndex();
 
-	store.dispatch(clearLog());
+	Actions.clearLog();
 
 	gitLogProcess = spawn('git', [
 		'log',
@@ -40,7 +39,7 @@ export const generateLog = (screen: Screen) => {
 			searchIndex.indexLine(counter.next().value as number, line);
 		});
 
-		store.dispatch(addCommits(lines));
+		Actions.addCommits(lines);
 	});
 
 	gitLogProcess.stderr.on('data', (data: string) => (errorString += data));
@@ -54,7 +53,7 @@ export const generateLog = (screen: Screen) => {
 
 			process.exit(code);
 		} else {
-			store.dispatch(updateStatus(Status.LOG_COMPLETED));
+			Actions.updateStatus(Status.LOG_COMPLETED);
 		}
 	});
 
