@@ -1,6 +1,8 @@
-import { BlessedElement, BoxElement, Screen } from '../types/types';
+import { Actions } from '../state/actions';
+import { BlessedElement, BoxElement, Screen, View } from '../types/types';
 import { registerCommand } from '../util/command-util';
 import { Command } from '../util/commands-def';
+import { getUseLegacyEscapeKeyBehavior } from '../util/config-util';
 import {
 	doCopyCommitMessage,
 	doCopyCommitSHA,
@@ -14,6 +16,8 @@ import { getMainContentContainer } from './main-content-container';
 import { getNotificationContainer } from './notification';
 import { getStatusBar } from './status-bar';
 
+const quit = () => process.exit(0);
+
 export const getScreen = (commands: Command[]): Screen => {
 	const screen: Screen = getScreenElement({
 		autoPadding: true,
@@ -22,7 +26,15 @@ export const getScreen = (commands: Command[]): Screen => {
 		smartCSR: true,
 	});
 
-	screen.key(['C-c', 'q', 'escape'], () => process.exit(0));
+	screen.key(['C-c', 'q'], quit);
+
+	let escapeKeyFunction = () => Actions.updateView(View.LIST);
+
+	if (getUseLegacyEscapeKeyBehavior()) {
+		escapeKeyFunction = quit;
+	}
+
+	screen.key('escape', escapeKeyFunction);
 
 	screen._listenedMouse = true;
 
