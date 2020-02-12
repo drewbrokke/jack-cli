@@ -10,7 +10,7 @@ import {
 	doOpenFilesInEditor,
 } from '../util/interface-actions';
 import { generateLog } from '../util/log-util';
-import { getHelpDialog, toggleHelp } from './help-dialog';
+import { getHelpDialog } from './help-dialog';
 import { getBoxElement, getScreenElement } from './interface-elements';
 import { getMainContentContainer } from './main-content-container';
 import { getNotificationContainer } from './notification';
@@ -28,7 +28,12 @@ export const getScreen = (commands: Command[]): Screen => {
 
 	screen.key(['C-c', 'q'], quit);
 
-	let escapeKeyFunction = () => Actions.updateView(View.LIST);
+	const helpDialogHider: Hider = getHider(getHelpDialog());
+
+	let escapeKeyFunction = () => {
+		helpDialogHider.hide();
+		Actions.updateView(View.LIST);
+	};
 
 	if (getUseLegacyEscapeKeyBehavior()) {
 		escapeKeyFunction = quit;
@@ -53,7 +58,7 @@ export const getScreen = (commands: Command[]): Screen => {
 	wrapper.append(getNotificationContainer());
 	wrapper.append(getHelpDialog());
 
-	screen.key('?', toggleHelp);
+	screen.key('?', helpDialogHider.toggle);
 	screen.key('m', doCopyCommitMessage);
 	screen.key('o', doOpenFilesInEditor);
 	screen.key('r', () => generateLog(screen));
@@ -82,6 +87,7 @@ export const getScreen = (commands: Command[]): Screen => {
 interface Hider {
 	hide(): void;
 	show(): void;
+	toggle(): void;
 }
 
 const getHider = (element: BlessedElement): Hider => ({
@@ -93,4 +99,8 @@ const getHider = (element: BlessedElement): Hider => ({
 		element.show();
 		element.screen.render();
 	},
+	toggle() {
+		element.toggle()
+		element.screen.render();
+	}
 });

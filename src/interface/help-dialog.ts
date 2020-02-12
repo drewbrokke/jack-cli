@@ -31,9 +31,3 @@ export const getHelpDialog = () => {
 
 	return helpDialog;
 };
-
-export const toggleHelp = () => {
-	helpDialog.toggle();
-
-	helpDialog.screen.render();
-};
