@@ -1,6 +1,7 @@
 import { colors } from './colors';
 import { getCommands } from './command-util';
 import { Command } from './commands-def';
+import { getUseLegacyEscapeKeyBehavior } from './config-util';
 
 const { emphasis } = colors;
 
@@ -33,10 +34,16 @@ const getPresetKeysText = () => {
 		[`m`, `Copy commit message to clipboard`],
 		[`y`, `Copy commit SHA to clipboard`],
 		['', ''],
-		[`r`, `Refresh the list`],
-		[`q, esc, C-c`, `Exit ${emphasis('jack')}`],
 		[`?`, `Show/hide help dialog`],
+		[`r`, `Refresh the list`],
 	];
+
+	if (getUseLegacyEscapeKeyBehavior()) {
+		keys.push([`q, esc, C-c`, `Exit ${emphasis('jack')}`]);
+	} else {
+		keys.push([`esc`, `Return to default view`])
+		keys.push([`q, C-c`, `Exit ${emphasis('jack')}`]);
+	}
 
 	const longest: number = keys.reduce(
 		(acc: number, [key]) => Math.max(acc, key.length),
