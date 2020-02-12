@@ -13,6 +13,7 @@ interface Config {
 	notificationTimeout?: number;
 	searchIndexLimit?: number;
 	showLineNumbers?: boolean;
+	useLegacyEscapeKeyBehavior?: boolean;
 	useSearchIndex?: boolean;
 }
 let CONFIG_FILE_PATH: string;
@@ -35,6 +36,7 @@ const DEFAULT_GIT_SHOW_OPTIONS = '--patch-with-stat --stat-width 1000 --color';
 const DEFAULT_NOTIFICATION_TIMEOUT = 5000;
 const DEFAULT_SEARCH_INDEX_LIMIT = 300000;
 const DEFAULT_SHOW_LINE_NUMBERS = false;
+const DEFAULT_USE_LEGACY_ESCAPE_KEY_BEHAVIOR = false;
 const DEFAULT_USE_SEARCH_INDEX = true;
 
 let config: Config;
@@ -72,6 +74,16 @@ export const getShowLineNumbers = (): boolean => {
 	return getConfig().showLineNumbers || DEFAULT_SHOW_LINE_NUMBERS;
 };
 
+export const getUseLegacyEscapeKeyBehavior = (): boolean => {
+	const useLegacyEscapeKeyBehavior = getConfig().useLegacyEscapeKeyBehavior;
+
+	if (useLegacyEscapeKeyBehavior !== undefined) {
+		return useLegacyEscapeKeyBehavior;
+	}
+
+	return DEFAULT_USE_LEGACY_ESCAPE_KEY_BEHAVIOR;
+};
+
 export const getUseSearchIndex = (): boolean => {
 	const useSearchIndex = getConfig().useSearchIndex;
 
@@ -98,6 +110,7 @@ const readConfig = (): Config => {
 		notificationTimeout: DEFAULT_NOTIFICATION_TIMEOUT,
 		searchIndexLimit: DEFAULT_SEARCH_INDEX_LIMIT,
 		showLineNumbers: DEFAULT_SHOW_LINE_NUMBERS,
+		useLegacyEscapeKeyBehavior: DEFAULT_USE_LEGACY_ESCAPE_KEY_BEHAVIOR,
 		useSearchIndex: DEFAULT_USE_SEARCH_INDEX,
 	};
 
