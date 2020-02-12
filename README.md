@@ -2,43 +2,43 @@
 
 # Table of Contents
 
-- [Table of Contents](#table-of-contents)
-- [jack](#jack)
-- [Motivation](#motivation)
-- [Installation](#installation)
-- [Usage](#usage)
-  - [Viewing a Git log](#viewing-a-git-log)
-  - [Built-in Key Commands](#built-in-key-commands)
-    - [Meta](#meta)
-    - [Navigation](#navigation)
-    - [Searching](#searching)
-    - [Actions](#actions)
-- [Configuration](#configuration)
-  - [Configuration options](#configuration-options)
-    - [**blacklistPatterns**](#blacklistpatterns)
-    - [**commands**](#commands)
-    - [**gitShowOptions**](#gitshowoptions)
-    - [**notificationTimeout**](#notificationtimeout)
-    - [**searchIndexLimit**](#searchindexlimit)
-    - [**showLineNumbers**](#showlinenumbers)
-    - [**useSearchIndex**](#usesearchindex)
-  - [The `Command` object](#the-command-object)
-    - [**command (Required)**](#command-required)
-    - [**description (Required)**](#description-required)
-    - [**foreground (Optional)**](#foreground-optional)
-    - [**key (Required)**](#key-required)
-    - [**onErrorCommand (Optional)**](#onerrorcommand-optional)
-    - [**refreshOnComplete (Optional)**](#refreshoncomplete-optional)
-  - [Placeholder tokens](#placeholder-tokens)
-    - [**COMMIT_MESSAGE**](#commit_message)
-    - [**SHA_RANGE**](#sha_range)
-    - [**SHA_SINGLE_OR_RANGE**](#sha_single_or_range)
-    - [**SHA_SINGLE**](#sha_single)
-  - [Environment variables](#environment-variables)
-    - [JACK_CLI_CONFIG_FILE_PATH](#jack_cli_config_file_path)
-  - [Miscellaneous](#miscellaneous)
-    - [**Why does the `foreground` option for my custom command not work?**](#why-does-the-foreground-option-for-my-custom-command-not-work)
-    - [**iTerm drag and drop is potentially dangerous while using `jack`**](#iterm-drag-and-drop-is-potentially-dangerous-while-using-jack)
+-   [Table of Contents](#table-of-contents)
+-   [jack](#jack)
+-   [Motivation](#motivation)
+-   [Installation](#installation)
+-   [Usage](#usage)
+    -   [Viewing a Git log](#viewing-a-git-log)
+    -   [Built-in Key Commands](#built-in-key-commands)
+        -   [Meta](#meta)
+        -   [Navigation](#navigation)
+        -   [Searching](#searching)
+        -   [Actions](#actions)
+-   [Configuration](#configuration)
+    -   [Configuration options](#configuration-options)
+        -   [**blacklistPatterns**](#blacklistpatterns)
+        -   [**commands**](#commands)
+        -   [**gitShowOptions**](#gitshowoptions)
+        -   [**notificationTimeout**](#notificationtimeout)
+        -   [**searchIndexLimit**](#searchindexlimit)
+        -   [**showLineNumbers**](#showlinenumbers)
+        -   [**useSearchIndex**](#usesearchindex)
+    -   [The `Command` object](#the-command-object)
+        -   [**command (Required)**](#command-required)
+        -   [**description (Required)**](#description-required)
+        -   [**foreground (Optional)**](#foreground-optional)
+        -   [**key (Required)**](#key-required)
+        -   [**onErrorCommand (Optional)**](#onerrorcommand-optional)
+        -   [**refreshOnComplete (Optional)**](#refreshoncomplete-optional)
+    -   [Placeholder tokens](#placeholder-tokens)
+        -   [**COMMIT_MESSAGE**](#commit_message)
+        -   [**SHA_RANGE**](#sha_range)
+        -   [**SHA_SINGLE_OR_RANGE**](#sha_single_or_range)
+        -   [**SHA_SINGLE**](#sha_single)
+    -   [Environment variables](#environment-variables)
+        -   [JACK_CLI_CONFIG_FILE_PATH](#jack_cli_config_file_path)
+    -   [Miscellaneous](#miscellaneous)
+        -   [**Why does the `foreground` option for my custom command not work?**](#why-does-the-foreground-option-for-my-custom-command-not-work)
+        -   [**iTerm drag and drop is potentially dangerous while using `jack`**](#iterm-drag-and-drop-is-potentially-dangerous-while-using-jack)
 
 # jack
 
@@ -87,10 +87,11 @@ Modifier Keys:
 
 ### Meta
 
-| Key             | Description           |
-| --------------- | --------------------- |
-| **q, esc, C-c** | Exit `jack`           |
-| **?**           | Show/hide help dialog |
+| Key        | Description                |
+| ---------- | -------------------------- |
+| **q, C-c** | Exit `jack`                |
+| **esc**    | Return to the default view |
+| **?**      | Show/hide help dialog      |
 
 ### Navigation
 
@@ -213,6 +214,14 @@ These options can be configured in the `.jack.json` file:
 **Default**: `false`
 
 **Description**: Whether or not to show line numbers.
+
+### **useLegacyEscapeKeyBehavior**
+
+**Type**: Boolean
+
+**Default**: `false`
+
+**Description**: By default, the `escape` key will return to the default list view. Setting this to `true` will return to the old behavior of quitting the application.
 
 ### **useSearchIndex**
 
