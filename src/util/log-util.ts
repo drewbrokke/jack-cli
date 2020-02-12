@@ -33,7 +33,7 @@ export const generateLog = (screen: Screen) => {
 
 	gitLogProcess.stdout.setEncoding('utf8');
 	gitLogProcess.stdout.on('data', (data: string) => {
-		const lines = data.trim().split('\n');
+		const lines = data.trimRight().split('\n');
 
 		lines.forEach((line) => {
 			searchIndex.indexLine(counter.next().value as number, line);
