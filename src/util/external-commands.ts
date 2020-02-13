@@ -17,6 +17,8 @@ export const copyCommitMessageToClipboard = async (
 export const copySHAToClipboard = async (SHA: string): Promise<void> =>
 	await clipboardy.write(SHA);
 
+export const openFile = async (filePath: string) => await open(filePath);
+
 export const openFilesFromCommitRange = async (
 	SHA1: string,
 	SHA2: string,
@@ -29,5 +31,5 @@ export const openFilesFromCommitRange = async (
 		.split('\n')
 		.map((file) => path.join(topLevel, file));
 
-	return Promise.all(filesArray.map((file) => open(file)));
+	return Promise.all(filesArray.map(openFile));
 };

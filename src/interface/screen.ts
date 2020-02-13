@@ -7,6 +7,7 @@ import {
 	doCopyCommitMessage,
 	doCopyCommitSHA,
 	doMarkCommit,
+	doOpenConfigFile,
 	doOpenFilesInEditor,
 } from '../util/interface-actions';
 import { generateLog } from '../util/log-util';
@@ -70,6 +71,7 @@ export const getScreen = (commands: Command[]): Screen => {
 			screen.restoreFocus();
 		}
 	});
+	screen.key('<', doOpenConfigFile);
 	screen.key('m', doCopyCommitMessage);
 	screen.key('o', doOpenFilesInEditor);
 	screen.key('r', () => generateLog(screen));

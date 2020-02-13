@@ -1,9 +1,11 @@
 import { notifier } from '../interface/notification';
 import { Actions } from '../state/actions';
 import { store } from '../state/store';
+import { getConfigFilePath } from './config-util';
 import {
 	copyCommitMessageToClipboard,
 	copySHAToClipboard,
+	openFile,
 	openFilesFromCommitRange,
 } from './external-commands';
 import { sortSHAs } from './git-util';
@@ -32,6 +34,20 @@ export const doCopyCommitSHA = async () => {
 	} catch (error) {
 		notifier.error(
 			`Could not copy the SHA to the clipboard:\n\n${error.message}`,
+		);
+	}
+};
+
+export const doOpenConfigFile = async () => {
+	try {
+		await openFile(getConfigFilePath());
+
+		notifier.success(`Opened the config file at: ${getConfigFilePath()}`);
+	} catch (error) {
+		notifier.error(
+			`Could not open the config file at ${getConfigFilePath()}:\n\n${
+				error.message
+			}`,
 		);
 	}
 };
