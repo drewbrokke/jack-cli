@@ -21,6 +21,7 @@
         -   [**notificationTimeout**](#notificationtimeout)
         -   [**searchIndexLimit**](#searchindexlimit)
         -   [**showLineNumbers**](#showlinenumbers)
+        -   [**useLegacyEscapeKeyBehavior**](#uselegacyescapekeybehavior)
         -   [**useSearchIndex**](#usesearchindex)
     -   [The `Command` object](#the-command-object)
         -   [**command (Required)**](#command-required)
