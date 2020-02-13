@@ -1,31 +1,26 @@
-import { TextElement, TextOptions } from '../types/types';
+import { BoxElement } from '../types/types';
 import { HELP_TEXT } from '../util/help-text';
-import { getTextElement } from './interface-elements';
+import { getPageableBoxElement } from './interface-elements';
 
-let helpDialog: TextElement;
+let helpDialog: BoxElement;
 
 export const getHelpDialog = () => {
 	if (helpDialog) {
 		return helpDialog;
 	}
 
-	const options: TextOptions = {
-		border: 'line',
+	helpDialog = getPageableBoxElement({
+		alwaysScroll: true,
+		bottom: 1,
 		content: HELP_TEXT,
+		keys: true,
+		left: 0,
 		name: 'helpDialog',
-		padding: {
-			bottom: 0,
-			left: 1,
-			right: 1,
-			top: 0,
-		},
 		right: 0,
-		shrink: true,
-		tags: true,
+		scrollable: true,
 		top: 0,
-	};
-
-	helpDialog = getTextElement(options);
+		vi: true,
+	});
 
 	helpDialog.hide();
 

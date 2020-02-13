@@ -2,11 +2,11 @@ import { Actions } from '../state/actions';
 import { doSubscribe } from '../state/store';
 import { BoxElement, UpdateFunction, View } from '../types/types';
 import { gitShow } from '../util/git-util';
-import { getBoxElement } from './interface-elements';
+import { getPageableBoxElement } from './interface-elements';
 import { notifier } from './notification';
 
 export const getCommitElement = (): BoxElement => {
-	const commitElement: BoxElement = getBoxElement({
+	const commitElement: BoxElement = getPageableBoxElement({
 		alwaysScroll: true,
 		bottom: 0,
 		keys: true,
@@ -18,14 +18,6 @@ export const getCommitElement = (): BoxElement => {
 		vi: true,
 	});
 
-	commitElement.key(['f', 'pagedown'], () => {
-		commitElement.scroll(+commitElement.height);
-		commitElement.screen.render();
-	});
-	commitElement.key(['b', 'pageup'], () => {
-		commitElement.scroll(-commitElement.height);
-		commitElement.screen.render();
-	});
 	commitElement.key(['right', 'S-down', 'S-j'], () => Actions.updateIndex(1));
 	commitElement.key(['left', 'S-k', 'S-up'], () => Actions.updateIndex(-1));
 	commitElement.key(['enter', 'space'], () => Actions.updateView(View.LIST));

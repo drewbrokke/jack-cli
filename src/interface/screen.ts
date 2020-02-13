@@ -28,7 +28,7 @@ export const getScreen = (commands: Command[]): Screen => {
 
 	screen.key(['C-c', 'q'], quit);
 
-	const helpDialogHider: Hider = getHider(getHelpDialog());
+	const helpDialogHider = new Hider(getHelpDialog());
 
 	let escapeKeyFunction = () => {
 		helpDialogHider.hide();
@@ -58,14 +58,25 @@ export const getScreen = (commands: Command[]): Screen => {
 	wrapper.append(getNotificationContainer());
 	wrapper.append(getHelpDialog());
 
-	screen.key('?', helpDialogHider.toggle);
+	screen.key('?', () => {
+		if (helpDialogHider.hidden()) {
+			screen.saveFocus();
+			helpDialogHider.focus();
+		}
+
+		helpDialogHider.toggle();
+
+		if (helpDialogHider.hidden()) {
+			screen.restoreFocus();
+		}
+	});
 	screen.key('m', doCopyCommitMessage);
 	screen.key('o', doOpenFilesInEditor);
 	screen.key('r', () => generateLog(screen));
 	screen.key('x', doMarkCommit);
 	screen.key('y', doCopyCommitSHA);
 
-	const wrapperHider = getHider(wrapper);
+	const wrapperHider = new Hider(wrapper);
 
 	for (const command of commands) {
 		screen.key(command.key, async () => {
@@ -84,23 +95,33 @@ export const getScreen = (commands: Command[]): Screen => {
 	return screen;
 };
 
-interface Hider {
-	hide(): void;
-	show(): void;
-	toggle(): void;
-}
+class Hider {
+	private element: BlessedElement;
 
-const getHider = (element: BlessedElement): Hider => ({
-	hide() {
-		element.hide();
-		element.screen.render();
-	},
-	show() {
-		element.show();
-		element.screen.render();
-	},
-	toggle() {
-		element.toggle()
-		element.screen.render();
+	constructor(element: BlessedElement) {
+		this.element = element;
 	}
-});
+
+	public focus() {
+		this.element.focus();
+	}
+
+	public hide() {
+		this.element.hide();
+		this.element.screen.render();
+	}
+
+	public hidden() {
+		return this.element.hidden;
+	}
+
+	public show() {
+		this.element.show();
+		this.element.screen.render();
+	}
+
+	public toggle() {
+		this.element.toggle();
+		this.element.screen.render();
+	}
+}

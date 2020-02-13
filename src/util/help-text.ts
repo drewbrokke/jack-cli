@@ -41,7 +41,7 @@ const getPresetKeysText = () => {
 	if (getUseLegacyEscapeKeyBehavior()) {
 		keys.push([`q, esc, C-c`, `Exit ${emphasis('jack')}`]);
 	} else {
-		keys.push([`esc`, `Return to default view`])
+		keys.push([`esc`, `Return to default view`]);
 		keys.push([`q, C-c`, `Exit ${emphasis('jack')}`]);
 	}
 

@@ -13,6 +13,21 @@ import {
 export const getBoxElement = (options: BoxOptions): BoxElement =>
 	Blessed.box(options);
 
+export const getPageableBoxElement = (options: BoxOptions): BoxElement => {
+	const element = getBoxElement(options);
+
+	element.key(['f', 'pagedown'], () => {
+		element.scroll(+element.height);
+		element.screen.render();
+	});
+	element.key(['b', 'pageup'], () => {
+		element.scroll(-element.height);
+		element.screen.render();
+	});
+
+	return element;
+};
+
 export const getListElement = (options: ListOptions): ListElement =>
 	Blessed.list(options);
 
