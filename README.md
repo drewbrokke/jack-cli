@@ -88,11 +88,12 @@ Modifier Keys:
 
 ### Meta
 
-| Key        | Description                |
-| ---------- | -------------------------- |
-| **q, C-c** | Exit `jack`                |
-| **esc**    | Return to the default view |
-| **?**      | Show/hide help dialog      |
+| Key         | Description                 |
+| ----------- | --------------------------- |
+| **q, C-c**  | Exit `jack`                 |
+| **esc**     | Return to the default view  |
+| **?**       | Show/hide help dialog       |
+| **S-, / <** | Open the configuration file |
 
 ### Navigation
 

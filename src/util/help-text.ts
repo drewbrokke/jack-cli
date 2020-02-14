@@ -36,6 +36,8 @@ const getPresetKeysText = () => {
 		['', ''],
 		[`?`, `Show/hide help dialog`],
 		[`r`, `Refresh the list`],
+		['', ''],
+		[`S-, / <`, `Open the configuration file`],
 	];
 
 	if (getUseLegacyEscapeKeyBehavior()) {
