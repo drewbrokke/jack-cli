@@ -86,8 +86,8 @@ export const reducer = (
 		}
 
 		return {
-			SHA,
 			...state,
+			SHA,
 			index,
 		};
 	} else if (action.type === ActionType.PREVIOUS_SEARCH_RESULT) {
@@ -113,8 +113,8 @@ export const reducer = (
 		}
 
 		return {
-			SHA,
 			...state,
+			SHA,
 			index,
 		};
 	} else if (action.type === ActionType.UPDATE_SEARCH) {
@@ -159,8 +159,8 @@ export const reducer = (
 		}
 
 		return {
-			SHA,
 			...state,
+			SHA,
 			index,
 			indexesMatchingSearch,
 			search: searchTerm,
