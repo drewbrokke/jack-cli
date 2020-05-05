@@ -55,7 +55,7 @@
 		"@types/blessed": "^0.1.12",
 		"@types/clipboardy": "^2.0.1",
 		"@types/node": "^9.6.1",
-		"ava": "^2.3.0",
+		"ava": "^3.8.1",
 		"prettier": "^1.18.2",
 		"ts-node": "^8.3.0",
 		"tslint": "^5.20.0",
