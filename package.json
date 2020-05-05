@@ -52,6 +52,7 @@
 		"show"
 	],
 	"devDependencies": {
+		"@ava/typescript": "^1.1.1",
 		"@types/blessed": "^0.1.12",
 		"@types/clipboardy": "^2.0.1",
 		"@types/node": "^9.6.1",
@@ -63,11 +64,10 @@
 		"typescript": "^3.6.3"
 	},
 	"ava": {
-		"extensions": [
-			"ts"
-		],
-		"require": [
-			"ts-node/register"
-		]
+		"typescript": {
+			"rewritePaths": {
+				"src/": "dist/"
+			}
+		}
 	}
 }
