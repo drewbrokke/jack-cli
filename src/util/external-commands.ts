@@ -1,7 +1,7 @@
-import * as clipboardy from 'clipboardy';
 import * as open from 'open';
 import * as path from 'path';
 
+import { writeToClipboard } from './clipboard-util';
 import { gitCommitMessage, gitDiffNameOnly, gitTopLevel } from './git-util';
 
 export const copyCommitMessageToClipboard = async (
@@ -9,13 +9,13 @@ export const copyCommitMessageToClipboard = async (
 ): Promise<any> => {
 	const message = await gitCommitMessage(SHA);
 
-	clipboardy.write(message);
+	await writeToClipboard(message);
 
 	return message;
 };
 
 export const copySHAToClipboard = async (SHA: string): Promise<void> =>
-	await clipboardy.write(SHA);
+	await writeToClipboard(SHA);
 
 export const openFile = async (filePath: string) => await open(filePath);
 
