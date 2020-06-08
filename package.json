@@ -31,7 +31,6 @@
 	"dependencies": {
 		"ansi-colors": "^4.1.1",
 		"blessed": "^0.1.81",
-		"chalk": "^2.4.2",
 		"clipboardy": "^2.1.0",
 		"flexsearch": "^0.6.30",
 		"open": "^6.4.0"
