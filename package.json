@@ -29,6 +29,7 @@
 	"author": "Drew Brokke <drew.brokke@liferay.com> (https://github.com/drewbrokke)",
 	"license": "ISC",
 	"dependencies": {
+		"ansi-colors": "^4.1.1",
 		"blessed": "^0.1.81",
 		"chalk": "^2.4.2",
 		"clipboardy": "^2.1.0",
