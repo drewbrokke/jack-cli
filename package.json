@@ -33,6 +33,7 @@
 		"blessed": "^0.1.81",
 		"clipboardy": "^2.1.0",
 		"flexsearch": "^0.6.30",
+		"kleur": "^3.0.3",
 		"open": "^6.4.0"
 	},
 	"keywords": [
