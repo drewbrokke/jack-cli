@@ -1,7 +1,16 @@
 import { spawn } from 'child_process';
+import { getCopyToClipboardCommandArgs } from './config-util';
+
+const clipboardCommandArgs = getCopyToClipboardCommandArgs();
 
 export const writeToClipboard = async (text: string): Promise<void> => {
-	if (process.platform === 'darwin') {
+	if (clipboardCommandArgs.length) {
+		return await doWriteToClipboard(
+			clipboardCommandArgs[0],
+			clipboardCommandArgs.slice(1),
+			text,
+		);
+	} else if (process.platform === 'darwin') {
 		return await doWriteToClipboard('pbcopy', [], text);
 	} else {
 		return await doWriteToClipboard('xsel', ['--input'], text);
@@ -15,6 +24,13 @@ const doWriteToClipboard = async (
 ): Promise<void> => {
 	return new Promise((resolve, reject) => {
 		const copyProcess = spawn(command, args);
+
+		copyProcess.on('error', (error: Error) => {
+			return reject(
+				new Error(`There was a problem running process: ${command}
+${error.message}`),
+			);
+		});
 
 		let errorString = '';
 
