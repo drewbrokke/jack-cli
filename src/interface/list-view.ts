@@ -1,7 +1,7 @@
 import { Actions } from '../state/actions';
 import { doSubscribe } from '../state/store';
 import { ListElement, UpdateFunction, View } from '../types/types';
-import { KEY_NAV_INTERVAL, stash } from '../util/stash';
+import { NAV_INTERVAL, stash } from '../util/stash';
 import { getListElement } from './interface-elements';
 import { notifier } from './notification';
 import { getSearchInput } from './search-bar';
@@ -24,25 +24,25 @@ export const getCommitListElement = (): ListElement => {
 	});
 
 	const doUpdateIndex = (action: (interval: number) => void) => {
-		const interval: number = stash.has(KEY_NAV_INTERVAL)
-			? stash.get(KEY_NAV_INTERVAL)
+		const interval: number = stash.has(NAV_INTERVAL)
+			? stash.get(NAV_INTERVAL)
 			: 1;
 
 		action(interval);
 
-		if (stash.has(KEY_NAV_INTERVAL)) {
-			stash.delete(KEY_NAV_INTERVAL);
+		if (stash.has(NAV_INTERVAL)) {
+			stash.delete(NAV_INTERVAL);
 
 			notifier.info(`Movement interval reset.`);
 		}
 	};
 
 	commitListElement.key('1234567890'.split(''), (keyName: string) => {
-		const newInterval: string = stash.has(KEY_NAV_INTERVAL)
-			? `${stash.get(KEY_NAV_INTERVAL)}${keyName}`
+		const newInterval: string = stash.has(NAV_INTERVAL)
+			? `${stash.get(NAV_INTERVAL)}${keyName}`
 			: keyName;
 
-		stash.set(KEY_NAV_INTERVAL, parseInt(newInterval, 10));
+		stash.set(NAV_INTERVAL, parseInt(newInterval, 10));
 
 		notifier.info(`Movement interval: ${newInterval}`);
 	});
