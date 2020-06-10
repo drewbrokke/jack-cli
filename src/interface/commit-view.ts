@@ -2,6 +2,7 @@ import { Actions } from '../state/actions';
 import { doSubscribe } from '../state/store';
 import { BoxElement, UpdateFunction, View } from '../types/types';
 import { gitShow } from '../util/git-util';
+import { keys } from '../util/keys-def';
 import { getPageableBoxElement } from './interface-elements';
 import { notifier } from './notification';
 
@@ -18,9 +19,15 @@ export const getCommitElement = (): BoxElement => {
 		vi: true,
 	});
 
-	commitElement.key(['right', 'S-down', 'S-j'], () => Actions.updateIndex(1));
-	commitElement.key(['left', 'S-k', 'S-up'], () => Actions.updateIndex(-1));
-	commitElement.key(['enter', 'space'], () => Actions.updateView(View.LIST));
+	commitElement.key([keys.RIGHT, keys.SHIFT_DOWN, keys.SHIFT_J], () =>
+		Actions.updateIndex(1),
+	);
+	commitElement.key([keys.LEFT, keys.SHIFT_K, keys.SHIFT_UP], () =>
+		Actions.updateIndex(-1),
+	);
+	commitElement.key([keys.ENTER, keys.SPACE], () =>
+		Actions.updateView(View.LIST),
+	);
 
 	commitElement.focus();
 

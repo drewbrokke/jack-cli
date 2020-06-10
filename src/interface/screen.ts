@@ -10,6 +10,7 @@ import {
 	doOpenConfigFile,
 	doOpenFilesInEditor,
 } from '../util/interface-actions';
+import { keys } from '../util/keys-def';
 import { generateLog } from '../util/log-util';
 import { getHelpDialog } from './help-dialog';
 import { getBoxElement, getScreenElement } from './interface-elements';
@@ -27,7 +28,7 @@ export const getScreen = (commands: Command[]): Screen => {
 		smartCSR: true,
 	});
 
-	screen.key(['C-c', 'q'], quit);
+	screen.key([keys.CONTROL_C, keys.Q], quit);
 
 	const helpDialogHider = new Hider(getHelpDialog());
 
@@ -40,7 +41,7 @@ export const getScreen = (commands: Command[]): Screen => {
 		escapeKeyFunction = quit;
 	}
 
-	screen.key('escape', escapeKeyFunction);
+	screen.key(keys.ESCAPE, escapeKeyFunction);
 
 	screen._listenedMouse = true;
 
@@ -59,7 +60,7 @@ export const getScreen = (commands: Command[]): Screen => {
 	wrapper.append(getNotificationContainer());
 	wrapper.append(getHelpDialog());
 
-	screen.key('?', () => {
+	screen.key(keys.QUESTION_MARK, () => {
 		if (helpDialogHider.hidden()) {
 			screen.saveFocus();
 			helpDialogHider.focus();
@@ -71,12 +72,12 @@ export const getScreen = (commands: Command[]): Screen => {
 			screen.restoreFocus();
 		}
 	});
-	screen.key('<', doOpenConfigFile);
-	screen.key('m', doCopyCommitMessage);
-	screen.key('o', doOpenFilesInEditor);
-	screen.key('r', () => generateLog(screen));
-	screen.key('x', doMarkCommit);
-	screen.key('y', doCopyCommitSHA);
+	screen.key(keys.LESS_THAN, doOpenConfigFile);
+	screen.key(keys.M, doCopyCommitMessage);
+	screen.key(keys.O, doOpenFilesInEditor);
+	screen.key(keys.R, () => generateLog(screen));
+	screen.key(keys.X, doMarkCommit);
+	screen.key(keys.Y, doCopyCommitSHA);
 
 	const wrapperHider = new Hider(wrapper);
 

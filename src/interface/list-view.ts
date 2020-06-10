@@ -6,6 +6,7 @@ import { getListElement } from './interface-elements';
 import { notifier } from './notification';
 import { getSearchInput } from './search-bar';
 
+import { keys, NUMBER_KEYS } from '../util/keys-def';
 import { searchIndex } from '../util/search';
 
 export const getCommitListElement = (): ListElement => {
@@ -37,7 +38,7 @@ export const getCommitListElement = (): ListElement => {
 		}
 	};
 
-	commitListElement.key('1234567890'.split(''), (keyName: string) => {
+	commitListElement.key(NUMBER_KEYS, (keyName: string) => {
 		const newInterval: string = stash.has(NAV_INTERVAL)
 			? `${stash.get(NAV_INTERVAL)}${keyName}`
 			: keyName;
@@ -46,27 +47,27 @@ export const getCommitListElement = (): ListElement => {
 
 		notifier.info(`Movement interval: ${newInterval}`);
 	});
-	commitListElement.key(['down', 'j'], () =>
+	commitListElement.key([keys.DOWN, keys.J], () =>
 		doUpdateIndex(Actions.updateIndex),
 	);
 
-	commitListElement.key(['k', 'up'], () =>
+	commitListElement.key([keys.K, keys.UP], () =>
 		doUpdateIndex((interval: number) => Actions.updateIndex(-interval)),
 	);
 
-	commitListElement.key(['b', 'pageup'], () =>
+	commitListElement.key([keys.B, keys.PAGEUP], () =>
 		Actions.updateIndex(-commitListElement.height),
 	);
 
-	commitListElement.key(['f', 'pagedown'], () =>
+	commitListElement.key([keys.F, keys.PAGEDOWN], () =>
 		Actions.updateIndex(+commitListElement.height),
 	);
 
-	commitListElement.key(['enter', 'space'], () =>
+	commitListElement.key([keys.ENTER, keys.SPACE], () =>
 		Actions.updateView(View.COMMIT),
 	);
 
-	commitListElement.key('/', () => {
+	commitListElement.key(keys.FORWARD_SLASH, () => {
 		const searchInput = getSearchInput(async (value) => {
 			const results = await searchIndex.search(value);
 
@@ -84,8 +85,8 @@ export const getCommitListElement = (): ListElement => {
 		commitListElement.screen.render();
 	});
 
-	commitListElement.key('n', () => Actions.nextSearchResult());
-	commitListElement.key('S-n', () => Actions.previousSearchResult());
+	commitListElement.key(keys.N, () => Actions.nextSearchResult());
+	commitListElement.key(keys.SHIFT_N, () => Actions.previousSearchResult());
 
 	commitListElement.focus();
 

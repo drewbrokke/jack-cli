@@ -1,9 +1,9 @@
 import { Command } from './commands-def';
+import { ALL_KEYS } from './keys-def';
 
 type CommandValidator = (commandOptions: Command) => void;
 
 const KEY_REGEX = /^([CS]-)?[a-z]$/;
-const RESERVED_KEYS = [...'bfjkmnoqrxy?'.split(''), 'C-c', 'S-n'];
 
 const validateCommandProperty: CommandValidator = ({ command }) => {
 	if (!command) {
@@ -65,10 +65,10 @@ const validateKeyProperty: CommandValidator = ({ key }) => {
 		);
 	}
 
-	if (RESERVED_KEYS.includes(key)) {
+	if (ALL_KEYS.includes(key)) {
 		throw new Error(
 			// tslint:disable-next-line:max-line-length
-			`The key combination "${key}" is reserved. Here is the list of reserved key combinations: ${RESERVED_KEYS.join(
+			`The key combination "${key}" is reserved. Here is the list of reserved key combinations: ${ALL_KEYS.join(
 				' ',
 			)}`,
 		);
