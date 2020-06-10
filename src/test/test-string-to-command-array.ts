@@ -3,6 +3,8 @@ import test from 'ava';
 import { stringToCommandArray } from '../util/util-functions';
 
 test('stringToCommandArray', (t) => {
+	t.deepEqual(stringToCommandArray(''), []);
+
 	t.deepEqual(stringToCommandArray('hello world'), ['hello', 'world']);
 
 	t.deepEqual(stringToCommandArray('one "two three" four'), [
