@@ -9,6 +9,7 @@ import { stringToCommandArray } from './util-functions';
 interface Config {
 	blacklistPatterns: string[];
 	commands: Command[];
+	copyToClipboardCommand: string;
 	gitShowOptions: string;
 	notificationTimeout: number;
 	searchIndexLimit: number;
@@ -20,6 +21,7 @@ interface Config {
 const DEFAULT_CONFIG: Config = {
 	blacklistPatterns: [],
 	commands: [],
+	copyToClipboardCommand: '',
 	gitShowOptions: '--patch-with-stat --stat-width 1000 --color',
 	notificationTimeout: 5000,
 	searchIndexLimit: 300000,
@@ -67,6 +69,8 @@ export const getBlacklistPatterns = (): RegExp[] =>
 	);
 export const getCommands = (): Command[] => CONFIG.commands;
 export const getConfigFilePath = () => CONFIG_FILE_PATH;
+export const getCopyToClipboardCommandArgs = () =>
+	stringToCommandArray(CONFIG.copyToClipboardCommand.trim());
 export const getGitShowOptions = (): string[] =>
 	stringToCommandArray(CONFIG.gitShowOptions);
 export const getNotificationTimeout = (): number => CONFIG.notificationTimeout;
